@@ -1,69 +1,167 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('http://fonts.cdnfonts.com/css/gilroy-bold');
+/* font-family: 'Gilroy-Bold'; */
+/* font-family: 'Gilroy-Heavy'; */
+/* font-family: 'Gilroy-Light'; */
+/* font-family: 'Gilroy-Medium'; */
+/* font-family: 'Gilroy-Regular'; */
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-html, body {
-  min-height: 100%;
-}
+/* html, body {
+  height: 100%;
+} */
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Gilroy-Medium', sans-serif;
+    background: #f5f5f5;
+    height: 100vh;
 }
+
 
 .wrap {
-    border: 1px solid #000;
-    border-radius: 0 0 5px 5px;
-    display: flex;
-    justify-content: center;
-    padding: 5px;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
-    transition: box-shadow 0.3s ease;
-}
-
-.wrap:hover {
-    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.5);
-}
-
-.wrap h1 {
-    font-size: 36px;
-    color: #333;
-}
-
-.connect {
+    /* border: 1px solid #000; */
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 30%;
-    height: 60px;
+    padding: 5px;
+    gap: 10px;
+    padding: 60px;
+}
+
+.wrap h1 {
+    font-size: 44px;
+    font-family: 'Gilroy-Bold', sans-serif;
+    color: #000;
+}
+
+h1 {
+    position: relative;
+}
+
+h1::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -2.5%;
+    width: 105%;
+    height: 60%;
+    background: linear-gradient(120deg, #d9d9d9 0%, #d9d9d9 100%);
+    transform: rotate(-3deg);
+    z-index: -1;
+    transition: all 0.3s ease;
+}
+
+h1:hover::before {
+    width: 0;
+    transform: rotate(0deg);
+}
+
+.wrap .planet_icon {
+    font-size: 48px;
+}
+
+.connect_sect {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 5px;
-    background: #1fabe7;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    text-decoration: none;
-    font-size: 24px;
-    color: #fff;
-    font-weight: 500;
+    transform: translateY(-50%);
 }
 
-.connect:hover {
-    background: #129ad4;
-}
-
-.connect:active {
-    background: #0e7eb1;
-}
-
-
-.form_cnx {
-    border: 1px solid #000;
+.connect_wrap {
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 30px;
+    width: 50%;
+    /* height: 350px; */
     height: fit-content;
-    width: fit-content;
+    padding: 80px 60px;
+    background: linear-gradient(110deg, #f2f2f2 0%, #f0f0f0 100%);
+    box-shadow: 0px 1px 10px 1px rgba(0, 0, 0, 0.1);
+}
+
+.btn {
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-family: 'Gilroy-Bold', sans-serif;
+    color: #000;
+    cursor: pointer;
+    width: 100%;
+    height: 80px;
+    background: #fff;
+    font-size: 36px;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: #f9f9f9;
+    color: #353535;
+}
+
+.btn:active {
+    background: #ebebeb;
+    color: #303030;
+}
+
+input {
+    border: 1px solid #bbb;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #000;
+    cursor: pointer;
+    width: 100%;
+    height: 80px;
+    background: #fff;
+    font-size: 36px;
+    transition: all 0.1s ease;
+    caret-color: #12A6E5;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+input:focus {
+    outline: none;
+    border: 2px solid #12A6E5;
+}
+
+input::selection {
+    background: #12A6E5;
+    color: #fff;
+}
+
+input::-webkit-input-placeholder {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: #888;
+    font-size: 24px;
+}
+
+.connect_form label {
+    font-size: 20px;
+    color: #888;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.auth_btn {
+    margin-top: 70px;
+}
+
+.connect_before {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
