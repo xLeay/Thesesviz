@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.wrap {
+    border: 1px solid #000;
+    border-radius: 0 0 5px 5px;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
+    transition: box-shadow 0.3s ease;
+}
+
+.wrap:hover {
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.5);
+}
+
+.wrap h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+.connect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    height: 60px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    background: #1fabe7;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+    font-size: 24px;
+    color: #fff;
+    font-weight: 500;
+}
+
+.connect:hover {
+    background: #129ad4;
+}
+
+.connect:active {
+    background: #0e7eb1;
+}
+
+
+.form_cnx {
+    border: 1px solid #000;
+    height: fit-content;
+    width: fit-content;
+}
