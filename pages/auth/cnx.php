@@ -1,31 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+include '../../includes/auth/conf.php';
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../src/styles/app.css">
-    <title>Connexion PHP</title>
-</head>
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = htmlspecialchars($_POST['username']);
+    $password = htmlspecialchars($_POST['password']);
 
-<body>
-    <section></section>
-    <div class="form_cnx">
-        <form action="cnx.php" method="post">
-            <div class="form-group">
-                <label for="login">Login</label>
-                <input type="text" name="login" id="login">
-            </div>
-            <div class="form-group">
-                <label for="password">Mot de passe</label>
-                <input type="password" name="password" id="password">
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Se connecter">
-            </div>
-        </form>
-    </div>
-</body>
+    $connected = false;
 
-</html>
+    if ($_GET['from'] == 'connect') {
+        $sql = "SELECT * FROM user WHERE login = '$username' AND password = '$password'";
+        $result = $conn->query($sql);
+        if ($result->rowCount() > 0) {
+            $connected = true;
+        }
+        
+    } elseif ($_GET['from'] == 'signup') {
+        $sql = "INSERT INTO user (login, password) VALUES ('$username', '$password')";
+        $result = $conn->query($sql);
+        if ($result) {
+            $connected = true;
+        }
+    }
+}
+
+if ($connected) {
+    require '../../includes/components/connected.php';
+}
+
+if (!$connected) {
+    require '../../includes/components/notconnected.php';
+}

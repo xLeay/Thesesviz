@@ -134,7 +134,8 @@ input {
 
 input:focus {
     outline: none;
-    border: 2px solid #12A6E5;
+    border: 1px solid transparent;
+    box-shadow: 0px 0px 0px 2px #12A6E5;
 }
 
 input::selection {
@@ -164,4 +165,28 @@ input::-webkit-input-placeholder {
     display: flex;
     flex-direction: column;
     gap: 30px;
+}
+
+.logi:not(:placeholder-shown) ~ .passw:not(:placeholder-shown) ~ .auth_btn {
+    background: #12A6E5;
+    color: #fff;
+}
+
+@media (max-width: 1536px) {
+    .connect_wrap {
+        padding: 50px 30px;
+    }
+
+    input,
+    .btn {
+        height: 60px;
+    }
+
+    .btn {
+        padding: 0 0;
+    }
+
+    .auth_btn {
+        margin-top: 50px;
+    }
 }
