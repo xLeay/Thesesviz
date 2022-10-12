@@ -12,7 +12,7 @@
 <body>
     <h1>Vous n'êtes pas connecté</h1>
 
-    <a href="../../pages/index.php">Veuillez réessayer ici</a>
+    <a href="../../pages">Veuillez réessayer ici</a>
 </body>
 
 </html>

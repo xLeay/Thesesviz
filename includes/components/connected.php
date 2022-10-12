@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +9,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Vous êtes bien connecté</h1>
+    <h1>Vous êtes bien connecté, bienvenue <?= $username ?></h1>
+
+    <button class="btn home_button" onclick="window.location.href = '/pages'">Retour à l'accueil</button>
 </body>
 </html>

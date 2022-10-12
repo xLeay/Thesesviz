@@ -20,22 +20,19 @@
     <section class="connect_sect">
         <div class="connect_wrap">
 
-
             <?php
             if (!isset($_POST['con']) || !isset($_POST['ins'])) {
                 include '../includes/components/connectBefore.php';
             }
 
             if (isset($_POST['con'])) {
-                include_once '../includes/components/connectItem.php';
-                echo '<script>document.querySelector(".connect_before").remove()</script>';
-                $_POST = array();
-            } elseif (isset($_POST['ins'])) {
-                include_once '../includes/components/InscriptItem.php';
-                echo '<script>document.querySelector(".connect_before").remove()</script>';
-                $_POST = array();
-            }
+                include '../includes/components/connectItem.php';
+                include '../includes/components/removeConnectionItems.php';
 
+            } elseif (isset($_POST['ins'])) {
+                include '../includes/components/InscriptItem.php';
+                include '../includes/components/removeConnectionItems.php';
+            }
             ?>
         </div>
     </section>
