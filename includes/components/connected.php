@@ -9,8 +9,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Vous êtes bien connecté, bienvenue <?= $username ?></h1>
-
-    <button class="btn home_button" onclick="window.location.href = '/pages'">Retour à l'accueil</button>
+    <p>Vous êtes bien connecté, bienvenue <?= $username ?></p>
+    <p>Vous allez être redirigé vers l'acceuil de Theseviz...</p>
+    <?php header("refresh:2;url=/pages/home.php"); ?>
 </body>
 </html>
