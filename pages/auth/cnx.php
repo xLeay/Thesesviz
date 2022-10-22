@@ -35,3 +35,5 @@ if ($connected) {
 if (!$connected) {
     require '../../includes/components/notconnected.php';
 }
+
+?>

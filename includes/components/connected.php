@@ -11,6 +11,6 @@
 <body>
     <p>Vous êtes bien connecté, bienvenue <?= $username ?></p>
     <p>Vous allez être redirigé vers l'acceuil de Theseviz...</p>
-    <?php header("refresh:2;url=/pages/home.php"); ?>
+    <?php header("refresh:1;url=/pages/home.php"); ?>
 </body>
 </html>
