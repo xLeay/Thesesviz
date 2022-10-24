@@ -29,7 +29,7 @@ require '../includes/functions/script_import.php';
 
     $i = 0;
     foreach ($data as $key => $value) {
-        if ($i < 0) {
+        if ($i < 1) {
             debug($value);
             $i++;
         }
