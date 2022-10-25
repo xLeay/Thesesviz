@@ -53,13 +53,23 @@ if (isset($_POST['buttomImport'])) {
             $nom_etablissement = $etablissement['nom'];
         }
 
+        $sql2_0 = "SELECT idref FROM etablissement WHERE idref = :idref";
         $sql2 = "INSERT INTO etablissement (idref, nom) VALUES (:idref, :nom)";
+        $selection2 = $conn->prepare($sql2_0);
         $insertion2 = $conn->prepare($sql2);
-        $insertion2->bindParam(':idref', $idref_etablissement);
-        $insertion2->bindParam(':nom', $nom_etablissement);
 
-        $insertion2->execute();
-        $idEtablissement = $conn->lastInsertId();
+        $selection = $selection2->bindParam(':idref', $idref_etablissement);
+        $selection = $selection2->execute();
+        $selected = $selection2->fetch();
+
+        if (!$selected) {
+
+            $insertion2->bindParam(':idref', $idref_etablissement);
+            $insertion2->bindParam(':nom', $nom_etablissement);
+
+            $insertion2->execute();
+            $idEtablissement = $conn->lastInsertId();
+        }
 
 
         // INSERTION NUMERO TROIS (SOUTENIR)
@@ -106,9 +116,12 @@ if (isset($_POST['buttomImport'])) {
 
                     // INSERTION NUMERO CINQ (REPOSER) ------------------------------------------------------------------------
 
+
+                    JE DOIS FAIRE UN SELECT POUR AVOIR PLUS DE "REPOSER" QUE DE SUJETS
+                    INJECTION. These1 = Sujet1, Sujet2, Sujet3, These2 = Sujet1, Sujet2, Sujet3 DONC
                     $insertion5 = $conn->prepare($sql5);
                     $insertion5->bindParam(':idSujet', $idSujet);
-                    $insertion5->bindParam(':idThese', $idThese);
+                    $insertion5->bindParam(':idThese', $idThese)
 
                     $insertion5->execute();
                 }
@@ -205,9 +218,9 @@ if (isset($_POST['buttomImport'])) {
         }
 
         $i++;
-        // if ($i == 30) {
-        //     break;
-        // }
+        if ($i == 4) {
+            break;
+        }
         // break;
     }
 
