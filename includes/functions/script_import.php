@@ -116,12 +116,9 @@ if (isset($_POST['buttomImport'])) {
 
                     // INSERTION NUMERO CINQ (REPOSER) ------------------------------------------------------------------------
 
-
-                    JE DOIS FAIRE UN SELECT POUR AVOIR PLUS DE "REPOSER" QUE DE SUJETS
-                    INJECTION. These1 = Sujet1, Sujet2, Sujet3, These2 = Sujet1, Sujet2, Sujet3 DONC
                     $insertion5 = $conn->prepare($sql5);
                     $insertion5->bindParam(':idSujet', $idSujet);
-                    $insertion5->bindParam(':idThese', $idThese)
+                    $insertion5->bindParam(':idThese', $idThese);
 
                     $insertion5->execute();
                 }
@@ -217,15 +214,15 @@ if (isset($_POST['buttomImport'])) {
             $roleN++;
         }
 
-        $i++;
-        if ($i == 4) {
-            break;
-        }
+        // $i++;
+        // if ($i == 4) {
+        //     break;
+        // }
         // break;
     }
 
-    $time_end = microtime(true);
-    $time = $time_end - $time_start;
+    // $time_end = microtime(true);
+    // $time = $time_end - $time_start;
 
-    echo "$time secondes\n";
+    // echo "$time secondes\n";
 }

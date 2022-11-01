@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-@import url('http://fonts.cdnfonts.com/css/gilroy-bold');
-/* font-family: 'Gilroy-Bold'; */
-/* font-family: 'Gilroy-Heavy'; */
-/* font-family: 'Gilroy-Light'; */
-/* font-family: 'Gilroy-Medium'; */
-/* font-family: 'Gilroy-Regular'; */
+
+:root {
+    --primary: #C9AC90;
+    --secondary: #C7BEB5;
+    --secondary30: rgba(199, 190, 181, 0.3);
+}
 
 * {
     box-sizing: border-box;
@@ -17,11 +17,87 @@
 } */
 
 body {
-    font-family: 'Gilroy-Medium', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: #f5f5f5;
     height: 100vh;
 }
 
+nav {
+    outline: 1px solid #000;
+    display: flex;
+    justify-content: center;
+
+    padding: 30px;
+    vertical-align: auto;
+}
+
+nav .search_thesis {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 50px;
+    background: #fff;
+    border: 1px solid var(--secondary);
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.search_thesis .search_icon {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 700,
+  'GRAD' 0,
+  'opsz' 48
+}
+
+.search_icon, .close_icon {
+    color: var(--secondary);
+    margin-inline: 20px;
+    user-select: none;
+
+    font-size: 48px;
+}
+
+.search_thesis .close_icon {
+    display: none;
+    position: relative;
+}
+
+.search_thesis .close_icon:hover::before {
+    /* cercle autour de l'icone */
+    content: '';
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--secondary30);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.search_thesis input {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 0 50px 50px 0;
+    border: none;
+}
+
+#search::-webkit-input-placeholder {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--secondary);
+}
+
+#search {
+    font-weight: 600;
+    font-size: 24px;
+}
 
 .wrap {
     /* border: 1px solid #000; */
@@ -35,7 +111,7 @@ body {
 
 .wrap h1 {
     font-size: 44px;
-    font-family: 'Gilroy-Bold', sans-serif;
+    font-family: 'Poppins', sans-serif;
     color: #000;
 }
 
@@ -90,11 +166,12 @@ h1 {
 }
 
 .btn {
-    border: 1px solid #bbb;
+    border: 1px solid var(--secondary);
     border-radius: 10px;
     padding: 10px 20px;
     font-size: 16px;
-    font-family: 'Gilroy-Bold', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
     color: #000;
     cursor: pointer;
     width: 100%;
@@ -115,35 +192,37 @@ h1 {
 }
 
 input {
-    border: 1px solid #bbb;
-    border-radius: 10px;
-    padding: 10px 20px;
+    border: 1px solid var(--secondary);
     font-family: 'Poppins', sans-serif;
-    font-weight: 600;
     color: #000;
     cursor: pointer;
-    width: 100%;
-    height: 80px;
     background: #fff;
-    font-size: 36px;
     transition: all 0.1s ease;
-    caret-color: #12A6E5;
-    margin-bottom: 10px;
-    font-size: 24px;
+    caret-color: var(--primary);
 }
 
 input:focus {
     outline: none;
     border: 1px solid transparent;
-    box-shadow: 0px 0px 0px 2px #12A6E5;
+    box-shadow: 0px 0px 0px 2px var(--primary);
 }
 
 input::selection {
-    background: #12A6E5;
+    background: var(--primary);
     color: #fff;
 }
 
-input::-webkit-input-placeholder {
+.authen {
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 600;
+    width: 100%;
+    height: 80px;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.authen::-webkit-input-placeholder {
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
     color: #888;
@@ -167,8 +246,8 @@ input::-webkit-input-placeholder {
     gap: 30px;
 }
 
-.logi:not(:placeholder-shown) ~ .passw:not(:placeholder-shown) ~ .auth_btn {
-    background: #12A6E5;
+.logi:not(:placeholder-shown)~.passw:not(:placeholder-shown)~.auth_btn {
+    background: var(--primary);
     color: #fff;
 }
 
@@ -197,6 +276,49 @@ input::-webkit-input-placeholder {
 .home_button {
     width: 200px;
     font-size: 18px;
+}
+
+section {
+    border: 1px solid #000;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+    padding: 0 60px;
+    gap: 20px;
+}
+
+.section_title {
+    font-size: 36px;
+    font-weight: 600;
+    color: #000;
+}
+
+.stats_wrap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+
+}
+
+.stats_wrap .stats {
+    border: 1px solid var(--secondary);
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+}
+
+.stats_title {
+    font-size: 24px;
+    font-weight: 400;
+    color: #000;
+}
+
+.stats_data {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--primary);
 }
 
 @media (max-width: 1536px) {
