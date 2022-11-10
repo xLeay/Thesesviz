@@ -59,6 +59,16 @@ $selection8 = $conn->prepare($sqlsujets20);
 $selection8->execute();
 $sujets = $selection8->fetchALL(PDO::FETCH_ASSOC);
 
+// tableau d'une thèse
+$thesis = array(
+    'idThese' => $dernieres[0]['idThese'],
+    'date_soutenance' => $dernieres[0]['date_soutenance'],
+    'nom' => $dernieres[0]['nom'],
+    'titre' => $dernieres[0]['titre'],
+    'these_accessible' => $dernieres[0]['these_accessible'],
+    'auteur' => $auteurs[0]['nom'] . ' ' . $auteurs[0]['prenom'],
+    'sujet' => $sujets[0]['libelle']
+);
 
 
 ?>
@@ -137,31 +147,44 @@ $sujets = $selection8->fetchALL(PDO::FETCH_ASSOC);
 
     <section>
         <p class="section_title">Les 20 dernières thèses</p>
+
         <div class="quick_thesis_container">
             <div class="quick_thesis_wrap">
                 <div class="quick_thesis">
                     <?php foreach ($dernieres as $these) : ?>
-                        <p class="thesis_title"><?= $these['titre']; ?></p>
-                        <p class="thesis_etablissement"><?= $these['these_accessible']; ?></p>
+                        <p class="thesis_title bold" style="font-size: 18px;"><?= $these['titre']; ?></p>
+                        <div class="thesis_online">
+                            <?php if ($these['these_accessible'] == 1) : ?>
+                                <span class="material-symbols-rounded online_icon">check_circle</span>
+                            <?php else : ?>
+                                <span class="material-symbols-rounded online_icon">cancel</span>
+                            <?php endif; ?>
+                        </div>
                     <?php endforeach; ?>
 
-                    <?php foreach ($auteurs as $auteur) : ?>
-                        <p class="thesis_author"><?= $auteur['prenom'] ?> <span class="important_info"><?= $auteur['nom']; ?></span></p>
-                    <?php endforeach; ?>
-                    <div class="quick_thesis_subjects">
-                        <?php foreach ($sujets as $sujet) : ?>
-                            <div class="quick_thesis_subject">
-                                <p class="thesis_title"><?= $sujet['libelle']; ?></p>
-                            </div>
+                    <div class="small_wrapper">
+                        <?php foreach ($auteurs as $auteur) : ?>
+                            <p class="thesis_author"><?= $auteur['prenom'] ?> <span class="important_info"><?= $auteur['nom']; ?></span></p>
                         <?php endforeach; ?>
+                        <div class="quick_thesis_subjects">
+                            <?php foreach ($sujets as $sujet) : ?>
+                                <div class="quick_thesis_subject">
+                                    <p class="thesis_title"><?= $sujet['libelle']; ?></p>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
                 <div class="quick_thesis_info">
-                    <p class="quick_thesis_date"><?= $these['date_soutenance']; ?></p>
-                    <p class="quick_thesis_academy"><?= $these['nom']; ?></p>
+                    <p class="quick_thesis_date"><?= strftime('%d %b', strtotime($these['date_soutenance'])); ?> <span class="important_info"><?= strftime('%Y', strtotime($these['date_soutenance'])); ?></span></p>
+                    <p class="quick_thesis_academy important_info"><?= $these['nom']; ?></p>
                 </div>
             </div>
         </div>
+    </section>
+
+    <section>
+        <?php debug($thesis); ?>
     </section>
 
 
