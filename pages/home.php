@@ -1,75 +1,67 @@
 <?php
 
-require '../includes/functions/app.php';
+// require '../includes/functions/app.php';
 require '/Laragon/www/Thesesviz/includes/auth/conf.php';
+require '../includes/functions/loadData.php';
 
-// seléction des thèses répertoriées
-$sqlrepertorie = "SELECT idThese FROM these";
-$selection1 = $conn->prepare($sqlrepertorie);
-$selection1->execute();
+// // seléction des thèses répertoriées
+// $sqlrepertorie = "SELECT idThese FROM these";
+// $selection1 = $conn->prepare($sqlrepertorie);
+// $selection1->execute();
 
-// sélection des thèses en ligne
-$sqlenligne = "SELECT these_accessible FROM these WHERE these_accessible = 1";
-$selection2 = $conn->prepare($sqlenligne);
-$selection2->execute();
+// // sélection des thèses en ligne
+// $sqlenligne = "SELECT these_accessible FROM these WHERE these_accessible = 1";
+// $selection2 = $conn->prepare($sqlenligne);
+// $selection2->execute();
 
-// sélection des établissements concernés
-$sqletablissement = "SELECT idref FROM etablissement";
-$selection3 = $conn->prepare($sqletablissement);
-$selection3->execute();
+// // sélection des établissements concernés
+// $sqletablissement = "SELECT idref FROM etablissement";
+// $selection3 = $conn->prepare($sqletablissement);
+// $selection3->execute();
 
-// sélection des sujets de thèses
-$sqlsujet = "SELECT idSujet FROM sujet";
-$selection4 = $conn->prepare($sqlsujet);
-$selection4->execute();
+// // sélection des sujets de thèses
+// $sqlsujet = "SELECT idSujet FROM sujet";
+// $selection4 = $conn->prepare($sqlsujet);
+// $selection4->execute();
 
-// sélection des années de soutenance
-$sqlannee = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(*) as count FROM soutenir GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
-$selection5 = $conn->prepare($sqlannee);
-$selection5->execute();
-$annees = $selection5->fetchALL(PDO::FETCH_ASSOC);
+// // sélection des années de soutenance
+// $sqlannee = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(*) as count FROM soutenir GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
+// $selection5 = $conn->prepare($sqlannee);
+// $selection5->execute();
+// $annees = $selection5->fetchALL(PDO::FETCH_ASSOC);
 
 
-// sélection des 20 dernières thèses ajoutées
-$sql20dernieres = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible
-FROM etablissement e, these t NATURAL JOIN soutenir s 
-WHERE s.idEtablissement = e.idEtablissement 
-ORDER BY s.date_soutenance DESC LIMIT 1";
-$selection6 = $conn->prepare($sql20dernieres);
-$selection6->execute();
-$dernieres = $selection6->fetchALL(PDO::FETCH_ASSOC);
+// // sélection des 20 dernières thèses ajoutées
+// $sql20dernieres = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+// FROM etablissement e, these t NATURAL JOIN soutenir s 
+// WHERE s.idEtablissement = e.idEtablissement 
+// ORDER BY s.date_soutenance DESC LIMIT 20";
+// $selection6 = $conn->prepare($sql20dernieres);
+// $selection6->execute();
+// $dernieres = $selection6->fetchALL(PDO::FETCH_ASSOC);
 
-// sélection des auteurs des 20 dernières thèses ajoutées
-$sqlauteurs20 = "SELECT a.role, p.nom, p.prenom
-FROM soutenir s 
-INNER JOIN assister a ON a.idThese = s.idThese
-INNER JOIN personne p ON p.idPersonne = a.idPersonne
-WHERE a.role = 'auteur de la these'
-ORDER BY s.date_soutenance DESC LIMIT 1;";
-$selection7 = $conn->prepare($sqlauteurs20);
-$selection7->execute();
-$auteurs = $selection7->fetchALL(PDO::FETCH_ASSOC);
+// // sélection des auteurs des 20 dernières thèses ajoutées
+// $sqlauteurs20 = "SELECT a.role, p.nom, p.prenom
+// FROM soutenir s 
+// INNER JOIN assister a ON a.idThese = s.idThese
+// INNER JOIN personne p ON p.idPersonne = a.idPersonne
+// WHERE a.role = 'auteur de la these'
+// ORDER BY s.date_soutenance DESC LIMIT 20;";
+// $selection7 = $conn->prepare($sqlauteurs20);
+// $selection7->execute();
+// $auteurs = $selection7->fetchALL(PDO::FETCH_ASSOC);
 
-// sélection des sujets des 20 dernières thèses ajoutées à l'aide de l'idThese
-$sqlsujets20 = "SELECT s.libelle
-FROM reposer r
-INNER JOIN sujet s ON s.idSujet = r.idSujet
-INNER JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY date_soutenance DESC LIMIT 1) so ON so.idThese = r.idThese";
-$selection8 = $conn->prepare($sqlsujets20);
-$selection8->execute();
-$sujets = $selection8->fetchALL(PDO::FETCH_ASSOC);
+// // sélection des sujets des 20 dernières thèses ajoutées à l'aide de l'idThese
+// $sqlsujets20 = "SELECT s.libelle, r.idThese
+// FROM reposer r
+// INNER JOIN sujet s ON s.idSujet = r.idSujet
+// INNER JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY date_soutenance DESC LIMIT 20) so ON so.idThese = r.idThese";
+// $selection8 = $conn->prepare($sqlsujets20);
+// $selection8->execute();
+// $sujets = $selection8->fetchALL(PDO::FETCH_ASSOC);
 
-// tableau d'une thèse
-$thesis = array(
-    'idThese' => $dernieres[0]['idThese'],
-    'date_soutenance' => $dernieres[0]['date_soutenance'],
-    'nom' => $dernieres[0]['nom'],
-    'titre' => $dernieres[0]['titre'],
-    'these_accessible' => $dernieres[0]['these_accessible'],
-    'auteur' => $auteurs[0]['nom'] . ' ' . $auteurs[0]['prenom'],
-    'sujet' => $sujets[0]['libelle']
-);
 
+// debug($dernieres, $auteurs, $sujets);
 
 ?>
 
@@ -82,6 +74,7 @@ $thesis = array(
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../src/styles/app.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../src/styles/home.css">
     <title>Thesesviz - Acceuil</title>
 </head>
 
@@ -126,7 +119,6 @@ $thesis = array(
     </section>
 
 
-    <!-- <section style="outline: 1px solid #000;"> -->
     <section>
         <p class="section_title">Graphiques sur les thèses</p>
         <div class="btn_container">
@@ -148,69 +140,76 @@ $thesis = array(
     <section>
         <p class="section_title">Les 20 dernières thèses</p>
 
-        <div class="quick_thesis_container">
-            <div class="quick_thesis_wrap">
-                <div class="quick_thesis">
-                    <?php foreach ($dernieres as $these) : ?>
-                        <p class="thesis_title bold" style="font-size: 18px;"><?= $these['titre']; ?></p>
+        <?php $i = 0; ?>
+        <?php for ($i; $i < 5; $i++) : ?> BON BUT C'EST D'AFFICHER QUE 5 MAIS EN MONTRER PLUS AVEC UN BOUTON VOIR PLUS
+            <?php
+            $thesis = array(
+                'titre' => $dernieres[$i]['titre'],
+                'date' => $dernieres[$i]['date_soutenance'],
+                'etablissement' => $dernieres[$i]['nom'],
+                'auteurs' => array(
+                    'prenom' => $auteurs[$i]['prenom'],
+                    'nom' => $auteurs[$i]['nom']
+                ),
+                'accessible' => $dernieres[$i]['these_accessible'],
+                'sujets' => array()
+            );
+
+            foreach ($sujets as $sujet) {
+                if ($sujet['idThese'] == $dernieres[$i]['idThese']) {
+                    array_push($thesis['sujets'], $sujet['libelle']);
+                }
+            }
+
+            ?>
+
+            
+            <div class="quick_thesis_container">
+                <div class="quick_thesis_wrap">
+                    <div class="quick_thesis">
+                        <div class="title_content">
+                            <p class="thesis_title bold underline"><?= $thesis['titre']; ?></p>
+                        </div>
                         <div class="thesis_online">
-                            <?php if ($these['these_accessible'] == 1) : ?>
+                            <?php if ($thesis['accessible'] == 1) : ?>
                                 <span class="material-symbols-rounded online_icon">check_circle</span>
                             <?php else : ?>
                                 <span class="material-symbols-rounded online_icon">cancel</span>
                             <?php endif; ?>
                         </div>
-                    <?php endforeach; ?>
 
-                    <div class="small_wrapper">
-                        <?php foreach ($auteurs as $auteur) : ?>
-                            <p class="thesis_author"><?= $auteur['prenom'] ?> <span class="important_info"><?= $auteur['nom']; ?></span></p>
-                        <?php endforeach; ?>
-                        <div class="quick_thesis_subjects">
-                            <?php foreach ($sujets as $sujet) : ?>
-                                <div class="quick_thesis_subject">
-                                    <p class="thesis_title"><?= $sujet['libelle']; ?></p>
-                                </div>
-                            <?php endforeach; ?>
+                        <div class="small_wrapper">
+                            <p class="thesis_author"><?= $thesis['auteurs']['prenom'] ?> <span class="important_info"><?= $thesis['auteurs']['nom']; ?></span></p>
+                            <div class="quick_thesis_subjects">
+                                <?php for ($j = 0; $j < (count($thesis['sujets']) > 3 ? 3 : count($thesis['sujets'])); $j++) : ?>
+                                    <div class="quick_thesis_subject">
+                                        <p class="thesis_subject"><?= $thesis['sujets'][$j]; ?></p>
+                                    </div>
+                                <?php endfor; ?>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="quick_thesis_info">
-                    <p class="quick_thesis_date"><?= strftime('%d %b', strtotime($these['date_soutenance'])); ?> <span class="important_info"><?= strftime('%Y', strtotime($these['date_soutenance'])); ?></span></p>
-                    <p class="quick_thesis_academy important_info"><?= $these['nom']; ?></p>
+                    <div class="quick_thesis_info">
+                        <p class="quick_thesis_date"><?= strftime('%d %b', strtotime($thesis['date'])); ?> <span class="important_info"><?= strftime('%Y', strtotime($thesis['date'])); ?></span></p>
+                        <p class="quick_thesis_academy important_info underline"><?= $thesis['etablissement']; ?></p>
+                    </div>
                 </div>
             </div>
+
+        <?php endfor; ?>
+
+        <!-- bouton "voir plus" -->
+        <div class="btn_container">
+            <button class="btn see_more">Voir plus</button>
         </div>
-    </section>
 
-    <section>
-        <?php debug($thesis); ?>
-    </section>
+        <!-- si le bouton est cliqué, afficher les 5 suivantes -->
 
 
-    <section>
 
 
-        <div class="thesis_container" style="border: 1px solid #000;">
-            <?php foreach ($dernieres as $these) : ?>
-                <div class="thesis">
-                    <!-- <p class="thesis_title"><?= $these['titre']; ?></p>
-                    <p class="thesis_author"><?= $these['auteur']; ?></p>
-                    <p class="thesis_date"><?= $these['date_soutenance']; ?></p> -->
-                    <?php debug($these); ?>
-                </div>
-            <?php endforeach; ?>
-            <?php foreach ($auteurs as $auteur) : ?>
-                <div class="thesis">
-                    <?php debug($auteur); ?>
-                </div>
-            <?php endforeach; ?>
-            <?php foreach ($sujets as $sujet) : ?>
-                <div class="thesis">
-                    <?php debug($sujet); ?>
-                </div>
-            <?php endforeach; ?>
-        </div>
+
+
     </section>
 
     <br><br><br><br><br><br><br><br><br><br>
@@ -246,6 +245,18 @@ $thesis = array(
     <script src="../src/scripts/app.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
+
+
+
+
+
+
+
+
+
+
+
+
             // Graphique colonne
 
             const UnAn = document.getElementById('UnAn');
