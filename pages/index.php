@@ -16,6 +16,7 @@
         <span class="material-symbols-outlined planet_icon">description</span>
         <h1><?= "ThesesViz." ?></h1>
     </div>
+    
 
     <section class="connect_sect">
         <div class="connect_wrap">

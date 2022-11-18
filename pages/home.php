@@ -1,67 +1,6 @@
 <?php
 
-// require '../includes/functions/app.php';
-require '/Laragon/www/Thesesviz/includes/auth/conf.php';
 require '../includes/functions/loadData.php';
-
-// // seléction des thèses répertoriées
-// $sqlrepertorie = "SELECT idThese FROM these";
-// $selection1 = $conn->prepare($sqlrepertorie);
-// $selection1->execute();
-
-// // sélection des thèses en ligne
-// $sqlenligne = "SELECT these_accessible FROM these WHERE these_accessible = 1";
-// $selection2 = $conn->prepare($sqlenligne);
-// $selection2->execute();
-
-// // sélection des établissements concernés
-// $sqletablissement = "SELECT idref FROM etablissement";
-// $selection3 = $conn->prepare($sqletablissement);
-// $selection3->execute();
-
-// // sélection des sujets de thèses
-// $sqlsujet = "SELECT idSujet FROM sujet";
-// $selection4 = $conn->prepare($sqlsujet);
-// $selection4->execute();
-
-// // sélection des années de soutenance
-// $sqlannee = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(*) as count FROM soutenir GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
-// $selection5 = $conn->prepare($sqlannee);
-// $selection5->execute();
-// $annees = $selection5->fetchALL(PDO::FETCH_ASSOC);
-
-
-// // sélection des 20 dernières thèses ajoutées
-// $sql20dernieres = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
-// FROM etablissement e, these t NATURAL JOIN soutenir s 
-// WHERE s.idEtablissement = e.idEtablissement 
-// ORDER BY s.date_soutenance DESC LIMIT 20";
-// $selection6 = $conn->prepare($sql20dernieres);
-// $selection6->execute();
-// $dernieres = $selection6->fetchALL(PDO::FETCH_ASSOC);
-
-// // sélection des auteurs des 20 dernières thèses ajoutées
-// $sqlauteurs20 = "SELECT a.role, p.nom, p.prenom
-// FROM soutenir s 
-// INNER JOIN assister a ON a.idThese = s.idThese
-// INNER JOIN personne p ON p.idPersonne = a.idPersonne
-// WHERE a.role = 'auteur de la these'
-// ORDER BY s.date_soutenance DESC LIMIT 20;";
-// $selection7 = $conn->prepare($sqlauteurs20);
-// $selection7->execute();
-// $auteurs = $selection7->fetchALL(PDO::FETCH_ASSOC);
-
-// // sélection des sujets des 20 dernières thèses ajoutées à l'aide de l'idThese
-// $sqlsujets20 = "SELECT s.libelle, r.idThese
-// FROM reposer r
-// INNER JOIN sujet s ON s.idSujet = r.idSujet
-// INNER JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY date_soutenance DESC LIMIT 20) so ON so.idThese = r.idThese";
-// $selection8 = $conn->prepare($sqlsujets20);
-// $selection8->execute();
-// $sujets = $selection8->fetchALL(PDO::FETCH_ASSOC);
-
-
-// debug($dernieres, $auteurs, $sujets);
 
 ?>
 
@@ -75,6 +14,7 @@ require '../includes/functions/loadData.php';
     <link rel="stylesheet" href="../src/styles/app.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link rel="stylesheet" href="../src/styles/home.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <title>Thesesviz - Acceuil</title>
 </head>
 
@@ -90,7 +30,7 @@ require '../includes/functions/loadData.php';
     <nav>
         <form action="" class="search_thesis" onclick="document.getElementById('search').focus()">
             <span class="material-symbols-rounded search_icon">search</span>
-            <input type="text" name="" id="search" placeholder="Recherche de thèse par titre, année, auteur...">
+            <input type="text" name="keyword" id="search" placeholder="Recherche de thèse par titre, année, auteur...">
             <span class="material-symbols-rounded close_icon">close</span>
         </form>
     </nav>
@@ -141,9 +81,10 @@ require '../includes/functions/loadData.php';
         <p class="section_title">Les 20 dernières thèses</p>
 
         <?php $i = 0; ?>
-        <?php for ($i; $i < 5; $i++) : ?> BON BUT C'EST D'AFFICHER QUE 5 MAIS EN MONTRER PLUS AVEC UN BOUTON VOIR PLUS
+        <?php for ($i; $i < 5; $i++) : ?>
             <?php
             $thesis = array(
+                'rank' => $dernieres[$i]['rank'],
                 'titre' => $dernieres[$i]['titre'],
                 'date' => $dernieres[$i]['date_soutenance'],
                 'etablissement' => $dernieres[$i]['nom'],
@@ -163,7 +104,7 @@ require '../includes/functions/loadData.php';
 
             ?>
 
-            
+
             <div class="quick_thesis_container">
                 <div class="quick_thesis_wrap">
                     <div class="quick_thesis">
@@ -191,25 +132,16 @@ require '../includes/functions/loadData.php';
                     </div>
                     <div class="quick_thesis_info">
                         <p class="quick_thesis_date"><?= strftime('%d %b', strtotime($thesis['date'])); ?> <span class="important_info"><?= strftime('%Y', strtotime($thesis['date'])); ?></span></p>
-                        <p class="quick_thesis_academy important_info underline"><?= $thesis['etablissement']; ?></p>
+                        <p class="quick_thesis_academy important_info underline"><?= $thesis['etablissement']; ?> -- <?= $thesis['rank']; ?></p>
                     </div>
                 </div>
             </div>
 
         <?php endfor; ?>
 
-        <!-- bouton "voir plus" -->
-        <div class="btn_container">
-            <button class="btn see_more">Voir plus</button>
+        <div class="btn_container" id="see_more__container">
+            <button id="see_more" class="btn">Voir plus</button>
         </div>
-
-        <!-- si le bouton est cliqué, afficher les 5 suivantes -->
-
-
-
-
-
-
     </section>
 
     <br><br><br><br><br><br><br><br><br><br>
@@ -226,36 +158,25 @@ require '../includes/functions/loadData.php';
 
 
     <!-- <?php
-            $json = file_get_contents('../includes/extract_theses.json');
-            $data = json_decode($json, true);
+        $json = file_get_contents('../includes/extract_theses.json');
+        $data = json_decode($json, true);
 
-            $i = 0;
-            foreach ($data as $key => $value) {
-                if ($i < 1) {
-                    debug($value);
-                    $i++;
-                }
+        $i = 0;
+        foreach ($data as $key => $value) {
+            if ($i < 1) {
+                debug($value);
+                $i++;
             }
-            ?> -->
+        }
+    ?> -->
 
 
 
 
 
     <script src="../src/scripts/app.js"></script>
-    <script>
+    <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", async () => {
-
-
-
-
-
-
-
-
-
-
-
 
             // Graphique colonne
 

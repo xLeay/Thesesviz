@@ -25,7 +25,7 @@ if (isset($_POST['buttomImport'])) {
         $sur_travaux = ($these['these_sur_travaux'] == "non") ? 0 : 1;
         $titre = end($these['titres']);
         $discipline = $these['discipline']['fr'];
-
+ 
 
         $sql = "INSERT INTO these (these_accessible, embargo, nnt, oai_set_specs, resume, soutenue, sur_travaux, titre, discipline) VALUES (:these_accessible, :embargo, :nnt, :oai_set_specs, :resume, :soutenue, :sur_travaux, :titre, :discipline)";
         $insertion = $conn->prepare($sql);
@@ -84,6 +84,7 @@ if (isset($_POST['buttomImport'])) {
         $insertion3->bindParam(':date_soutenance', $date_soutenance);
 
         $insertion3->execute();
+
 
 
         // INSERTION NUMERO QUATRE (SUJETS) ------------------------------------------------------------------------
