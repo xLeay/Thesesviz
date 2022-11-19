@@ -38,6 +38,12 @@ body {
     font-weight: 600;
 }
 
+.hide {
+    display: none;
+}
+
+
+
 nav {
     /* outline: 1px solid #000; */
     display: flex;
@@ -56,6 +62,7 @@ nav .search_thesis {
     border: 1px solid var(--secondary);
     border-radius: 50px;
     cursor: pointer;
+    position: relative;
 }
 
 .search_thesis .material-symbols-rounded {
@@ -75,7 +82,8 @@ nav .search_thesis {
     -webkit-font-smoothing: antialiased;
 }
 
-.search_icon, .close_icon {
+.search_icon,
+.close_icon {
     color: var(--secondary);
     user-select: none;
 }
@@ -400,7 +408,44 @@ section {
     color: #fff;
 }
 
+.search_options {
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+    height: 200px;
+    background: #FFFFFF;
+    border: 1px solid #C7BEB5;
+    border-radius: 10px;
+    position: absolute;
+    padding: 10px 0;
+    top: calc(100% + 5px);
+    right: 0;
+    user-select: none;
+    cursor: auto;
+}
 
+.search_options__item p {
+    margin-left: 15px;
+}
+
+.search_options__list {
+    width: 100%;
+}
+
+.search_options__item {
+    cursor: pointer;
+}
+
+.search_options__list .search_options__item:hover {
+    background: var(--primary25);
+}
+
+.search_options > p {
+    margin-left: 15px;
+}
 
 
 @media (max-width: 1536px) {

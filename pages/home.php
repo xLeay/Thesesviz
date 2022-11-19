@@ -27,13 +27,7 @@ require '../includes/functions/loadData.php';
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-    <nav>
-        <form action="" class="search_thesis" onclick="document.getElementById('search').focus()">
-            <span class="material-symbols-rounded search_icon">search</span>
-            <input type="text" name="keyword" id="search" placeholder="Recherche de thèse par titre, année, auteur...">
-            <span class="material-symbols-rounded close_icon">close</span>
-        </form>
-    </nav>
+    <?php include '../includes/components/nav.php'; ?>
 
     <section>
         <p class="section_title">Statistiques de thèses</p>
@@ -158,17 +152,17 @@ require '../includes/functions/loadData.php';
 
 
     <!-- <?php
-        $json = file_get_contents('../includes/extract_theses.json');
-        $data = json_decode($json, true);
+            $json = file_get_contents('../includes/extract_theses.json');
+            $data = json_decode($json, true);
 
-        $i = 0;
-        foreach ($data as $key => $value) {
-            if ($i < 1) {
-                debug($value);
-                $i++;
+            $i = 0;
+            foreach ($data as $key => $value) {
+                if ($i < 1) {
+                    debug($value);
+                    $i++;
+                }
             }
-        }
-    ?> -->
+            ?> -->
 
 
 
