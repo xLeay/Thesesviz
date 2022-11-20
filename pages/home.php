@@ -29,6 +29,12 @@ require '../includes/functions/loadData.php';
 
     <?php include '../includes/components/nav.php'; ?>
 
+
+
+
+
+
+
     <section>
         <p class="section_title">Statistiques de thèses</p>
 

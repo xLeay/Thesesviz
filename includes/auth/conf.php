@@ -1,5 +1,6 @@
 <?php
 require '/Laragon/www/Thesesviz/pdo_pass.php';
+require_once '/Laragon/www/Thesesviz/includes/functions/app.php';
 
 $servername = "localhost";
 $username = "root";
