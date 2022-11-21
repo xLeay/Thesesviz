@@ -77,7 +77,7 @@ require '../includes/functions/loadData.php';
     </section>
 
 
-    <section>
+    <section class="thesis20">
         <p class="section_title">Les 20 dernières thèses</p>
 
         <?php $i = 0; ?>
@@ -104,7 +104,6 @@ require '../includes/functions/loadData.php';
 
             ?>
 
-
             <div class="quick_thesis_container">
                 <div class="quick_thesis_wrap">
                     <div class="quick_thesis">
@@ -113,9 +112,14 @@ require '../includes/functions/loadData.php';
                         </div>
                         <div class="thesis_online">
                             <?php if ($thesis['accessible'] == 1) : ?>
-                                <span class="material-symbols-rounded online_icon">check_circle</span>
+                                <div class="accessible__wrap">
+                                    <p>en ligne</p>
+                                    <span class="material-symbols-rounded online_icon">check_circle</span>
+                                </div>
                             <?php else : ?>
-                                <span class="material-symbols-rounded online_icon">cancel</span>
+                                <div class="accessible__wrap">
+                                    <span class="material-symbols-rounded online_icon">cancel</span>
+                                </div>
                             <?php endif; ?>
                         </div>
 
@@ -178,6 +182,16 @@ require '../includes/functions/loadData.php';
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", async () => {
 
+            const thesis_title = document.querySelectorAll('.thesis_title');
+
+            thesis_title.forEach(title => {
+                let containerWidth = title.offsetWidth;
+                console.log(containerWidth);
+
+                title.innerHTML = truncate(title.innerHTML, containerWidth, 3);
+            });
+
+
             // Graphique colonne
 
             const UnAn = document.getElementById('UnAn');
@@ -199,15 +213,18 @@ require '../includes/functions/loadData.php';
                 }
             });
 
+            Highcharts.seriesTypes.line.prototype.getPointSpline = Highcharts.seriesTypes.spline.prototype.getPointSpline;
             const chart = Highcharts.chart('histo_container', {
 
+                credits: {
+                    enabled: false
+                },
                 title: {
                     text: null,
                 },
                 subtitle: {
                     text: null
                 },
-
                 tooltip: {
                     backgroundColor: '#FFFFFF',
                     borderRadius: 10,
@@ -236,7 +253,7 @@ require '../includes/functions/loadData.php';
                     categories: ['1985', '1990', '1995', '2000', '2005', '2010', '2015', '2020']
                 },
                 series: [{
-                    type: 'column',
+                    // type: 'column',
                     name: 'Soutenues',
                     data: [parseInt(data[0].count), parseInt(data[5].count), parseInt(data[10].count), parseInt(data[15].count), parseInt(data[20].count), parseInt(data[25].count), parseInt(data[30].count), parseInt(data[34].count)],
                     showInLegend: false
@@ -253,7 +270,7 @@ require '../includes/functions/loadData.php';
                         categories: ['1985', '1986', '1987', '1988', '1989', '1990', '1991', '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2018', '2019', '2020', '2021', '2022']
                     },
                     series: [{
-                        type: 'column',
+                        // type: 'column',
                         name: 'Soutenues',
                         data: [parseInt(data[0].count), parseInt(data[1].count), parseInt(data[2].count), parseInt(data[3].count), parseInt(data[4].count), parseInt(data[5].count), parseInt(data[6].count), parseInt(data[7].count), parseInt(data[8].count), parseInt(data[9].count), parseInt(data[10].count), parseInt(data[11].count), parseInt(data[12].count), parseInt(data[13].count), parseInt(data[14].count), parseInt(data[15].count), parseInt(data[16].count), parseInt(data[17].count), parseInt(data[18].count), parseInt(data[19].count), parseInt(data[20].count), parseInt(data[21].count), parseInt(data[22].count), parseInt(data[23].count), parseInt(data[24].count), parseInt(data[25].count), parseInt(data[26].count), parseInt(data[27].count), parseInt(data[28].count), parseInt(data[29].count), parseInt(data[30].count), parseInt(data[31].count), parseInt(data[32].count), parseInt(data[33].count), parseInt(data[34].count), parseInt(data[35].count), parseInt(data[36].count)],
                         showInLegend: false
@@ -271,7 +288,7 @@ require '../includes/functions/loadData.php';
                         categories: ['1985', '1990', '1995', '2000', '2005', '2010', '2015', '2020']
                     },
                     series: [{
-                        type: 'column',
+                        // type: 'column',
                         name: 'Soutenues',
                         data: [parseInt(data[0].count), parseInt(data[5].count), parseInt(data[10].count), parseInt(data[15].count), parseInt(data[20].count), parseInt(data[25].count), parseInt(data[30].count), parseInt(data[34].count)],
                         showInLegend: false
@@ -289,7 +306,7 @@ require '../includes/functions/loadData.php';
                         categories: ['1985', '1995', '2005', '2015', '2020']
                     },
                     series: [{
-                        type: 'column',
+                        // type: 'column',
                         name: 'Soutenues',
                         data: [parseInt(data[0].count), parseInt(data[10].count), parseInt(data[20].count), parseInt(data[30].count), parseInt(data[34].count)],
                         showInLegend: false
@@ -335,6 +352,9 @@ require '../includes/functions/loadData.php';
 
             // Create the chart
             const map_chart = Highcharts.mapChart('map_container', {
+                credits: {
+                    enabled: false
+                },
                 chart: {
                     map: topology
                 },

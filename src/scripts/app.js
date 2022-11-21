@@ -1,4 +1,15 @@
 
+
+function truncate(text, maxLength, dotCount) {
+    let modText = text.trim();
+    if (modText.length > maxLength) {
+        modText = text.substring(0, maxLength - dotCount);
+        modText = modText.padEnd(maxLength, ".");
+        return modText;
+    }
+    return text;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
     const search_thesis = document.querySelector('.search_thesis');
@@ -109,7 +120,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // fonction qui retour le résultat de la recherche car une div en contenteditable ne peut pas être utilisé dans un formulaire
     function getContent() {
         search_input.value = placeholder.textContent;
-        console.log(search_input.value, placeholder.textContent);
+        if (placeholder.querySelector('span')) {
+            search_input.value = placeholder.querySelector('span').nextSibling.textContent.replace(/^\s+/, '');
+        }
+        // console.log(search_input.value);
     }
 
     // détecter l'entrée de mot clé de recherche comme titre:, auteur:, etc et les transformer en span
@@ -137,13 +151,6 @@ document.addEventListener('DOMContentLoaded', function () {
             setEndOfContenteditable(placeholder);
         }, 50);
     }
-
-
-
-
-
-
-
 
 
 });

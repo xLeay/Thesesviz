@@ -2,6 +2,7 @@
     display: grid;
     grid-template-columns: 5fr 1fr;
     gap: 15px;
+    position: relative;
 }
 
 .small_wrapper {
@@ -11,15 +12,21 @@
 
 .thesis_title {
     font-size: 18px;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .title_content {
-    width: 97%;
+    width: 89%;
+}
+
+.quick_thesis_academy {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .thesis_online {
@@ -33,6 +40,30 @@
     user-select: none;
 }
 
+.accessible__wrap {
+    border: 1px solid var(--secondary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    gap: 3px;
+}
+
+.accessible__wrap p {
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.accessible__wrap .online_icon {
+    font-size: 18px;
+    margin-right: 0;
+}
+
+.accessible__wrap p+.online_icon {
+    margin-right: 5px;
+}
+
 .quick_thesis,
 .quick_thesis_info {
     border: 1px solid var(--secondary);
@@ -44,6 +75,8 @@
     padding: 10px;
     gap: 5px;
     transition: all 0.2s ease;
+    min-width: 100%;
+    background: white;
 }
 
 .quick_thesis:hover,
@@ -76,4 +109,7 @@
     font-size: 14px;
 }
 
-
+.thesis20 .btn_container {
+    margin-top: 20px;
+    height: fit-content;
+}
