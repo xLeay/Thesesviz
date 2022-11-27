@@ -2,6 +2,16 @@
 
 include '/Laragon/www/Thesesviz/includes/auth/conf.php';
 
+// $json = file_get_contents('../includes/extract_theses.json');
+// $data = json_decode($json, true);
+
+// $i = 0;
+// foreach ($data as $key => $value) {
+//     if ($i < 1) {
+//         debug($value);
+//         $i++;
+//     }
+// }
 
 if (isset($_POST['buttomImport'])) {
 

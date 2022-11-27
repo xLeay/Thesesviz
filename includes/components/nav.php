@@ -1,6 +1,6 @@
 
 <nav>
-    <form action="/pages/search.php" method="get" class="search_thesis" autocomplete="off" enctype="text/plain">
+    <form action="/q" method="get" class="search_thesis" autocomplete="off" enctype="text/plain">
         <div class="search_wrap">
             <div class="search__editor" spellcheck="false">
                 <div class="search__editor-placeholder" style="padding-left: 15px;">

@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', function () {
             // trigger search
             getContent();
 
+            // montre le contenu de getContent
+            console.log(getContent());
+
             
             search_thesis.submit();
         }
@@ -46,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('click', function (e) {
         if (e.target == search_thesis || search_thesis.contains(e.target) && e.target != search_options && search_options.contains(e.target) == false) {
 
-            search_options.style.display = 'flex';
             placeholder.focus();
+            search_options.style.display = 'flex';
 
         } else {
             search_options.style.display = 'none';
@@ -120,10 +123,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // fonction qui retour le résultat de la recherche car une div en contenteditable ne peut pas être utilisé dans un formulaire
     function getContent() {
         search_input.value = placeholder.textContent;
+        // console.log(search_input.value);
         if (placeholder.querySelector('span')) {
-            search_input.value = placeholder.querySelector('span').nextSibling.textContent.replace(/^\s+/, '');
+            search_input.value = placeholder.querySelector('span').textContent.replace(':', '~'); // TODO: à modifier pour que le caractère ~ soit remplacé par le caractère : dans le controller -- https://perishablepress.com/stop-using-unsafe-characters-in-urls/
+            search_input.value += placeholder.querySelector('span').nextSibling.textContent.replace(/^\s+/, '');
+            // console.log(search_input.value);
         }
         // console.log(search_input.value);
+
+        return search_input.value;
     }
 
     // détecter l'entrée de mot clé de recherche comme titre:, auteur:, etc et les transformer en span
@@ -154,3 +162,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 });
+

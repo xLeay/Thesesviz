@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ router.php [QSA,L]
+</IfModule>
+
+<Files wp-login.php>
+    AuthType Basic
+    AuthName "Espace sécurisé, veuillez vous connecter"
+    AuthUserFile /.htpasswd
+    Require valid-user
+</Files>

@@ -1,10 +1,8 @@
 <?php
-require '/Laragon/www/Thesesviz/pdo_pass.php';
-require_once '/Laragon/www/Thesesviz/includes/functions/app.php';
 
 $servername = "localhost";
 $username = "root";
-$password = "$mdp";
+$password = "";
 $options = array(PDO::MYSQL_ATTR_INIT_COMMAND=>'SET NAMES utf8mb4', PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET utf8mb4");
 
 try {

@@ -41,20 +41,20 @@
 //     return $sql;
 // }
 
-function reduce($key)
-{
-    $options = [
-        'titre:', 'auteur:', 'sujet:', 'depuis:', 'de:', 'à:'
-    ];
-    foreach ($options as $option) {
-        if (strpos($key, $option) !== false) {
-            $key = str_replace($option, '', $key);
-            $key = trim($key);
-        } else {
-            return $key;
-        }
-    }
-}
+// function reduce($key)
+// {
+//     $options = [
+//         'titre:', 'auteur:', 'sujet:', 'depuis:', 'de:', 'à:'
+//     ];
+//     foreach ($options as $option) {
+//         if (strpos($key, $option) !== false) {
+//             $key = str_replace($option, '', $key);
+//             $key = trim($key);
+//         } else {
+//             return $key;
+//         }
+//     }
+// }
 
 
 // // sélection des 20 dernières thèses ajoutées
@@ -93,60 +93,62 @@ function reduce($key)
 // $selection5->execute();
 // $annees = $selection5->fetchALL(PDO::FETCH_ASSOC);
 
-function decodeKey($key)
-{
-    $options = [
-        'titre:', 'auteur:', 'sujet:', 'depuis:', 'de:', 'à:'
-    ];
-
-    $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
-    FROM etablissement e, these t NATURAL JOIN soutenir s 
-    WHERE s.idEtablissement = e.idEtablissement AND t.titre LIKE '%$key%'
-    ORDER BY t.idThese DESC";
-
-    $sqlauteur = "SELECT a.role, p.nom, p.prenom, s.idThese
-    FROM soutenir s
-    INNER JOIN assister a ON a.idThese = s.idThese
-    INNER JOIN personne p ON p.idPersonne = a.idPersonne
-    WHERE a.role = 'auteur de la these'
-    ORDER BY s.idThese DESC";
-
-    $sqlsujet = "SELECT s.libelle, r.idThese
-    FROM reposer r
-    INNER JOIN sujet s ON s.idSujet = r.idSujet
-    INNER JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so ON so.idThese = r.idThese";
-
-    $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
-    FROM soutenir s
-    INNER JOIN these t ON t.idThese = s.idThese
-    WHERE t.titre LIKE '%$key%'
-    GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
-
-    $queries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
 
 
+// function decodeKey($key)
+// {
+//     $options = [
+//         'titre:', 'auteur:', 'sujet:', 'depuis:', 'de:', 'à:'
+//     ];
+
+//     $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+//     FROM etablissement e, these t NATURAL JOIN soutenir s 
+//     WHERE s.idEtablissement = e.idEtablissement AND t.titre LIKE '%$key%'
+//     ORDER BY t.idThese DESC";
+
+//     $sqlauteur = "SELECT a.role, p.nom, p.prenom, s.idThese
+//     FROM soutenir s
+//     INNER JOIN assister a ON a.idThese = s.idThese
+//     INNER JOIN personne p ON p.idPersonne = a.idPersonne
+//     WHERE a.role = 'auteur de la these'
+//     ORDER BY s.idThese DESC";
+
+//     $sqlsujet = "SELECT s.libelle, r.idThese
+//     FROM reposer r
+//     INNER JOIN sujet s ON s.idSujet = r.idSujet
+//     INNER JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so ON so.idThese = r.idThese";
+
+//     $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
+//     FROM soutenir s
+//     INNER JOIN these t ON t.idThese = s.idThese
+//     WHERE t.titre LIKE '%$key%'
+//     GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
+
+//     $queries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
 
 
-    // on vérifie si l'utilisateur a spécifié une option de recherche
-    foreach ($options as $option) {
-        if (strpos($key, $option) !== false) {
-            $key = str_replace($option, '', $key);
 
-            debug($key, $option . 'key');
 
-            $key = trim($key);
+//     // on vérifie si l'utilisateur a spécifié une option de recherche
+//     foreach ($options as $option) {
+//         if (strpos($key, $option) !== false) {
+//             $key = str_replace($option, '', $key);
 
-            debug($key);
+//             debug($key, $option . 'key');
 
-            switch ($option) {
-                case 'titre:':
-                    return $queries;
-                    break;
-                case 'auteur:':
-                    // TODO : requête pour les auteurs
-            }
-        }
-    }
+//             $key = trim($key);
 
-    return $queries;
-}
+//             debug($key);
+
+//             switch ($option) {
+//                 case 'titre:':
+//                     return $queries;
+//                     break;
+//                 case 'auteur:':
+//                     // TODO : requête pour les auteurs
+//             }
+//         }
+//     }
+
+//     return $queries;
+// }

@@ -1,7 +1,6 @@
 <?php
 
-require_once 'app.php';
-require_once '/Laragon/www/Thesesviz/includes/auth/conf.php';
+// require ROOT . '/includes/auth/conf.php';
 
 
 // seléction des thèses répertoriées
@@ -61,5 +60,6 @@ INNER JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY date_soutenan
 $selection8 = $conn->prepare($sqlsujets20);
 $selection8->execute();
 $sujets = $selection8->fetchALL(PDO::FETCH_ASSOC);
+
 
 
