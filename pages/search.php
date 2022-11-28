@@ -1,12 +1,17 @@
 <?php
 
 $data = new Search();
+debug($_GET);
 
-// debug($_GET);
+// debug le premier array de GET
+// debug(key($_GET));
 
-if (isset($_GET['key'])) {
+$option = key($_GET);
+if (isset($_GET[$option]) && ($option != 'id')) {
 
-    $key = htmlspecialchars($_GET['key']);
+    $key = htmlspecialchars($_GET[$option]);
+
+    // debug($key);
 
     $recherche = $data->reduce($key);
     $queries = $data->decodeKey($key);
@@ -30,7 +35,9 @@ if (isset($_GET['key'])) {
     // debug($sujets);
     // debug($annees);
 
-} else if (isset($_GET['id'])) {
+}
+
+if (isset($_GET['id'])) {
 
     $id = htmlspecialchars($_GET['id']);
 
@@ -215,7 +222,7 @@ if (isset($_GET['key'])) {
         <?php if (isset($key)) : ?>
             let data = <?= json_encode($annees); ?>;
 
-            console.log(data);
+            // console.log(data);
             let year = [];
             let count = [];
 

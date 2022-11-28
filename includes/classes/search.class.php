@@ -209,8 +209,8 @@ class Search
             NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so
             WHERE r.idThese = $id";
 
-            $queries = array($sqlthese, $sqlpersonnes, $sqlsujet);
-            return $queries;
+            $IDqueries = array($sqlthese, $sqlpersonnes, $sqlsujet);
+            return $IDqueries;
         }
 
 
@@ -243,35 +243,109 @@ class Search
             'titre:', 'auteur:', 'sujet:', 'depuis:', 'de:', 'à:'
         ];
 
+        $option = key($_GET);
+        debug($option);
+
         // on vérifie si l'utilisateur a spécifié une option de recherche
-        foreach ($options as $option) {
-            if (strpos($key, $option) !== false) {
-                $key = str_replace($option, '', $key);
+        // foreach ($options as $option) {
+        //     if (strpos($key, $option) !== false) {
+        //         $key = str_replace($option, '', $key);
 
-                debug($key, $option . 'key');
+        //         debug($key, $option . 'key');
 
-                $key = trim($key);
+        //         $key = trim($key);
 
+        //         debug($key);
+
+        //         switch ($option) {
+        //             case 'titre:':
+        //                 return $queries;
+        //                 break;
+        //             case 'auteur:':
+        //                 debug('auteur');
+        //                 $sqlthese = "SELECT @rank:=@rank+1 AS rank, t.idThese
+        //                 FROM etablissement e, these t NATURAL JOIN soutenir s 
+        //                 WHERE s.idEtablissement = e.idEtablissement AND t.titre LIKE '%bonjour%'
+        //                 ORDER BY t.idThese DESC";
+
+        //                 $queries = array($sqlthese);
+        //                 return $queries;
+        //         }
+        //     }
+        // }
+        switch ($option) {
+            case 'key':
+                return $queries;
+                break;
+            case 'titre':
+                return $queries;
+                break;
+            case 'auteur':
                 debug($key);
+                $prenom = explode(' ', $key)[0];
+                // tout ce qui est après le prénom est le nom
+                $nom = substr($key, strlen($prenom) + 1);
+                debug($prenom, $nom);
 
-                switch ($option) {
-                    case 'titre:':
-                        return $queries;
-                        break;
-                    case 'auteur:':
-                        debug('auteur');
-                        $sqlthese = "SELECT @rank:=@rank+1 AS rank, t.idThese
-                        FROM etablissement e, these t NATURAL JOIN soutenir s 
-                        WHERE s.idEtablissement = e.idEtablissement AND t.titre LIKE '%bonjour%'
-                        ORDER BY t.idThese DESC";
 
-                        $queries = array($sqlthese);
-                        return $queries;
-                }
-            }
+                // SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, p.prenom, p.nom
+                // FROM etablissement e, these t
+                // NATURAL JOIN soutenir s
+                // JOIN assister a ON a.idThese = t.idThese
+                // NATURAL JOIN personne p
+                // WHERE s.idEtablissement = e.idEtablissement AND p.prenom = 'Claude' AND p.nom = 'Boksenbaum' AND a.role = 'auteur de la these'
+                // ORDER BY t.idThese DESC;
+
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+                FROM etablissement e, these t
+                NATURAL JOIN soutenir s
+                JOIN assister a ON a.idThese = t.idThese
+                NATURAL JOIN personne p
+                WHERE s.idEtablissement = e.idEtablissement AND p.prenom = '$prenom' OR p.nom = '$nom' AND a.role = 'auteur de la these'
+                ORDER BY t.idThese DESC";
+
+
+                
+
+                SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, p.prenom, p.nom
+                FROM etablissement e, these t
+                NATURAL JOIN soutenir s
+                JOIN assister a ON a.idThese = t.idThese
+                NATURAL JOIN personne p
+                WHERE s.idEtablissement = e.idEtablissement AND p.prenom = '' OR p.nom = 'Abalo Abotchi' AND a.role = 'auteur de la these'
+                ORDER BY t.idThese DESC;
+
+
+                // Abalo Abotchi
+
+
+                $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre
+                FROM these t
+                NATURAL JOIN assister a
+                NATURAL JOIN personne p
+                WHERE t.titre LIKE '%$key%' AND a.role = 'auteur de la these'
+                ORDER BY t.idThese DESC";
+
+                $sqlsujet = "SELECT s.libelle, r.idThese
+                FROM reposer r
+                NATURAL JOIN sujet s
+                NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so";
+
+                $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
+                FROM soutenir s
+                NATURAL JOIN these t
+                WHERE t.titre LIKE '%$key%'
+                GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
+
+                $AUTHORqueries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
+                return $AUTHORqueries;
+                break;
+            default:
+                debug($option);
+                return $queries;
         }
 
-        return $queries;
+        // return $queries;
     }
 
     public function exe($query)
