@@ -1,7 +1,7 @@
 <?php
 
 $data = new Search();
-debug($_GET);
+// debug($_GET);
 
 // debug le premier array de GET
 // debug(key($_GET));
@@ -18,7 +18,7 @@ if (isset($_GET[$option]) && ($option != 'id')) {
 
     // debug($key, $recherche);
     // debug($queries);
-    
+
     $time_start = microtime(true); // Début du chronomètre
 
     $theses = $data->exe($queries[0]);
@@ -28,7 +28,7 @@ if (isset($_GET[$option]) && ($option != 'id')) {
 
     $time_end = microtime(true);
     $time = $time_end - $time_start; // Fin du chronomètre
-    $time = round($time, 4);
+    $time = round($time, 3);
 
     // debug($theses);
     // debug($auteurs);
@@ -110,14 +110,11 @@ if (isset($_GET['id'])) {
             if ($personne['role'] == 'auteur de la these') {
                 $thesis['auteur']['nom'] = $personne['nom'];
                 $thesis['auteur']['prenom'] = $personne['prenom'];
-            }
-            else if ($personne['role'] == 'directeur de these') {
+            } else if ($personne['role'] == 'directeur de these') {
                 array_push($thesis['directeur'], $personne['nom'] . ' ' . $personne['prenom']);
-            }
-            else if ($personne['role'] == 'president du jury') {
+            } else if ($personne['role'] == 'president du jury') {
                 array_push($thesis['president'], $personne['nom'] . ' ' . $personne['prenom']);
-            }
-            else if ($personne['role'] == 'rapporteur') {
+            } else if ($personne['role'] == 'rapporteur') {
                 array_push($thesis['rapporteur'], $personne['nom'] . ' ' . $personne['prenom']);
             }
         }
@@ -129,7 +126,7 @@ if (isset($_GET['id'])) {
     <?php if (isset($key)) : ?>
         <?php if (count($theses) > 0) : ?>
 
-            <p class="results_nb"><?= count($theses) ?> résultats pour <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes)</p>
+            <p class="results_nb"><?= count($theses) ?> résultats pour <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
 
             <!-- <div style="display: grid; height: 400px; margin-bottom: 20px;"> -->
             <div class="thesis_chart">
@@ -139,7 +136,7 @@ if (isset($_GET['id'])) {
                 <div id="histo_container"></div>
             </div>
 
-            <p class="section_title">Sélection des <?= count($theses) < 10 ? count($theses) : '10 premières' ?> thèses</p>
+            <?= count($theses) > 1 ? '<p class="section_title">Sélection des ' . (count($theses) < 10 ? count($theses) : '10 premières') . ' thèses</p>' : '<p class="section_title">Sélection de la thèse</p>' ?>
 
             <?php $i = 0; ?>
             <?php for ($i; $i < (count($theses) > 10 ? 10 : count($theses)); $i++) : ?>
@@ -186,7 +183,6 @@ if (isset($_GET['id'])) {
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", async () => {
 
-
         <?php if (isset($id)) : ?>
 
             const unwrap_summary = document.getElementById('js-no_wrap');
@@ -197,6 +193,17 @@ if (isset($_GET['id'])) {
 
             if (summary.length > 400) {
                 unwrap_summary.innerHTML = summary.substring(0, 400) + '...';
+
+                see_more_summary.addEventListener('click', () => {
+                    revealSummary();
+                    see_more_summary.style.display = 'none';
+                    thesis_self__summary.classList.remove('summary_closed');
+                });
+            }
+
+            if (summary.length < 200) {
+                thesis_self__summary.classList.remove('summary_closed');
+                see_more_summary.parentNode.removeChild(see_more_summary);
             }
 
             function revealSummary() {
@@ -206,14 +213,6 @@ if (isset($_GET['id'])) {
 
                 unwrap_summary.style.height = 'auto';
             }
-
-            see_more_summary.addEventListener('click', () => {
-                revealSummary();
-                see_more_summary.style.display = 'none';
-                thesis_self__summary.classList.remove('summary_closed');
-            });
-
-
 
         <?php endif; ?>
 
