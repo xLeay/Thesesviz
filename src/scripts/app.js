@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     placeholder.addEventListener('keydown', function (e) {
         if (e.keyCode === 13) {
-            
+
             // prevent default action
             e.preventDefault();
             // trigger search
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (placeholder.querySelector('span')) {
             // search_input.value = placeholder.querySelector('span').textContent.replace(':', '');
             option = placeholder.querySelector('span').textContent.replace(':', '');
-            
+
             search_input.value = placeholder.querySelector('span').nextSibling.textContent.replace(/^\s+/, '');
             console.log(search_input.value);
         }
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // return search_input.value;
         return option;
     }
-    
+
     function setInputname() {
         switch (getContent()) {
             case 'titre':
@@ -187,6 +187,8 @@ document.addEventListener('DOMContentLoaded', function () {
             setEndOfContenteditable(placeholder);
         }, 50);
     }
+
+    // TODO: Fonction pour remettre dans le placeholder la recherche précédente
 
 
 });

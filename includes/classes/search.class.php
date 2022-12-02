@@ -244,7 +244,7 @@ class Search
         ];
 
         $option = key($_GET);
-        debug($option);
+        debug($option . ' - option');
 
         // on vérifie si l'utilisateur a spécifié une option de recherche
         // foreach ($options as $option) {
@@ -281,11 +281,13 @@ class Search
                 return $queries;
                 break;
             case 'auteur':
-                debug($key);
+                debug('<br>');
+                debug($key . ' - Tout le prenom-nom');
+                debug('<br>');
                 $prenom = explode(' ', $key)[0];
                 // tout ce qui est après le prénom est le nom
                 $nom = substr($key, strlen($prenom) + 1);
-                debug($prenom, $nom);
+                debug($prenom . ' - Prenom', $nom . ' - Nom');
 
 
                 // SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, p.prenom, p.nom
@@ -296,24 +298,24 @@ class Search
                 // WHERE s.idEtablissement = e.idEtablissement AND p.prenom = 'Claude' AND p.nom = 'Boksenbaum' AND a.role = 'auteur de la these'
                 // ORDER BY t.idThese DESC;
 
-                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, p.prenom, p.nom, a.role
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s
                 JOIN assister a ON a.idThese = t.idThese
                 NATURAL JOIN personne p
-                WHERE s.idEtablissement = e.idEtablissement AND p.prenom = '$prenom' OR p.nom = '$nom' AND a.role = 'auteur de la these'
+                WHERE s.idEtablissement = e.idEtablissement AND ((p.prenom = '$prenom' AND p.nom = '$nom') OR (p.prenom = '$prenom' OR p.nom = '$nom')) AND a.role = 'auteur de la these'
                 ORDER BY t.idThese DESC";
 
 
-                
+                LA TOUJOURS, LA RECHERCHE PAR AUTEUR EST P-E FINIE
 
-                SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, p.prenom, p.nom
-                FROM etablissement e, these t
-                NATURAL JOIN soutenir s
-                JOIN assister a ON a.idThese = t.idThese
-                NATURAL JOIN personne p
-                WHERE s.idEtablissement = e.idEtablissement AND p.prenom = '' OR p.nom = 'Abalo Abotchi' AND a.role = 'auteur de la these'
-                ORDER BY t.idThese DESC;
+                // SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, p.prenom, p.nom
+                // FROM etablissement e, these t
+                // NATURAL JOIN soutenir s
+                // JOIN assister a ON a.idThese = t.idThese
+                // NATURAL JOIN personne p
+                // WHERE s.idEtablissement = e.idEtablissement AND p.prenom = '' OR p.nom = 'Abalo Abotchi' AND a.role = 'auteur de la these'
+                // ORDER BY t.idThese DESC;
 
 
                 // Abalo Abotchi
@@ -341,7 +343,7 @@ class Search
                 return $AUTHORqueries;
                 break;
             default:
-                debug($option);
+                // debug($option);
                 return $queries;
         }
 

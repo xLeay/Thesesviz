@@ -156,6 +156,10 @@ nav .search_thesis {
     font-weight: 500;
     color: var(--secondary);
     display: inline-block;
+    
+    user-modify: read-write-plaintext-only; /* disable formatted paste */
+    -moz-user-modify: read-write-plaintext-only;
+    -webkit-user-modify: read-write-plaintext-only;
 }
 
 .search__editor-placeholder-inner:before {
@@ -675,22 +679,19 @@ section {
 
 
 
-.quick_thesis_subjects::-webkit-scrollbar-track
-{
-	border-radius: 10px;
-	background-color: #EFECE9;
+.quick_thesis_subjects::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #EFECE9;
 }
 
-.quick_thesis_subjects::-webkit-scrollbar
-{
-	height: 10px;
-	background-color: #F5F5F5;
+.quick_thesis_subjects::-webkit-scrollbar {
+    height: 10px;
+    background-color: #F5F5F5;
 }
 
-.quick_thesis_subjects::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	background-color: var(--primary);
+.quick_thesis_subjects::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--primary);
     border: 3px solid #EFECE9;
 }
 
@@ -717,7 +718,7 @@ section {
 
 .thesis_self__wrap .grid2_1 {
     gap: 15px;
-    grid-template-columns: minmax(50%,2fr) minmax(40%,1fr)
+    grid-template-columns: minmax(50%, 2fr) minmax(40%, 1fr)
 }
 
 .list_overflow {
@@ -816,22 +817,19 @@ section {
     white-space: nowrap;
 }
 
-.thesis_self__subjects::-webkit-scrollbar-track
-{
-	border-radius: 10px;
-	background-color: #EFECE9;
+.thesis_self__subjects::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #EFECE9;
 }
 
-.thesis_self__subjects::-webkit-scrollbar
-{
-	height: 12px;
-	background-color: #F5F5F5;
+.thesis_self__subjects::-webkit-scrollbar {
+    height: 12px;
+    background-color: #F5F5F5;
 }
 
-.thesis_self__subjects::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	background-color: var(--primary);
+.thesis_self__subjects::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--primary);
     border: 3px solid #EFECE9;
 }
 
