@@ -1,8 +1,13 @@
 <?php
 
-include '/Laragon/www/Thesesviz/includes/auth/conf.php';
+include "includes/classes/search.class.php";
 
-// $json = file_get_contents('../includes/extract_theses.json');
+$cnx = new Search();
+$conn = $cnx->getConn();
+
+debug($_POST);
+
+// $json = file_get_contents(ROOT . '../includes/extract_theses.json');
 // $data = json_decode($json, true);
 
 // $i = 0;
@@ -15,7 +20,7 @@ include '/Laragon/www/Thesesviz/includes/auth/conf.php';
 
 if (isset($_POST['buttomImport'])) {
 
-    $json = file_get_contents('/Laragon/www/Thesesviz/includes/extract_theses.json');
+    $json = file_get_contents(ROOT . '/includes/extract_theses.json');
     $data = json_decode($json, true);
     $i = 0;
 
@@ -35,7 +40,6 @@ if (isset($_POST['buttomImport'])) {
         $sur_travaux = ($these['these_sur_travaux'] == "non") ? 0 : 1;
         $titre = end($these['titres']);
         $discipline = $these['discipline']['fr'];
- 
 
         $sql = "INSERT INTO these (these_accessible, embargo, nnt, oai_set_specs, resume, soutenue, sur_travaux, titre, discipline) VALUES (:these_accessible, :embargo, :nnt, :oai_set_specs, :resume, :soutenue, :sur_travaux, :titre, :discipline)";
         $insertion = $conn->prepare($sql);
@@ -232,8 +236,8 @@ if (isset($_POST['buttomImport'])) {
         // break;
     }
 
-    // $time_end = microtime(true);
-    // $time = $time_end - $time_start;
+    $time_end = microtime(true);
+    $time = $time_end - $time_start;
 
-    // echo "$time secondes\n";
+    echo "$time secondes\n";
 }

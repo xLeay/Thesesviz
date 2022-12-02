@@ -3,11 +3,6 @@
 class Search
 {
 
-    // public function __construct()
-    // {
-    //     parent::__construct();
-    // }
-
     private $servername = "localhost";
     private $username = "root";
     private $password = "";
@@ -168,7 +163,7 @@ class Search
     }
 
 
-    public function reduce($key)
+    public function reduce($key) // PEUT ETRE L'ENLEVER A VOIR
     {
         $options = [
             'titre:', 'auteur:', 'sujet:', 'depuis:', 'de:', 'à:'
@@ -289,5 +284,11 @@ class Search
         $result = $selection->fetchALL(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    public function getConn()
+    {
+        return $this->conn;
+    }
+
 
 }

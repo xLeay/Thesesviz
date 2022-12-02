@@ -62,7 +62,7 @@ function loadAsset($page, $type)
 function loadPage($page, $with_head = true)
 {
 
-    include "includes/classes/search.class.php";
+    include_once "includes/classes/search.class.php";
 
     global $basepath, $og, $canonical;
     $path =  "pages" . DIRECTORY_SEPARATOR . $page . ".php";
@@ -96,6 +96,13 @@ switch ($request) {
             "description" => "Recherchez les thèses de doctorat en France"
         ];
         loadPage("search");
+        break;
+    case "/import":
+        $og = (object) [
+            "title" => "Import des thèses",
+            "description" => "Import des thèses"
+        ];
+        loadPage("import");
         break;
     case "/ajax/search":
         include "includes/ajax/search.php";
