@@ -32,15 +32,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     placeholder.addEventListener('keydown', function (e) {
         if (e.keyCode === 13) {
+
             // prevent default action
             e.preventDefault();
             // trigger search
             getContent();
 
-            // montre le contenu de getContent
-            console.log(getContent());
+            // console.log(getContent());
 
-            
+            // change input name based on search option
+            setInputname();
+
             search_thesis.submit();
         }
     });
@@ -116,28 +118,56 @@ document.addEventListener('DOMContentLoaded', function () {
                 item.remove();
                 showPlaceholder();
             }
-        
+
         });
     }
 
     // fonction qui retour le résultat de la recherche car une div en contenteditable ne peut pas être utilisé dans un formulaire
     function getContent() {
         search_input.value = placeholder.textContent;
+        let option = null;
         // console.log(search_input.value);
         if (placeholder.querySelector('span')) {
-            search_input.value = placeholder.querySelector('span').textContent.replace(':', '~'); // TODO: à modifier pour que le caractère ~ soit remplacé par le caractère : dans le controller -- https://perishablepress.com/stop-using-unsafe-characters-in-urls/
-            search_input.value += placeholder.querySelector('span').nextSibling.textContent.replace(/^\s+/, '');
-            // console.log(search_input.value);
-        }
-        // console.log(search_input.value);
+            // search_input.value = placeholder.querySelector('span').textContent.replace(':', '');
+            option = placeholder.querySelector('span').textContent.replace(':', '');
 
-        return search_input.value;
+            search_input.value = placeholder.querySelector('span').nextSibling.textContent.replace(/^\s+/, '');
+            console.log(search_input.value);
+        }
+        console.log(option);
+        // return search_input.value;
+        return option;
+    }
+
+    function setInputname() {
+        switch (getContent()) {
+            case 'titre':
+                search_input.name = "titre";
+                break;
+            case 'auteur':
+                search_input.name = "auteur";
+                break;
+            case 'sujet':
+                search_input.name = "sujet";
+                break;
+            case 'depuis':
+                search_input.name = "depuis";
+                break;
+            case 'de':
+                search_input.name = "de";
+                break;
+            default:
+                search_input.name = "key";
+                break;
+        }
     }
 
     // détecter l'entrée de mot clé de recherche comme titre:, auteur:, etc et les transformer en span
     function detectKeyword() {
         let options = ['titre:', 'auteur:', 'sujet:', 'depuis:', 'de:', 'à:'];
         let text = placeholder.textContent;
+
+        revoir la fonction pour mettre plusieurs mots clés dans la recherche (pour de: 2000 à: 2010)
 
         // si le texte contient un des mots clés de options
         options.forEach(function (item) {
@@ -159,6 +189,8 @@ document.addEventListener('DOMContentLoaded', function () {
             setEndOfContenteditable(placeholder);
         }, 50);
     }
+
+    // TODO: Fonction pour remettre dans le placeholder la recherche précédente
 
 
 });

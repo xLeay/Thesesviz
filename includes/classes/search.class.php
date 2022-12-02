@@ -204,32 +204,34 @@ class Search
             NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so
             WHERE r.idThese = $id";
 
-            $queries = array($sqlthese, $sqlpersonnes, $sqlsujet);
-            return $queries;
+            $IDqueries = array($sqlthese, $sqlpersonnes, $sqlsujet);
+            return $IDqueries;
         }
 
-
-        $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+        // Recherche par défaut en regardant dans le titre
+        $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_titre
         FROM etablissement e, these t NATURAL JOIN soutenir s 
-        WHERE s.idEtablissement = e.idEtablissement AND t.titre LIKE '%$key%'
-        ORDER BY t.idThese DESC";
+        WHERE s.idEtablissement = e.idEtablissement AND MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+        ORDER BY score_titre DESC";
 
-        $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre
+        $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre, MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_titre
         FROM these t
         NATURAL JOIN assister a
         NATURAL JOIN personne p
-        WHERE t.titre LIKE '%$key%' AND a.role = 'auteur de la these'
-        ORDER BY t.idThese DESC";
+        WHERE MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur de la these'
+        ORDER BY score_titre DESC";
 
-        $sqlsujet = "SELECT s.libelle, r.idThese
+        $sqlsujet = "SELECT s.libelle, r.idThese, MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_titre
         FROM reposer r
         NATURAL JOIN sujet s
-        NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so";
+        NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so
+        NATURAL JOIN these t
+        WHERE MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE)";
 
         $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
         FROM soutenir s
         NATURAL JOIN these t
-        WHERE t.titre LIKE '%$key%'
+        WHERE MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
         GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
 
         $queries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
@@ -239,34 +241,117 @@ class Search
         ];
 
         // on vérifie si l'utilisateur a spécifié une option de recherche
-        foreach ($options as $option) {
-            if (strpos($key, $option) !== false) {
-                $key = str_replace($option, '', $key);
+        $option = key($_GET);
+        // debug($option . ' - option');
 
-                debug($key, $option . 'key');
+        switch ($option) {
+            case 'key':
+                return $queries;
+                break;
+            case 'titre':
+                return $queries;
+                break;
+            case 'auteur':
+                $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, p.prenom, p.nom, a.role, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
+                FROM etablissement e, these t
+                NATURAL JOIN soutenir s
+                JOIN assister a ON a.idThese = t.idThese
+                NATURAL JOIN personne p
+                WHERE s.idEtablissement = e.idEtablissement AND MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur de la these'
+                ORDER BY score_personne DESC";
 
-                $key = trim($key);
+                $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
+                FROM these t
+                NATURAL JOIN assister a
+                NATURAL JOIN personne p
+                WHERE MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) 
+                ORDER BY score_personne DESC";
 
-                debug($key);
+                $sqlsujet = "SELECT s.libelle, r.idThese
+                FROM reposer r
+                NATURAL JOIN sujet s
+                NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so";
 
-                switch ($option) {
-                    case 'titre:':
-                        return $queries;
-                        break;
-                    case 'auteur:':
-                        debug('auteur');
-                        $sqlthese = "SELECT @rank:=@rank+1 AS rank, t.idThese
-                        FROM etablissement e, these t NATURAL JOIN soutenir s 
-                        WHERE s.idEtablissement = e.idEtablissement AND t.titre LIKE '%bonjour%'
-                        ORDER BY t.idThese DESC";
+                $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
+                FROM soutenir s
+                NATURAL JOIN assister a
+                NATURAL JOIN personne p
+                WHERE MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur de la these'
+                GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
 
-                        $queries = array($sqlthese);
-                        return $queries;
-                }
-            }
+                $AUTHORqueries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
+                return $AUTHORqueries;
+                break;
+            case 'sujet':
+                $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, su.libelle, MATCH (su.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_sujet
+                FROM etablissement e, these t
+                NATURAL JOIN soutenir s
+                JOIN reposer r ON r.idThese = t.idThese
+                NATURAL JOIN sujet su
+                WHERE s.idEtablissement = e.idEtablissement AND MATCH (su.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+                ORDER BY score_sujet DESC";
+
+                $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre, MATCH (s.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_sujet
+                FROM these t
+                NATURAL JOIN assister a
+                NATURAL JOIN personne p
+                JOIN reposer r ON r.idThese = t.idThese
+                NATURAL JOIN sujet s
+                WHERE MATCH (s.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+                ORDER BY score_sujet DESC";
+
+                $sqlsujet = "SELECT s.libelle, r.idThese, MATCH (s.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_sujet
+                FROM reposer r
+                NATURAL JOIN sujet s
+                NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so
+                NATURAL JOIN these t
+                WHERE MATCH (s.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE)";
+
+                $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
+                FROM soutenir s
+                NATURAL JOIN reposer r
+                NATURAL JOIN sujet su
+                WHERE MATCH (su.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+                GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
+
+                $SUBJECTqueries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
+                return $SUBJECTqueries;
+                break;
+            case 'depuis':
+                $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+                FROM etablissement e, these t
+                NATURAL JOIN soutenir s
+                WHERE s.idEtablissement = e.idEtablissement AND s.date_soutenance >= '$key'
+                ORDER BY s.date_soutenance DESC";
+
+                $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre
+                FROM these t
+                NATURAL JOIN assister a
+                NATURAL JOIN personne p
+                WHERE a.role = 'auteur de la these' AND t.idThese IN (SELECT idThese FROM soutenir WHERE date_soutenance >= '$key')
+                ORDER BY t.idThese DESC";
+
+                $sqlsujet = "SELECT s.libelle, r.idThese
+                FROM reposer r
+                NATURAL JOIN sujet s
+                NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so
+                WHERE so.date_soutenance >= '$key'";
+
+                $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
+                FROM soutenir s
+                WHERE s.date_soutenance >= '$key'
+                GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
+
+                $SINCEqueries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
+                return $SINCEqueries;
+                break;
+            case 'de':
+            default:
+                // debug($option);
+                return $queries;
         }
 
-        return $queries;
+        // return $queries;
     }
 
     public function exe($query)
