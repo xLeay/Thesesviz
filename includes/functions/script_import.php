@@ -1,7 +1,10 @@
 <?php
 
 include "includes/classes/these.class.php";
+include_once "includes/classes/db.class.php";
 
+$db = new DB();
+$conn = $db->cnx();
 
 // $classes = glob(dirname(__FILE__) . '*.php');
 
@@ -47,29 +50,28 @@ if (isset($_POST['buttomImport'])) {
         $sur_travaux = ($these['these_sur_travaux'] == "non") ? 0 : 1;
         $titre = end($these['titres']);
         $discipline = $these['discipline']['fr'];
-
+        
+        
+        
         // $sql = "INSERT INTO these (these_accessible, embargo, nnt, oai_set_specs, resume, soutenue, sur_travaux, titre, discipline) VALUES (:these_accessible, :embargo, :nnt, :oai_set_specs, :resume, :soutenue, :sur_travaux, :titre, :discipline)";
         // $insertion = $conn->prepare($sql);
         // $insertion->bindParam(':these_accessible', $accessible);
         // $insertion->bindParam(':embargo', $embargo);
         // $insertion->bindParam(':nnt', $nnt);
         // foreach ($oai_set_specs as $oai_set_spec) {
-        //     $insertion->bindParam(':oai_set_specs', $oai_set_spec);
-        // }
-        // $insertion->bindParam(':resume', $resume);
+            //     $insertion->bindParam(':oai_set_specs', $oai_set_spec);
+            // }
+            // $insertion->bindParam(':resume', $resume);
         // $insertion->bindParam(':soutenue', $soutenue);
         // $insertion->bindParam(':sur_travaux', $sur_travaux);
         // $insertion->bindParam(':titre', $titre);
         // $insertion->bindParam(':discipline', $discipline);
-
+        
         // $insertion->execute();
         // $idThese = $conn->lastInsertId();
-
+        
         $thesecl = new These();
 
-        // debug($thesecl);
-        
-        // $thesecl->getTheses();
         $thesecl->setAccessible($accessible);
         $thesecl->setEmbargo($embargo);
         $thesecl->setNnt($nnt);
@@ -81,7 +83,7 @@ if (isset($_POST['buttomImport'])) {
         $thesecl->setDiscipline($discipline);
 
 
-        $thesecl->insertIntoDB();
+        $thesecl->insertIntoDB($conn)->execute();
 
         // break;
 

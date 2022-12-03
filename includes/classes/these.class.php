@@ -15,6 +15,7 @@ class These extends DB
     private $titre = "";
     private $discipline = "";
 
+
     // la cnx est dans la classe parente, on peut donc l'utiliser directement
     public function getTheses()
     {
@@ -128,9 +129,9 @@ class These extends DB
         $this->discipline = $discipline;
     }
 
-    public function insertIntoDB()
+    public function insertIntoDB($conn)
     {
-        $conn = $this->cnx();
+        // $conn = $this->cnx();
 
         $sql = "INSERT INTO these (these_accessible, embargo, nnt, oai_set_specs, resume, soutenue, sur_travaux, titre, discipline) VALUES (:these_accessible, :embargo, :nnt, :oai_set_specs, :resume, :soutenue, :sur_travaux, :titre, :discipline)";
         $insertion = $conn->prepare($sql);
@@ -145,6 +146,9 @@ class These extends DB
         $insertion->bindParam(':titre', $this->titre);
         $insertion->bindParam(':discipline', $this->discipline);
 
-        $insertion->execute();
+        // $insertion->execute();
+
+        return $insertion;
     }
+
 }

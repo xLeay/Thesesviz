@@ -6,7 +6,7 @@ class DB {
     private $password = "";
     private $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4', PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET utf8mb4");
 
-    protected function cnx()
+    public function cnx()
     {
         try {
             $conn = new PDO("mysql:host=$this->servername;dbname=theseviz", $this->username, $this->password, $this->options);
