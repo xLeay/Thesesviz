@@ -1,25 +1,27 @@
 <?php
 
-class Search
+include_once "db.class.php";
+
+class Search extends DB
 {
 
-    private $servername = "localhost";
-    private $username = "root";
-    private $password = "";
-    private $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4', PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET utf8mb4");
+    // private $servername = "localhost";
+    // private $username = "root";
+    // private $password = "";
+    // private $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4', PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET utf8mb4");
 
-    protected function cnx()
-    {
-        try {
-            $conn = new PDO("mysql:host=$this->servername;dbname=theseviz", $this->username, $this->password, $this->options);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $conn;
-        } catch (PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
-        }
-    }
+    // protected function cnx()
+    // {
+    //     try {
+    //         $conn = new PDO("mysql:host=$this->servername;dbname=theseviz", $this->username, $this->password, $this->options);
+    //         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //         return $conn;
+    //     } catch (PDOException $e) {
+    //         echo "Connection failed: " . $e->getMessage();
+    //     }
+    // }
 
-    // private $conn = parent::cnx();
+    // la cnx est dans la classe parente, on peut donc l'utiliser directement
 
     public function __construct()
     {
@@ -96,7 +98,7 @@ class Search
 
     public function loadData()
     {
-        global $conn;
+        $conn = $this->cnx();
 
         // seléction des thèses répertoriées
         $sqlrepertorie = "SELECT idThese FROM these";
@@ -356,7 +358,7 @@ class Search
 
     public function exe($query)
     {
-        global $conn;
+        $conn = $this->cnx();
         $selection = $conn->prepare($query);
     
         if (isset($_GET['id'])) {
