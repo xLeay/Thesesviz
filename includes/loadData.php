@@ -1,8 +1,5 @@
 <?php
 
-// require ROOT . '/includes/auth/conf.php';
-
-
 // seléction des thèses répertoriées
 $sqlrepertorie = "SELECT idThese FROM these";
 $selection1 = $conn->prepare($sqlrepertorie);
@@ -29,14 +26,12 @@ $selection5 = $conn->prepare($sqlannee);
 $selection5->execute();
 $annees = $selection5->fetchALL(PDO::FETCH_ASSOC);
 
-
 // sélection des 20 dernières thèses ajoutées
 $sql20dernieres = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
 FROM etablissement e, these t NATURAL JOIN soutenir s 
 WHERE s.idEtablissement = e.idEtablissement 
 ORDER BY s.date_soutenance DESC LIMIT 20";
 $conn->query("SET @rank=0");
-// $selection6 = $conn->query($sql20dernieres);
 $selection6 = $conn->prepare($sql20dernieres);
 $selection6->execute();
 $dernieres = $selection6->fetchALL(PDO::FETCH_ASSOC);
@@ -46,7 +41,7 @@ $sqlauteurs20 = "SELECT a.role, p.nom, p.prenom
 FROM soutenir s 
 INNER JOIN assister a ON a.idThese = s.idThese
 INNER JOIN personne p ON p.idPersonne = a.idPersonne
-WHERE a.role = 'auteur de la these'
+WHERE a.role = 'auteur'
 ORDER BY s.date_soutenance DESC LIMIT 20;";
 $selection7 = $conn->prepare($sqlauteurs20);
 $selection7->execute();

@@ -62,6 +62,7 @@ $data = new Search();
         $auteurs = $data->loadData()[6];
         $sujets = $data->loadData()[7];
         $thesis = array(
+            'id' => $dernieres[$i]['idThese'],
             'rank' => $dernieres[$i]['rank'],
             'titre' => $dernieres[$i]['titre'],
             'date' => $dernieres[$i]['date_soutenance'],

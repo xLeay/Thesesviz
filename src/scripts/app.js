@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let options = ['titre:', 'auteur:', 'sujet:', 'depuis:', 'de:', 'à:'];
         let text = placeholder.textContent;
 
-        revoir la fonction pour mettre plusieurs mots clés dans la recherche (pour de: 2000 à: 2010)
+        // revoir la fonction pour mettre plusieurs mots clés dans la recherche (pour de: 2000 à: 2010)
 
         // si le texte contient un des mots clés de options
         options.forEach(function (item) {

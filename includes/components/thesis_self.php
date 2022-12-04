@@ -27,38 +27,56 @@
                     <!-- TODO: add link to author page -->
                     <p class="thesis_author">par <span class="important_info"><?= $thesis['auteur']['prenom'] ?> <?= $thesis['auteur']['nom']; ?></span></p>
 
+
                     <!-- DIRECTEUR(S) DE LA THESE -->
                     <!-- TODO: add link to director page -->
-                    <?php if (count($thesis['directeur']) == 1) : ?>
-                        <p class="thesis_director">sous la direction de <span class="less_important_info"><?= $thesis['directeur'][0]; ?></span></p>
-                    <?php elseif (count($thesis['directeur']) > 1) : ?>
-                        <?php for ($j = 0; $j < (count($thesis['directeur']) > 2 ? 2 : count($thesis['directeur'])); $j++) : ?>
-                            <p class="thesis_director">sous la direction de <span class="less_important_info"><?= $thesis['directeur'][$j]; ?></span> et <span class="less_important_info"><?= $thesis['directeur'][$j + 1]; ?></span></p>
-                            <?php break; ?>
-                        <?php endfor; ?>
+                    <?php if (count($thesis['directeur']) > 0) : ?>
+                        <p class="thesis_directeur">sous la direction de
+                            <?php foreach ($thesis['directeur'] as $key => $directeur) : ?>
+                                <span class="less_important_info"><?= $directeur; ?></span>
+                                <?php if ($key != count($thesis['directeur']) - 1 && $key != count($thesis['directeur']) - 2) : ?>
+                                    ,
+                                <?php elseif ($key == count($thesis['directeur']) - 2) : ?> et <?php endif; ?>
+                            <?php endforeach; ?>
+                        </p>
                     <?php endif; ?>
+
 
                     <!-- PRESIDENT(S) DU JURY -->
                     <!-- TODO: add link to president page -->
-                    <?php if (count($thesis['president']) == 1) : ?>
-                        <p class="thesis_president">présidée par <span class="less_important_info"><?= $thesis['president'][0]; ?></span></p>
-                    <?php elseif (count($thesis['president']) > 1) : ?>
-                        <?php for ($j = 0; $j < (count($thesis['president']) > 2 ? 2 : count($thesis['president'])); $j++) : ?>
-                            <p class="thesis_president">présidée par <span class="less_important_info"><?= $thesis['president'][$j]; ?></span> et <span class="less_important_info"><?= $thesis['president'][$j + 1]; ?></span></p>
-                            <?php break; ?>
-                        <?php endfor; ?>
+                    <?php if ($thesis['president']['prenom'] != NULL) : ?>
+                        <p class="thesis_president">présidée par <span class="less_important_info"><?= $thesis['president']['prenom'] ?> <?= $thesis['president']['nom']; ?></span></p>
                     <?php endif; ?>
+
+
+                    <!-- MEMBRE(S) DU JURY -->
+                    <!-- TODO: add link to member page -->
+                    <?php if (count($thesis['membre']) > 0) : ?>
+                        <p class="thesis_membre">le jury est composé de
+                            <?php foreach ($thesis['membre'] as $key => $membre) : ?>
+                                <span class="less_important_info"><?= $membre; ?></span>
+                                <?php if ($key != count($thesis['membre']) - 1 && $key != count($thesis['membre']) - 2) : ?>
+                                    ,
+                                <?php elseif ($key == count($thesis['membre']) - 2) : ?> et <?php endif; ?>
+                            <?php endforeach; ?>
+                        </p>
+                    <?php endif; ?>
+
 
                     <!-- RAPPORTEUR(S) DE LA THESE -->
                     <!-- TODO: add link to rapporteur page -->
-                    <?php if (count($thesis['rapporteur']) == 1) : ?>
-                        <p class="thesis_rapporteur">rapportée par <span class="less_important_info"><?= $thesis['rapporteur'][0]; ?></span></p>
-                    <?php elseif (count($thesis['rapporteur']) > 1) : ?>
-                        <?php for ($j = 0; $j < (count($thesis['rapporteur']) > 2 ? 2 : count($thesis['rapporteur'])); $j++) : ?>
-                            <p class="thesis_rapporteur">rapportée par <span class="less_important_info"><?= $thesis['rapporteur'][$j]; ?></span> et <span class="less_important_info"><?= $thesis['rapporteur'][$j + 1]; ?></span></p>
-                            <?php break; ?>
-                        <?php endfor; ?>
+                    <?php if (count($thesis['rapporteur']) > 0) : ?>
+                        <p class="thesis_rapporteur">rapportée par
+                            <?php foreach ($thesis['rapporteur'] as $key => $rapporteur) : ?>
+                                <span class="less_important_info"><?= $rapporteur; ?></span>
+                                <?php if ($key != count($thesis['rapporteur']) - 1 && $key != count($thesis['rapporteur']) - 2) : ?>
+                                    ,
+                                <?php elseif ($key == count($thesis['rapporteur']) - 2) : ?> et <?php endif; ?>
+                            <?php endforeach; ?>
+                        </p>
                     <?php endif; ?>
+
+                    
                 <?php endif; ?>
             </div>
         </div>

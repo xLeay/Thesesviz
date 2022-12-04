@@ -14,6 +14,7 @@ class These extends DB
     private $sur_travaux = "";
     private $titre = "";
     private $discipline = "";
+    private $code_etab = "";
 
 
     // la cnx est dans la classe parente, on peut donc l'utiliser directement
@@ -129,11 +130,19 @@ class These extends DB
         $this->discipline = $discipline;
     }
 
+    public function getCodeEtab()
+    {
+        return $this->code_etab;
+    }
+
+    public function setCodeEtab($code_etab)
+    {
+        $this->code_etab = $code_etab;
+    }
+
     public function insertIntoDB($conn)
     {
-        // $conn = $this->cnx();
-
-        $sql = "INSERT INTO these (these_accessible, embargo, nnt, oai_set_specs, resume, soutenue, sur_travaux, titre, discipline) VALUES (:these_accessible, :embargo, :nnt, :oai_set_specs, :resume, :soutenue, :sur_travaux, :titre, :discipline)";
+        $sql = "INSERT INTO these (these_accessible, embargo, nnt, oai_set_specs, resume, soutenue, sur_travaux, titre, discipline, code_etab) VALUES (:these_accessible, :embargo, :nnt, :oai_set_specs, :resume, :soutenue, :sur_travaux, :titre, :discipline, :code_etab)";
         $insertion = $conn->prepare($sql);
 
         $insertion->bindParam(':these_accessible', $this->accessible);
@@ -145,8 +154,7 @@ class These extends DB
         $insertion->bindParam(':sur_travaux', $this->sur_travaux);
         $insertion->bindParam(':titre', $this->titre);
         $insertion->bindParam(':discipline', $this->discipline);
-
-        // $insertion->execute();
+        $insertion->bindParam(':code_etab', $this->code_etab);
 
         return $insertion;
     }

@@ -5,29 +5,6 @@ include_once "db.class.php";
 class Search extends DB
 {
 
-    // private $servername = "localhost";
-    // private $username = "root";
-    // private $password = "";
-    // private $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4', PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET utf8mb4");
-
-    // protected function cnx()
-    // {
-    //     try {
-    //         $conn = new PDO("mysql:host=$this->servername;dbname=theseviz", $this->username, $this->password, $this->options);
-    //         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    //         return $conn;
-    //     } catch (PDOException $e) {
-    //         echo "Connection failed: " . $e->getMessage();
-    //     }
-    // }
-
-    // la cnx est dans la classe parente, on peut donc l'utiliser directement
-
-    public function __construct()
-    {
-        $this->conn = $this->cnx();
-    }
-
     public function select(array $cols): string
     {
         $query = "SELECT ";
@@ -142,7 +119,7 @@ class Search extends DB
         FROM soutenir s 
         INNER JOIN assister a ON a.idThese = s.idThese
         INNER JOIN personne p ON p.idPersonne = a.idPersonne
-        WHERE a.role = 'auteur de la these'
+        WHERE a.role = 'auteur'
         ORDER BY s.date_soutenance DESC LIMIT 20;";
         $selection7 = $conn->prepare($sqlauteurs20);
         $selection7->execute();
@@ -220,7 +197,7 @@ class Search extends DB
         FROM these t
         NATURAL JOIN assister a
         NATURAL JOIN personne p
-        WHERE MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur de la these'
+        WHERE MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur'
         ORDER BY score_titre DESC";
 
         $sqlsujet = "SELECT s.libelle, r.idThese, MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_titre
@@ -259,7 +236,7 @@ class Search extends DB
                 NATURAL JOIN soutenir s
                 JOIN assister a ON a.idThese = t.idThese
                 NATURAL JOIN personne p
-                WHERE s.idEtablissement = e.idEtablissement AND MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur de la these'
+                WHERE s.idEtablissement = e.idEtablissement AND MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur'
                 ORDER BY score_personne DESC";
 
                 $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
@@ -278,7 +255,7 @@ class Search extends DB
                 FROM soutenir s
                 NATURAL JOIN assister a
                 NATURAL JOIN personne p
-                WHERE MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur de la these'
+                WHERE MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur'
                 GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
 
                 $AUTHORqueries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
@@ -330,7 +307,7 @@ class Search extends DB
                 FROM these t
                 NATURAL JOIN assister a
                 NATURAL JOIN personne p
-                WHERE a.role = 'auteur de la these' AND t.idThese IN (SELECT idThese FROM soutenir WHERE date_soutenance >= '$key')
+                WHERE a.role = 'auteur' AND t.idThese IN (SELECT idThese FROM soutenir WHERE date_soutenance >= '$key')
                 ORDER BY t.idThese DESC";
 
                 $sqlsujet = "SELECT s.libelle, r.idThese

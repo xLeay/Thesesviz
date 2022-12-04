@@ -72,7 +72,7 @@
 // FROM soutenir s 
 // INNER JOIN assister a ON a.idThese = s.idThese
 // INNER JOIN personne p ON p.idPersonne = a.idPersonne
-// WHERE a.role = 'auteur de la these'
+// WHERE a.role = 'auteur'
 // ORDER BY s.date_soutenance DESC LIMIT 20";
 // $selection7 = $conn->prepare($sqlauteurs20);
 // $selection7->execute();
@@ -110,7 +110,7 @@
 //     FROM soutenir s
 //     INNER JOIN assister a ON a.idThese = s.idThese
 //     INNER JOIN personne p ON p.idPersonne = a.idPersonne
-//     WHERE a.role = 'auteur de la these'
+//     WHERE a.role = 'auteur'
 //     ORDER BY s.idThese DESC";
 
 //     $sqlsujet = "SELECT s.libelle, r.idThese

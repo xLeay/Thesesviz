@@ -7,9 +7,11 @@ $data = new Search();
 // debug(key($_GET));
 
 $option = key($_GET);
+
 if (isset($_GET[$option]) && ($option != 'id')) {
 
     $key = htmlspecialchars($_GET[$option]);
+
 
     // debug($key);
 
@@ -35,9 +37,7 @@ if (isset($_GET[$option]) && ($option != 'id')) {
     // debug($sujets);
     // debug($annees);
 
-}
-
-if (isset($_GET['id'])) {
+} elseif (isset($_GET['id'])) {
 
     $id = htmlspecialchars($_GET['id']);
 
@@ -94,7 +94,11 @@ if (isset($_GET['id'])) {
                 'prenom' => '',
             ),
             'directeur' => array(),
-            'president' => array(),
+            'president' => array(
+                'nom' => '',
+                'prenom' => '',
+            ),
+            'membre' => array(),
             'rapporteur' => array(),
             'sujets' => array()
         );
@@ -107,13 +111,16 @@ if (isset($_GET['id'])) {
 
         foreach ($personnes as $personne) {
 
-            if ($personne['role'] == 'auteur de la these') {
+            if ($personne['role'] == 'auteur') {
                 $thesis['auteur']['nom'] = $personne['nom'];
                 $thesis['auteur']['prenom'] = $personne['prenom'];
-            } else if ($personne['role'] == 'directeur de these') {
+            } else if ($personne['role'] == 'directeur') {
                 array_push($thesis['directeur'], $personne['nom'] . ' ' . $personne['prenom']);
-            } else if ($personne['role'] == 'president du jury') {
-                array_push($thesis['president'], $personne['nom'] . ' ' . $personne['prenom']);
+            } else if ($personne['role'] == 'president') {
+                $thesis['president']['nom'] = $personne['nom'];
+                $thesis['president']['prenom'] = $personne['prenom'];
+            } else if ($personne['role'] == 'membre') {
+                array_push($thesis['membre'], $personne['nom'] . ' ' . $personne['prenom']);
             } else if ($personne['role'] == 'rapporteur') {
                 array_push($thesis['rapporteur'], $personne['nom'] . ' ' . $personne['prenom']);
             }
@@ -121,9 +128,8 @@ if (isset($_GET['id'])) {
 
         include ROOT . '../includes/components/thesis_self.php';
         ?>
-    <?php endif; ?>
 
-    <?php if (isset($key)) : ?>
+    <?php elseif (isset($key)) : ?>
         <?php if (count($theses) > 0) : ?>
 
             <p class="results_nb"><?= count($theses) ?> résultats pour <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
@@ -214,11 +220,11 @@ if (isset($_GET['id'])) {
                 unwrap_summary.style.height = 'auto';
             }
 
-        <?php endif; ?>
-
+            
+        // ----------------------------
         // Graphique colonne
 
-        <?php if (isset($key)) : ?>
+        <?php elseif (isset($key)) : ?>
             let data = <?= json_encode($annees); ?>;
 
             // console.log(data);
