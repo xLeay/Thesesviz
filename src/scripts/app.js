@@ -45,6 +45,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             search_thesis.submit();
         }
+
+        // si on fait la touche escape, on cache les options de recherche
+        if (e.keyCode === 27) {
+            search_options.style.display = 'none';
+        }
+        
     });
 
     // On affiche les options de recherche lorsqu'on clique sur le formulaire de recherche

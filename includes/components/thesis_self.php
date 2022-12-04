@@ -6,7 +6,7 @@
 <div class="thesis_self__subjects" style="<?php if (count($thesis['sujets']) > 0) : ?>padding-bottom: 10px;<?php endif; ?>">
     <?php for ($j = 0; $j < (count($thesis['sujets'])); $j++) : ?>
         <div class="thesis_self__subject">
-            <p class="thesis_subject"><?= $thesis['sujets'][$j]; ?></p> <!-- TODO: add link to subject page -->
+            <p class="thesis_subject"><a href="/q?sujet=<?= $thesis['sujets'][$j]; ?>"><?= $thesis['sujets'][$j]; ?></a></p>
         </div>
     <?php endfor; ?>
 </div>
@@ -24,8 +24,11 @@
                 <?php else : ?>
 
                     <!-- AUTEUR DE LA THESE -->
-                    <!-- TODO: add link to author page -->
-                    <p class="thesis_author">par <span class="important_info"><?= $thesis['auteur']['prenom'] ?> <?= $thesis['auteur']['nom']; ?></span></p>
+                    <p class="thesis_author">par
+                        <a class="underline" href="/q?auteur=<?= $thesis['auteur']['prenom'] ?>+<?= $thesis['auteur']['nom'] ?>">
+                            <span class="important_info"><?= $thesis['auteur']['prenom'] ?> <?= $thesis['auteur']['nom']; ?></span>
+                        </a>
+                    </p>
 
 
                     <!-- DIRECTEUR(S) DE LA THESE -->
@@ -33,10 +36,12 @@
                     <?php if (count($thesis['directeur']) > 0) : ?>
                         <p class="thesis_directeur">sous la direction de
                             <?php foreach ($thesis['directeur'] as $key => $directeur) : ?>
-                                <span class="less_important_info"><?= $directeur; ?></span>
-                                <?php if ($key != count($thesis['directeur']) - 1 && $key != count($thesis['directeur']) - 2) : ?>
-                                    ,
-                                <?php elseif ($key == count($thesis['directeur']) - 2) : ?> et <?php endif; ?>
+                                <a class="underline" href="/q?personne=<?= $directeur; ?>">
+                                    <span class="less_important_info"><?= $directeur; ?></span>
+                                    <?php if ($key != count($thesis['directeur']) - 1 && $key != count($thesis['directeur']) - 2) : ?>
+                                        ,
+                                    <?php elseif ($key == count($thesis['directeur']) - 2) : ?> et <?php endif; ?>
+                                </a>
                             <?php endforeach; ?>
                         </p>
                     <?php endif; ?>
@@ -76,7 +81,7 @@
                         </p>
                     <?php endif; ?>
 
-                    
+
                 <?php endif; ?>
             </div>
         </div>

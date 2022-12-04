@@ -161,13 +161,17 @@ class Search extends DB
     public function decodeKey($key)
     {
 
+        // On échappe les apostrophes pour éviter les erreurs SQL
+        $key = str_replace("'", "\'", $key);
+
         // Si l'id est dans le GET, celà signifie qu'on a cliqué sur une thèse en particulier, et on veut afficher les informations de cette thèse
         if (isset($_GET['id'])) {
 
             $id = $_GET['id'];
 
             $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.discipline, t.resume
-            FROM etablissement e, these t NATURAL JOIN soutenir s 
+            FROM etablissement e, these t
+            NATURAL JOIN soutenir s 
             WHERE s.idEtablissement = e.idEtablissement AND t.idThese = $id
             ORDER BY t.idThese DESC";
 
@@ -188,8 +192,9 @@ class Search extends DB
         }
 
         // Recherche par défaut en regardant dans le titre
-        $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_titre
-        FROM etablissement e, these t NATURAL JOIN soutenir s 
+        $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_titre
+        FROM etablissement e, these t
+        NATURAL JOIN soutenir s 
         WHERE s.idEtablissement = e.idEtablissement AND MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
         ORDER BY score_titre DESC";
 
@@ -231,7 +236,7 @@ class Search extends DB
                 return $queries;
                 break;
             case 'auteur':
-                $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, p.prenom, p.nom, a.role, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s
                 JOIN assister a ON a.idThese = t.idThese
@@ -243,7 +248,7 @@ class Search extends DB
                 FROM these t
                 NATURAL JOIN assister a
                 NATURAL JOIN personne p
-                WHERE MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) 
+                WHERE MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur'
                 ORDER BY score_personne DESC";
 
                 $sqlsujet = "SELECT s.libelle, r.idThese
@@ -262,7 +267,7 @@ class Search extends DB
                 return $AUTHORqueries;
                 break;
             case 'sujet':
-                $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, su.libelle, MATCH (su.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_sujet
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, su.libelle, MATCH (su.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_sujet
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s
                 JOIN reposer r ON r.idThese = t.idThese
@@ -297,7 +302,7 @@ class Search extends DB
                 return $SUBJECTqueries;
                 break;
             case 'depuis':
-                $sqlthese = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s
                 WHERE s.idEtablissement = e.idEtablissement AND s.date_soutenance >= '$key'
@@ -325,6 +330,82 @@ class Search extends DB
                 return $SINCEqueries;
                 break;
             case 'de':
+            case 'etablissement':
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+                FROM etablissement e, these t
+                NATURAL JOIN soutenir s
+                WHERE s.idEtablissement = e.idEtablissement AND e.nom LIKE '%$key%'
+                ORDER BY s.date_soutenance DESC";
+
+                $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre
+                FROM these t
+                NATURAL JOIN assister a
+                NATURAL JOIN personne p
+                WHERE a.role = 'auteur' AND t.idThese IN (SELECT idThese FROM soutenir WHERE idEtablissement IN (SELECT idEtablissement FROM etablissement WHERE nom LIKE '%$key%'))
+                ORDER BY t.idThese DESC";
+
+                $sqlsujet = "SELECT s.libelle, r.idThese
+                FROM reposer r
+                NATURAL JOIN sujet s
+                NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so
+                WHERE so.idThese IN (SELECT idThese FROM soutenir WHERE idEtablissement IN (SELECT idEtablissement FROM etablissement WHERE nom LIKE '%$key%'))";
+
+                $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
+                FROM soutenir s
+                WHERE s.idEtablissement IN (SELECT idEtablissement FROM etablissement WHERE nom LIKE '%$key%')
+                GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
+
+                $SCHOOLqueries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
+                return $SCHOOLqueries;
+                break;
+            case 'personne':
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
+                FROM etablissement e, these t
+                NATURAL JOIN soutenir s
+                JOIN assister a ON a.idThese = t.idThese
+                NATURAL JOIN personne p
+                WHERE s.idEtablissement = e.idEtablissement AND MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+                ORDER BY score_personne DESC";
+
+                // $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
+                // FROM these t
+                // NATURAL JOIN assister a
+                // NATURAL JOIN personne p
+                // WHERE MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+                // ORDER BY score_personne DESC";
+
+                $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
+                FROM these t
+                NATURAL JOIN assister a
+                NATURAL JOIN personne p
+                WHERE t.idThese IN (
+                    SELECT t.idThese
+                    FROM these t
+                    NATURAL JOIN assister a
+                    NATURAL JOIN personne p
+                    WHERE MATCH (prenom, nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+                )";
+
+
+                
+                
+
+
+                $sqlsujet = "SELECT s.libelle, r.idThese
+                FROM reposer r
+                NATURAL JOIN sujet s
+                NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so";
+
+                $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
+                FROM soutenir s
+                NATURAL JOIN assister a
+                NATURAL JOIN personne p
+                WHERE MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+                GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
+
+                $PERSONqueries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
+                return $PERSONqueries;
+                break;
             default:
                 // debug($option);
                 return $queries;
