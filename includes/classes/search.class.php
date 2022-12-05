@@ -169,7 +169,7 @@ class Search extends DB
 
             $id = $_GET['id'];
 
-            $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.discipline, t.resume
+            $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.discipline, t.resume, t.nnt
             FROM etablissement e, these t
             NATURAL JOIN soutenir s 
             WHERE s.idEtablissement = e.idEtablissement AND t.idThese = $id
@@ -367,13 +367,6 @@ class Search extends DB
                 WHERE s.idEtablissement = e.idEtablissement AND MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
                 ORDER BY score_personne DESC";
 
-                // $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
-                // FROM these t
-                // NATURAL JOIN assister a
-                // NATURAL JOIN personne p
-                // WHERE MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
-                // ORDER BY score_personne DESC";
-
                 $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
                 FROM these t
                 NATURAL JOIN assister a
@@ -385,11 +378,6 @@ class Search extends DB
                     NATURAL JOIN personne p
                     WHERE MATCH (prenom, nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
                 )";
-
-
-                
-                
-
 
                 $sqlsujet = "SELECT s.libelle, r.idThese
                 FROM reposer r
@@ -406,6 +394,35 @@ class Search extends DB
                 $PERSONqueries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
                 return $PERSONqueries;
                 break;
+            case 'discipline':
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.discipline, MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_discipline
+                FROM etablissement e, these t
+                NATURAL JOIN soutenir s 
+                WHERE s.idEtablissement = e.idEtablissement AND MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+                ORDER BY score_discipline DESC";
+
+                $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre, t.discipline, MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_discipline
+                FROM these t
+                NATURAL JOIN assister a
+                NATURAL JOIN personne p
+                WHERE MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE) AND a.role = 'auteur'
+                ORDER BY score_discipline DESC";
+
+                $sqlsujet = "SELECT s.libelle, r.idThese, MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_discipline
+                FROM reposer r
+                NATURAL JOIN sujet s
+                NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so
+                NATURAL JOIN these t
+                WHERE MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE)";
+
+                $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
+                FROM soutenir s
+                NATURAL JOIN these t
+                WHERE MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+                GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
+                
+                $queries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
+
             default:
                 // debug($option);
                 return $queries;

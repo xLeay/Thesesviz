@@ -33,8 +33,8 @@
         </div>
         <div class="quick_thesis_info">
             <p class="quick_thesis_date underline">
-                <a href="/q?depuis=<?= strftime('%Y', strtotime($thesis['date'])); ?>"><?= strftime('%d %b', strtotime($thesis['date'])); ?>
-                    <span class="important_info"><?= strftime('%Y', strtotime($thesis['date'])); ?></span>
+                <a href="/q?depuis=<?= DateTime::createFromFormat('Y-m-d', $thesis['date'])->format('Y'); ?>"><?= DateTime::createFromFormat('Y-m-d', $thesis['date'])->format('d M'); ?>
+                    <span class="important_info"><?= DateTime::createFromFormat('Y-m-d', $thesis['date'])->format('Y'); ?></span>
                 </a>
             </p>
             <p class="quick_thesis_academy important_info underline">

@@ -32,34 +32,37 @@
 
 
                     <!-- DIRECTEUR(S) DE LA THESE -->
-                    <!-- TODO: add link to director page -->
                     <?php if (count($thesis['directeur']) > 0) : ?>
                         <p class="thesis_directeur">sous la direction de
                             <?php foreach ($thesis['directeur'] as $key => $directeur) : ?>
                                 <a class="underline" href="/q?personne=<?= $directeur; ?>">
                                     <span class="less_important_info"><?= $directeur; ?></span>
-                                    <?php if ($key != count($thesis['directeur']) - 1 && $key != count($thesis['directeur']) - 2) : ?>
-                                        ,
-                                    <?php elseif ($key == count($thesis['directeur']) - 2) : ?> et <?php endif; ?>
                                 </a>
+                                <?php if ($key != count($thesis['directeur']) - 1 && $key != count($thesis['directeur']) - 2) : ?>
+                                    ,
+                                <?php elseif ($key == count($thesis['directeur']) - 2) : ?> et <?php endif; ?>
                             <?php endforeach; ?>
                         </p>
                     <?php endif; ?>
 
 
                     <!-- PRESIDENT(S) DU JURY -->
-                    <!-- TODO: add link to president page -->
                     <?php if ($thesis['president']['prenom'] != NULL) : ?>
-                        <p class="thesis_president">présidée par <span class="less_important_info"><?= $thesis['president']['prenom'] ?> <?= $thesis['president']['nom']; ?></span></p>
+                        <p class="thesis_president">présidée par
+                            <a class="underline" href="/q?personne=<?= $thesis['president']['prenom'] ?> <?= $thesis['president']['nom']; ?>">
+                                <span class="less_important_info"><?= $thesis['president']['prenom'] ?> <?= $thesis['president']['nom']; ?></span>
+                            </a>
+                        </p>
                     <?php endif; ?>
 
 
                     <!-- MEMBRE(S) DU JURY -->
-                    <!-- TODO: add link to member page -->
                     <?php if (count($thesis['membre']) > 0) : ?>
                         <p class="thesis_membre">le jury est composé de
                             <?php foreach ($thesis['membre'] as $key => $membre) : ?>
-                                <span class="less_important_info"><?= $membre; ?></span>
+                                <a class="underline" href="/q?personne=<?= $membre; ?>">
+                                    <span class="less_important_info"><?= $membre; ?></span>
+                                </a>
                                 <?php if ($key != count($thesis['membre']) - 1 && $key != count($thesis['membre']) - 2) : ?>
                                     ,
                                 <?php elseif ($key == count($thesis['membre']) - 2) : ?> et <?php endif; ?>
@@ -69,11 +72,12 @@
 
 
                     <!-- RAPPORTEUR(S) DE LA THESE -->
-                    <!-- TODO: add link to rapporteur page -->
                     <?php if (count($thesis['rapporteur']) > 0) : ?>
                         <p class="thesis_rapporteur">rapportée par
                             <?php foreach ($thesis['rapporteur'] as $key => $rapporteur) : ?>
-                                <span class="less_important_info"><?= $rapporteur; ?></span>
+                                <a class="underline" href="/q?personne=<?= $rapporteur; ?>">
+                                    <span class="less_important_info"><?= $rapporteur; ?></span>
+                                </a>
                                 <?php if ($key != count($thesis['rapporteur']) - 1 && $key != count($thesis['rapporteur']) - 2) : ?>
                                     ,
                                 <?php elseif ($key == count($thesis['rapporteur']) - 2) : ?> et <?php endif; ?>
@@ -90,35 +94,59 @@
             <p class="card_title">Informations sur la thèse</p>
 
             <div class="info_list list">
-                <!-- TODO: add link to year page -->
-                <p>soutenue le <span class="important_info"><?= strftime('%d %b %Y', strtotime($thesis['date'])); ?></span></p>
+                <p>soutenue le
+                    <a class="underline" href="/q?depuis=<?= DateTime::createFromFormat('Y-m-d', $thesis['date'])->format('Y'); ?>">
+                        <span class="important_info"><?= DateTime::createFromFormat('Y-m-d', $thesis['date'])->format('d M Y'); ?></span>
+                    </a>
+                </p>
 
-                <!-- TODO: add link to school page -->
                 <div class="prevent_overflow">
-                    <p class="list_overflow">à <span class="less_important_info"><?= $thesis['etablissement']; ?></span></p>
+                    <p class="list_overflow">à
+                        <a class="underline" href="/q?etablissement=<?= $thesis['etablissement']; ?>">
+                            <span class="less_important_info"><?= $thesis['etablissement']; ?></span>
+                        </a>
+                    </p>
                 </div>
 
-                <!-- TODO: add link to discipline page -->
                 <div class="prevent_overflow">
-                    <p class="list_overflow">discipline <span class="less_important_info"><?= $thesis['discipline']; ?></span></p>
+                    <p class="list_overflow">discipline
+                        <a class="underline" href="/q?discipline=<?= $thesis['discipline']; ?>">
+                            <span class="less_important_info"><?= $thesis['discipline']; ?></span>
+                        </a>
+                    </p>
                 </div>
 
+                <!-- www.theses.fr/NNT/document --> je suis là ------------------ accessible lien
                 <!-- TODO: add link to thesis target blank -->
                 <?php if ($thesis['accessible'] == 1) : ?>
-                    <p class="self_accessible">accessible <span class="less_important_info">&nbsp;en ligne</span>&nbsp;<span class="material-symbols-rounded less_important_info open_new_icon">open_in_new</span>
+                    <p class="self_accessible">accessible
+                        <a class="underline" href="https://www.theses.fr/<?= $thesis['nnt']; ?>/document" target="_blank">
+                            <span class="less_important_info">&nbsp;en ligne</span>&nbsp;<span class="material-symbols-rounded less_important_info open_new_icon">open_in_new</span>
+                        </a>
                     </p>
                 <?php endif; ?>
+
             </div>
         </div>
     </div>
 
-    <div class="thesis_self__summary summary_closed card">
-        <p class="card_title">Description de la thèse</p>
-        <div class="list">
-            <p id="js-no_wrap"><?= $thesis['resume']; ?></p>
+    <?php if ($thesis['resume'] != NULL) : ?>
+        <div class="thesis_self__summary summary_closed card">
+            <p class="card_title">Description de la thèse</p>
+            <div class="list">
+                <p id="js-no_wrap"><?= $thesis['resume']; ?></p>
+            </div>
+            <p class="see_more_summary">Voir plus</p>
         </div>
-        <p class="see_more_summary">Voir plus</p>
-    </div>
+
+    <?php else : ?>
+        <div class="thesis_self__summary card">
+            <p class="card_title">Description de la thèse</p>
+            <div class="list">
+                <p id="js-no_wrap">Aucune description n'a été fournie pour cette thèse.</p>
+            </div>
+        </div>
+    <?php endif; ?>
 
 
 </div>

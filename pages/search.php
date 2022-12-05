@@ -85,6 +85,10 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
     // debug($personnes);
     // debug($sujets);
     // debug($annees);
+    // debug(count($theses));
+    // debug(count($personnes));
+    // debug(count($sujets));
+    // debug(count($annees));
 
 }
 
@@ -112,6 +116,7 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
     <?php if (isset($id)) : ?>
         <?php
         $thesis = array(
+            'nnt' => $theses[0]['nnt'],
             'date' => $theses[0]['date_soutenance'],
             'etablissement' => $theses[0]['nom'],
             'titre' => $theses[0]['titre'],
@@ -166,8 +171,18 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
                 <p class="results_nb"><?= count($theses) ?> résultats pour la personnalité <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
             <?php endif; ?>
 
+            <!-- <div style="display: grid; height: 400px; margin-bottom: 20px;"> -->
+            <div class="thesis_chart">
+                <div class="btn_container">
+                    <button id="UnAn" class="btn chartBtn filter_btn">Depuis 2015</button>
+                </div>
+                <div id="histo_container"></div>
+            </div>
+
+            <?= count($theses) > 1 ? '<p class="section_title">Sélection des ' . (count($theses) < 10 ? count($theses) : '10 premières') . ' thèses</p>' : '<p class="section_title">Sélection de la thèse</p>' ?>
+
             <?php $i = 0; ?>
-            <?php for ($i; $i < (count($theses) > 1 ? 1 : count($theses)); $i++) : ?>
+            <?php for ($i; $i < (count($theses) > 10 ? 10 : count($theses)); $i++) : ?>
                 <?php
                 $thesis = array(
                     'date' => $theses[$i]['date_soutenance'],
@@ -209,14 +224,16 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
                 <p class="results_nb"><?= count($theses) ?> résultats pour <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
             <?php elseif ($option == 'titre') : ?>
                 <p class="results_nb"><?= count($theses) ?> résultats pour le titre <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php elseif ($option  == 'auteur') : ?>
+            <?php elseif ($option == 'auteur') : ?>
                 <p class="results_nb"><?= count($theses) ?> résultats pour l'auteur <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php elseif ($option  == 'sujet') : ?>
+            <?php elseif ($option == 'sujet') : ?>
                 <p class="results_nb"><?= count($theses) ?> résultats pour le sujet <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php elseif ($option  == 'depuis') : ?>
+            <?php elseif ($option == 'depuis') : ?>
                 <p class="results_nb"><?= count($theses) ?> résultats pour les thèses depuis <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php elseif ($option  == 'etablissement') : ?>
+            <?php elseif ($option == 'etablissement') : ?>
                 <p class="results_nb"><?= count($theses) ?> résultats pour l'établissement <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
+            <?php elseif ($option == 'discipline') : ?>
+                <p class="results_nb"><?= count($theses) ?> résultats pour la discipline <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
             <?php endif; ?>
 
 
@@ -310,8 +327,7 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
             // ----------------------------
             // Graphique colonne
 
-        // < ?php elseif (isset($_GET[$option])) : ?>
-        <?php elseif (isset($key)) : ?> je suis là, j'essaye d'afficher le graphique des thèses avec les personnes
+        <?php elseif (isset($key) || isset($option)) : ?>
 
             console.log('graphique');
             let data = <?= json_encode($annees); ?>;
