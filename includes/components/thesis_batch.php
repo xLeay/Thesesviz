@@ -2,13 +2,15 @@
     <div class="quick_thesis_wrap">
         <div class="quick_thesis">
             <div class="title_content">
-                <p class="thesis_title bold underline"> <a href="/q?id=<?= $thesis['id']; ?>"><?= $thesis['titre']; ?></a></p>
+                <p class="thesis_title semibold underline"> <a href="/q?id=<?= $thesis['id']; ?>"><?= $thesis['titre']; ?></a></p>
             </div>
             <div class="thesis_online">
                 <?php if ($thesis['accessible'] == 1) : ?>
                     <div class="accessible__wrap">
-                        <p>en ligne</p>
-                        <span class="material-symbols-rounded online_icon">check_circle</span>
+                        <a style="display: inline-flex; align-items: center; gap: 5px;" href="https://www.theses.fr/<?= $thesis['nnt']; ?>/document" target="_blank">
+                            <p>en ligne</p>
+                            <span class="material-symbols-rounded online_icon">check_circle</span>
+                        </a>
                     </div>
                 <?php else : ?>
                     <div class="accessible__wrap">

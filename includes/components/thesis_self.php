@@ -116,11 +116,9 @@
                     </p>
                 </div>
 
-                <!-- www.theses.fr/NNT/document --> je suis là ------------------ accessible lien
-                <!-- TODO: add link to thesis target blank -->
                 <?php if ($thesis['accessible'] == 1) : ?>
                     <p class="self_accessible">accessible
-                        <a class="underline" href="https://www.theses.fr/<?= $thesis['nnt']; ?>/document" target="_blank">
+                        <a style="display: flex;" class="underline" href="https://www.theses.fr/<?= $thesis['nnt']; ?>/document" target="_blank">
                             <span class="less_important_info">&nbsp;en ligne</span>&nbsp;<span class="material-symbols-rounded less_important_info open_new_icon">open_in_new</span>
                         </a>
                     </p>

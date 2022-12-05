@@ -110,181 +110,184 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
 
 <!-- < ?php require ROOT . "../includes/components/nav.php"; ?> -->
 
+<div class="main_container">
+    <section class="thesis20">
 
-<section class="thesis20">
+        <?php if (isset($id)) : ?>
+            <?php
+            $thesis = array(
+                'nnt' => $theses[0]['nnt'],
+                'date' => $theses[0]['date_soutenance'],
+                'etablissement' => $theses[0]['nom'],
+                'titre' => $theses[0]['titre'],
+                'accessible' => $theses[0]['these_accessible'],
+                'id' => $theses[0]['idThese'],
+                'discipline' => $theses[0]['discipline'],
+                'resume' => $theses[0]['resume'],
+                'auteur' => array(
+                    'nom' => '',
+                    'prenom' => '',
+                ),
+                'directeur' => array(),
+                'president' => array(
+                    'nom' => '',
+                    'prenom' => '',
+                ),
+                'membre' => array(),
+                'rapporteur' => array(),
+                'sujets' => array()
+            );
 
-    <?php if (isset($id)) : ?>
-        <?php
-        $thesis = array(
-            'nnt' => $theses[0]['nnt'],
-            'date' => $theses[0]['date_soutenance'],
-            'etablissement' => $theses[0]['nom'],
-            'titre' => $theses[0]['titre'],
-            'accessible' => $theses[0]['these_accessible'],
-            'id' => $theses[0]['idThese'],
-            'discipline' => $theses[0]['discipline'],
-            'resume' => $theses[0]['resume'],
-            'auteur' => array(
-                'nom' => '',
-                'prenom' => '',
-            ),
-            'directeur' => array(),
-            'president' => array(
-                'nom' => '',
-                'prenom' => '',
-            ),
-            'membre' => array(),
-            'rapporteur' => array(),
-            'sujets' => array()
-        );
-
-        foreach ($sujets as $sujet) {
-            if ($sujet['idThese'] == $theses[0]['idThese']) {
-                array_push($thesis['sujets'], $sujet['libelle']);
-            }
-        }
-
-        foreach ($personnes as $personne) {
-
-            if ($personne['role'] == 'auteur') {
-                $thesis['auteur']['nom'] = $personne['nom'];
-                $thesis['auteur']['prenom'] = $personne['prenom'];
-            } else if ($personne['role'] == 'directeur') {
-                array_push($thesis['directeur'], $personne['nom'] . ' ' . $personne['prenom']);
-            } else if ($personne['role'] == 'president') {
-                $thesis['president']['nom'] = $personne['nom'];
-                $thesis['president']['prenom'] = $personne['prenom'];
-            } else if ($personne['role'] == 'membre') {
-                array_push($thesis['membre'], $personne['nom'] . ' ' . $personne['prenom']);
-            } else if ($personne['role'] == 'rapporteur') {
-                array_push($thesis['rapporteur'], $personne['nom'] . ' ' . $personne['prenom']);
-            }
-        }
-
-        include ROOT . '../includes/components/thesis_self.php';
-        ?>
-
-    <?php elseif (isset($personne)) : ?>
-        <?php if (count($theses) > 0) : ?>
-
-            <?php if ($option == 'personne') : ?>
-                <p class="results_nb"><?= count($theses) ?> résultats pour la personnalité <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php endif; ?>
-
-            <!-- <div style="display: grid; height: 400px; margin-bottom: 20px;"> -->
-            <div class="thesis_chart">
-                <div class="btn_container">
-                    <button id="UnAn" class="btn chartBtn filter_btn">Depuis 2015</button>
-                </div>
-                <div id="histo_container"></div>
-            </div>
-
-            <?= count($theses) > 1 ? '<p class="section_title">Sélection des ' . (count($theses) < 10 ? count($theses) : '10 premières') . ' thèses</p>' : '<p class="section_title">Sélection de la thèse</p>' ?>
-
-            <?php $i = 0; ?>
-            <?php for ($i; $i < (count($theses) > 10 ? 10 : count($theses)); $i++) : ?>
-                <?php
-                $thesis = array(
-                    'date' => $theses[$i]['date_soutenance'],
-                    'etablissement' => $theses[$i]['nom'],
-                    'titre' => $theses[$i]['titre'],
-                    'accessible' => $theses[$i]['these_accessible'],
-                    'id' => $theses[$i]['idThese'],
-                    'auteurs' => array(
-                        'nom' => '',
-                        'prenom' => '',
-                    ),
-                    'sujets' => array()
-                );
-
-                foreach ($sujets as $sujet) {
-                    if ($sujet['idThese'] == $theses[$i]['idThese']) {
-                        array_push($thesis['sujets'], $sujet['libelle']);
-                    }
+            foreach ($sujets as $sujet) {
+                if ($sujet['idThese'] == $theses[0]['idThese']) {
+                    array_push($thesis['sujets'], $sujet['libelle']);
                 }
+            }
 
-                foreach ($personnes as $personne) {
-                    if ($personne['idThese'] == $theses[$i]['idThese']) {
-                        if ($personne['role'] == 'auteur') {
-                            $thesis['auteurs']['nom'] = $personne['nom'];
-                            $thesis['auteurs']['prenom'] = $personne['prenom'];
+            foreach ($personnes as $personne) {
+
+                if ($personne['role'] == 'auteur') {
+                    $thesis['auteur']['nom'] = $personne['nom'];
+                    $thesis['auteur']['prenom'] = $personne['prenom'];
+                } else if ($personne['role'] == 'directeur') {
+                    array_push($thesis['directeur'], $personne['nom'] . ' ' . $personne['prenom']);
+                } else if ($personne['role'] == 'president') {
+                    $thesis['president']['nom'] = $personne['nom'];
+                    $thesis['president']['prenom'] = $personne['prenom'];
+                } else if ($personne['role'] == 'membre') {
+                    array_push($thesis['membre'], $personne['nom'] . ' ' . $personne['prenom']);
+                } else if ($personne['role'] == 'rapporteur') {
+                    array_push($thesis['rapporteur'], $personne['nom'] . ' ' . $personne['prenom']);
+                }
+            }
+
+            include ROOT . '../includes/components/thesis_self.php';
+            ?>
+
+        <?php elseif (isset($personne)) : ?>
+            <?php if (count($theses) > 0) : ?>
+
+                <?php if ($option == 'personne') : ?>
+                    <p class="results_nb"><?= count($theses) ?> résultats pour la personnalité <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
+                <?php endif; ?>
+
+                <!-- <div style="display: grid; height: 400px; margin-bottom: 20px;"> -->
+                <div class="thesis_chart">
+                    <div class="btn_container">
+                        <button id="UnAn" class="btn chartBtn filter_btn">Depuis 2015</button>
+                    </div>
+                    <div id="histo_container"></div>
+                </div>
+
+                <?= count($theses) > 1 ? '<p class="section_title">Sélection des ' . (count($theses) < 10 ? count($theses) : '10 premières') . ' thèses</p>' : '<p class="section_title">Sélection de la thèse</p>' ?>
+
+                <?php $i = 0; ?>
+                <?php for ($i; $i < (count($theses) > 10 ? 10 : count($theses)); $i++) : ?>
+                    <?php
+                    $thesis = array(
+                        'nnt' => $theses[$i]['nnt'],
+                        'date' => $theses[$i]['date_soutenance'],
+                        'etablissement' => $theses[$i]['nom'],
+                        'titre' => $theses[$i]['titre'],
+                        'accessible' => $theses[$i]['these_accessible'],
+                        'id' => $theses[$i]['idThese'],
+                        'auteurs' => array(
+                            'nom' => '',
+                            'prenom' => '',
+                        ),
+                        'sujets' => array()
+                    );
+
+                    foreach ($sujets as $sujet) {
+                        if ($sujet['idThese'] == $theses[$i]['idThese']) {
+                            array_push($thesis['sujets'], $sujet['libelle']);
                         }
                     }
-                }
 
-                include ROOT . '../includes/components/thesis_batch.php';
-                ?>
-            <?php endfor; ?>
-        <?php endif; ?>
+                    foreach ($personnes as $personne) {
+                        if ($personne['idThese'] == $theses[$i]['idThese']) {
+                            if ($personne['role'] == 'auteur') {
+                                $thesis['auteurs']['nom'] = $personne['nom'];
+                                $thesis['auteurs']['prenom'] = $personne['prenom'];
+                            }
+                        }
+                    }
 
-    <?php elseif (isset($key)) : ?>
-        <?php if (count($theses) > 0) : ?>
-
-            <?php if ($option == 'key') : ?>
-                <p class="results_nb"><?= count($theses) ?> résultats pour <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php elseif ($option == 'titre') : ?>
-                <p class="results_nb"><?= count($theses) ?> résultats pour le titre <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php elseif ($option == 'auteur') : ?>
-                <p class="results_nb"><?= count($theses) ?> résultats pour l'auteur <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php elseif ($option == 'sujet') : ?>
-                <p class="results_nb"><?= count($theses) ?> résultats pour le sujet <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php elseif ($option == 'depuis') : ?>
-                <p class="results_nb"><?= count($theses) ?> résultats pour les thèses depuis <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php elseif ($option == 'etablissement') : ?>
-                <p class="results_nb"><?= count($theses) ?> résultats pour l'établissement <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
-            <?php elseif ($option == 'discipline') : ?>
-                <p class="results_nb"><?= count($theses) ?> résultats pour la discipline <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
+                    include ROOT . '../includes/components/thesis_batch.php';
+                    ?>
+                <?php endfor; ?>
             <?php endif; ?>
 
+        <?php elseif (isset($key)) : ?>
+            <?php if (count($theses) > 0) : ?>
 
-            <!-- <div style="display: grid; height: 400px; margin-bottom: 20px;"> -->
-            <div class="thesis_chart">
-                <div class="btn_container">
-                    <button id="UnAn" class="btn chartBtn filter_btn">Depuis 2015</button>
+                <?php if ($option == 'key') : ?>
+                    <p class="results_nb"><?= count($theses) ?> résultats pour <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
+                <?php elseif ($option == 'titre') : ?>
+                    <p class="results_nb"><?= count($theses) ?> résultats pour le titre <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
+                <?php elseif ($option == 'auteur') : ?>
+                    <p class="results_nb"><?= count($theses) ?> résultats pour l'auteur <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
+                <?php elseif ($option == 'sujet') : ?>
+                    <p class="results_nb"><?= count($theses) ?> résultats pour le sujet <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
+                <?php elseif ($option == 'depuis') : ?>
+                    <p class="results_nb"><?= count($theses) ?> résultats pour les thèses depuis <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
+                <?php elseif ($option == 'etablissement') : ?>
+                    <p class="results_nb"><?= count($theses) ?> résultats pour l'établissement <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
+                <?php elseif ($option == 'discipline') : ?>
+                    <p class="results_nb"><?= count($theses) ?> résultats pour la discipline <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
+                <?php endif; ?>
+
+
+                <!-- <div style="display: grid; height: 400px; margin-bottom: 20px;"> -->
+                <div class="thesis_chart">
+                    <div class="btn_container">
+                        <button id="UnAn" class="btn chartBtn filter_btn">Depuis 2015</button>
+                    </div>
+                    <div id="histo_container"></div>
                 </div>
-                <div id="histo_container"></div>
-            </div>
 
-            <?= count($theses) > 1 ? '<p class="section_title">Sélection des ' . (count($theses) < 10 ? count($theses) : '10 premières') . ' thèses</p>' : '<p class="section_title">Sélection de la thèse</p>' ?>
+                <?= count($theses) > 1 ? '<p class="section_title">Sélection des ' . (count($theses) < 10 ? count($theses) : '10 premières') . ' thèses</p>' : '<p class="section_title">Sélection de la thèse</p>' ?>
 
-            <?php $i = 0; ?>
-            <?php for ($i; $i < (count($theses) > 10 ? 10 : count($theses)); $i++) : ?>
-                <?php
+                <?php $i = 0; ?>
+                <?php for ($i; $i < (count($theses) > 10 ? 10 : count($theses)); $i++) : ?>
+                    <?php
 
-                $thesis = array(
-                    'id' => $theses[$i]['idThese'],
-                    'titre' => $theses[$i]['titre'],
-                    'date' => $theses[$i]['date_soutenance'],
-                    'etablissement' => $theses[$i]['nom'],
-                    'auteurs' => array(
-                        'prenom' => $auteurs[$i]['prenom'],
-                        'nom' => $auteurs[$i]['nom']
-                    ),
-                    'accessible' => $theses[$i]['these_accessible'],
-                    'sujets' => array()
-                );
+                    $thesis = array(
+                        'nnt' => $theses[$i]['nnt'],
+                        'id' => $theses[$i]['idThese'],
+                        'titre' => $theses[$i]['titre'],
+                        'date' => $theses[$i]['date_soutenance'],
+                        'etablissement' => $theses[$i]['nom'],
+                        'auteurs' => array(
+                            'prenom' => $auteurs[$i]['prenom'],
+                            'nom' => $auteurs[$i]['nom']
+                        ),
+                        'accessible' => $theses[$i]['these_accessible'],
+                        'sujets' => array()
+                    );
 
-                foreach ($sujets as $sujet) {
-                    if ($sujet['idThese'] == $theses[$i]['idThese']) {
-                        array_push($thesis['sujets'], $sujet['libelle']);
+                    foreach ($sujets as $sujet) {
+                        if ($sujet['idThese'] == $theses[$i]['idThese']) {
+                            array_push($thesis['sujets'], $sujet['libelle']);
+                        }
                     }
-                }
 
-                include ROOT . '../includes/components/thesis_batch.php';
-                ?>
-            <?php endfor; ?>
+                    include ROOT . '../includes/components/thesis_batch.php';
+                    ?>
+                <?php endfor; ?>
 
-        <?php else : ?>
-            <p class="results_nb">Aucun résultats pour <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes)</p>
-            <div class="no_results">
-                <span class="material-symbols-rounded">search</span>
-                <p>N'hésitez pas à élargir la recherche ou retirer les filtres.</p>
-            </div>
+            <?php else : ?>
+                <p class="results_nb">Aucun résultats pour <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes)</p>
+                <div class="no_results">
+                    <span class="material-symbols-rounded">search</span>
+                    <p>N'hésitez pas à élargir la recherche ou retirer les filtres.</p>
+                </div>
 
+            <?php endif; ?>
         <?php endif; ?>
-    <?php endif; ?>
 
-</section>
+    </section>
+</div>
 
 <div class="end" style="margin-top: 20vh; height: 1px;"></div>
 

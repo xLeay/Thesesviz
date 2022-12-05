@@ -1,4 +1,3 @@
-
 <?php
 $data = new Search();
 ?>
@@ -9,87 +8,89 @@ $data = new Search();
 <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-<section>
-    <p class="section_title">Statistiques de thèses</p>
+<div class="main_container">
+    <section>
+        <p class="section_title">Statistiques de thèses</p>
 
-    <div class="stats_wrap">
-        <div class="stats">
-            <p class="stats_title">Thèses répertoriées</p>
-            <!-- <p class="stats_data"> < ?= $data->loadData()->$selection1->rowCount(); ?> </p> -->
-            <p class="stats_data"> <?= $data->loadData()[0]; ?> </p>
+        <div class="stats_wrap">
+            <div class="stats">
+                <p class="stats_title">Thèses répertoriées</p>
+                <p class="stats_data"> <?= $data->loadData()[0]; ?> </p>
+            </div>
+            <div class="stats">
+                <p class="stats_title">Thèses en ligne</p>
+                <p class="stats_data"> <?= $data->loadData()[1]; ?> </p>
+            </div>
+            <div class="stats">
+                <p class="stats_title">Établissements</p>
+                <p class="stats_data"> <?= $data->loadData()[2]; ?> </p>
+            </div>
+            <div class="stats">
+                <p class="stats_title">Sujets</p>
+                <p class="stats_data"><?= $data->loadData()[3]; ?></p>
+            </div>
         </div>
-        <div class="stats">
-            <p class="stats_title">Thèses en ligne</p>
-            <p class="stats_data"> <?= $data->loadData()[1]; ?> </p>
+    </section>
+
+
+    <section>
+        <p class="section_title">Graphiques sur les thèses</p>
+        <div class="btn_container">
+            <button id="UnAn" class="btn chartBtn">un an</button>
+            <button id="CinqAns" class="btn chartBtn">5 ans</button>
+            <button id="DixAns" class="btn chartBtn">10 ans</button>
         </div>
-        <div class="stats">
-            <p class="stats_title">Établissements concernés</p>
-            <p class="stats_data"> <?= $data->loadData()[2]; ?> </p>
+
+        <div class="graphs_container">
+            <div id="histo_container"></div>
+            <div class="map_wrap">
+                <p>Thèses sur le territoire</p>
+                <div id="map_container"></div>
+            </div>
         </div>
-        <div class="stats">
-            <p class="stats_title">Sujets de thèses</p>
-            <p class="stats_data"> <?= $data->loadData()[3]; ?> </p>
-        </div>
-    </div>
-</section>
+    </section>
 
 
-<section>
-    <p class="section_title">Graphiques sur les thèses</p>
-    <div class="btn_container">
-        <button id="UnAn" class="btn chartBtn">un an</button>
-        <button id="CinqAns" class="btn chartBtn">5 ans</button>
-        <button id="DixAns" class="btn chartBtn">10 ans</button>
-    </div>
+    <section class="thesis20">
+        <p class="section_title">Les 20 dernières thèses</p>
 
-    <div class="graphs_container">
-        <div id="histo_container"></div>
-        <div class="map_wrap">
-            <p>Thèses sur le territoire</p>
-            <div id="map_container"></div>
-        </div>
-    </div>
-</section>
+        <?php $i = 0; ?>
+        <?php for ($i; $i < 5; $i++) : ?>
+            <?php
+            $dernieres = $data->loadData()[5];
+            $auteurs = $data->loadData()[6];
+            $sujets = $data->loadData()[7];
+            $thesis = array(
+                'nnt' => $dernieres[$i]['nnt'],
+                'id' => $dernieres[$i]['idThese'],
+                'rank' => $dernieres[$i]['rank'],
+                'titre' => $dernieres[$i]['titre'],
+                'date' => $dernieres[$i]['date_soutenance'],
+                'etablissement' => $dernieres[$i]['nom'],
+                'auteurs' => array(
+                    'prenom' => $auteurs[$i]['prenom'],
+                    'nom' => $auteurs[$i]['nom']
+                ),
+                'accessible' => $dernieres[$i]['these_accessible'],
+                'sujets' => array()
+            );
 
-
-<section class="thesis20">
-    <p class="section_title">Les 20 dernières thèses</p>
-
-    <?php $i = 0; ?>
-    <?php for ($i; $i < 5; $i++) : ?>
-        <?php
-        $dernieres = $data->loadData()[5];
-        $auteurs = $data->loadData()[6];
-        $sujets = $data->loadData()[7];
-        $thesis = array(
-            'id' => $dernieres[$i]['idThese'],
-            'rank' => $dernieres[$i]['rank'],
-            'titre' => $dernieres[$i]['titre'],
-            'date' => $dernieres[$i]['date_soutenance'],
-            'etablissement' => $dernieres[$i]['nom'],
-            'auteurs' => array(
-                'prenom' => $auteurs[$i]['prenom'],
-                'nom' => $auteurs[$i]['nom']
-            ),
-            'accessible' => $dernieres[$i]['these_accessible'],
-            'sujets' => array()
-        );
-
-        foreach ($sujets as $sujet) {
-            if ($sujet['idThese'] == $dernieres[$i]['idThese']) {
-                array_push($thesis['sujets'], $sujet['libelle']);
+            foreach ($sujets as $sujet) {
+                if ($sujet['idThese'] == $dernieres[$i]['idThese']) {
+                    array_push($thesis['sujets'], $sujet['libelle']);
+                }
             }
-        }
 
 
-        include ROOT . '../includes/components/thesis_batch.php';
-        ?>
-    <?php endfor; ?>
+            include ROOT . '../includes/components/thesis_batch.php';
+            ?>
+        <?php endfor; ?>
 
-    <div class="btn_container" id="see_more__container">
-        <button id="see_more" class="btn">Voir plus</button>
-    </div>
-</section>
+        <div class="btn_container" id="see_more__container">
+            <button id="see_more" class="btn">Voir plus</button>
+        </div>
+    </section>
+</div>
 
 <br><br><br><br><br><br><br><br><br><br>
 

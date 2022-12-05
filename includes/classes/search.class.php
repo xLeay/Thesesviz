@@ -105,7 +105,7 @@ class Search extends DB
 
 
         // sélection des 20 dernières thèses ajoutées
-        $sql20dernieres = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+        $sql20dernieres = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt
         FROM etablissement e, these t NATURAL JOIN soutenir s 
         WHERE s.idEtablissement = e.idEtablissement 
         ORDER BY s.date_soutenance DESC LIMIT 20";
@@ -192,7 +192,7 @@ class Search extends DB
         }
 
         // Recherche par défaut en regardant dans le titre
-        $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_titre
+        $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt, MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_titre
         FROM etablissement e, these t
         NATURAL JOIN soutenir s 
         WHERE s.idEtablissement = e.idEtablissement AND MATCH (t.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
@@ -236,7 +236,7 @@ class Search extends DB
                 return $queries;
                 break;
             case 'auteur':
-                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s
                 JOIN assister a ON a.idThese = t.idThese
@@ -267,7 +267,7 @@ class Search extends DB
                 return $AUTHORqueries;
                 break;
             case 'sujet':
-                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, su.libelle, MATCH (su.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_sujet
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, su.libelle, t.nnt, MATCH (su.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_sujet
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s
                 JOIN reposer r ON r.idThese = t.idThese
@@ -302,7 +302,7 @@ class Search extends DB
                 return $SUBJECTqueries;
                 break;
             case 'depuis':
-                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s
                 WHERE s.idEtablissement = e.idEtablissement AND s.date_soutenance >= '$key'
@@ -331,7 +331,7 @@ class Search extends DB
                 break;
             case 'de':
             case 'etablissement':
-                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s
                 WHERE s.idEtablissement = e.idEtablissement AND e.nom LIKE '%$key%'
@@ -359,7 +359,7 @@ class Search extends DB
                 return $SCHOOLqueries;
                 break;
             case 'personne':
-                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt, MATCH (p.prenom, p.nom) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_personne
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s
                 JOIN assister a ON a.idThese = t.idThese
@@ -395,7 +395,7 @@ class Search extends DB
                 return $PERSONqueries;
                 break;
             case 'discipline':
-                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.discipline, MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_discipline
+                $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.discipline, t.nnt, MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_discipline
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s 
                 WHERE s.idEtablissement = e.idEtablissement AND MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
