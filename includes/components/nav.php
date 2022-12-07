@@ -1,5 +1,11 @@
 
 <nav>
+    <div class="back">
+        <a id="backArrow">
+            <span class="material-symbols-rounded back_icon">arrow_back</span>
+        </a>
+    </div>
+
     <form action="/q" method="get" class="search_thesis" autocomplete="off" enctype="text/plain" onsubmit="submitForm(event)">
         <div class="search_wrap">
             <div class="search__editor" spellcheck="false">
@@ -35,10 +41,9 @@
                 <div class="search_options__item">
                     <p><span class="important_info">depuis:</span> année</p>
                 </div>
-                <div class="search_options__item">
-                    <p><span class="important_info">de:</span> année <span class="important_info">à:</span> année</p>
-                </div>
             </div>
         </div>
     </form>
+
+    <div class="fakealign" style="visibility: hidden;"><p>align</p></div>
 </nav>

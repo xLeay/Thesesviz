@@ -1,10 +1,7 @@
 <?php
 $data = new Search();
 ?>
-<!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
-<!-- <script src="https://code.highcharts.com/highcharts-more.js"></script> -->
-<!-- <script src="https://code.highcharts.com/modules/exporting.js"></script> -->
-<!-- <script src="https://code.highcharts.com/modules/export-data.js"></script> -->
+
 <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
@@ -104,17 +101,6 @@ $data = new Search();
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", async () => {
-
-        const thesis_title = document.querySelectorAll('.thesis_title');
-
-        thesis_title.forEach(title => {
-            let containerWidth = title.offsetWidth;
-            // console.log(containerWidth);
-
-            title.innerHTML = truncate(title.innerHTML, containerWidth, 3);
-        });
-
-
         // Graphique colonne
 
         const UnAn = document.getElementById('UnAn');

@@ -329,7 +329,6 @@ class Search extends DB
                 $SINCEqueries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
                 return $SINCEqueries;
                 break;
-            case 'de':
             case 'etablissement':
                 $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt
                 FROM etablissement e, these t

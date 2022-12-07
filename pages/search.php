@@ -174,7 +174,7 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
                 <!-- <div style="display: grid; height: 400px; margin-bottom: 20px;"> -->
                 <div class="thesis_chart">
                     <div class="btn_container">
-                        <button id="UnAn" class="btn chartBtn filter_btn">Depuis 2015</button>
+                        <a href="/q?depuis=<?= date('Y') - 5 ?>" id="UnAn" class="btn chartBtn filter_btn">Depuis 5 ans</a>
                     </div>
                     <div id="histo_container"></div>
                 </div>
@@ -241,7 +241,7 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
                 <!-- <div style="display: grid; height: 400px; margin-bottom: 20px;"> -->
                 <div class="thesis_chart">
                     <div class="btn_container">
-                        <button id="UnAn" class="btn chartBtn filter_btn">Depuis 2015</button>
+                        <a href="/q?depuis=<?= date('Y') - 5 ?>" id="UnAn" class="btn chartBtn filter_btn">Depuis 5 ans</a>
                     </div>
                     <div id="histo_container"></div>
                 </div>
@@ -332,10 +332,23 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
 
         <?php elseif (isset($key) || isset($option)) : ?>
 
-            console.log('graphique');
+
+            // affiche les résultats de la recherche en gras
+            let recherche = "<?= $recherche ?>";
+            let search_array = recherche.split(" ");
+            let search_array_length = search_array.length;
+
+            let title = document.querySelectorAll(".thesis_title a");
+
+            title.forEach((element) => {
+                element.innerHTML = element.innerHTML.replace(new RegExp(recherche, "gi"), '<span class="extrabold">' + recherche + '</span>');
+            });
+
+
+            // console.log('graphique');
             let data = <?= json_encode($annees); ?>;
 
-            console.log(data);
+            // console.log(data);
             let year = [];
             let count = [];
 

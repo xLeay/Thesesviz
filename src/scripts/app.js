@@ -10,6 +10,12 @@ function truncate(text, maxLength, dotCount) {
     return text;
 }
 
+// barre de progression de la page entière
+document.addEventListener('readystatechange', function () {
+
+});
+
+
 document.addEventListener('DOMContentLoaded', function () {
 
     const search_thesis = document.querySelector('.search_thesis');
@@ -18,11 +24,43 @@ document.addEventListener('DOMContentLoaded', function () {
     const search_options = document.querySelector('.search_options');
     const search_option_item = document.querySelectorAll('.search_options__item');
     const search_input = document.getElementById('search_input');
+    const quick_thesis_academy = document.querySelectorAll('.quick_thesis_academy a');
+
+    const backArrow = document.getElementById('backArrow');
 
 
     const primary = getComputedStyle(document.body).getPropertyValue('--primary');
     const secondary = getComputedStyle(document.body).getPropertyValue('--secondary');
     const placeholder = document.querySelector('.search__editor-placeholder-inner');
+
+
+    let referrer = document.referrer;
+    backArrow.setAttribute('href', referrer);
+    backArrow.onclick = function () {
+        window.history.back();
+        return false;
+    };
+
+    // si l'uri == '/', on supprime la flèche de retour
+    if (window.location.pathname != '/') {
+        backArrow.style.visibility = 'visible';
+    }
+
+    quick_thesis_academy.forEach(function (item) {
+
+        let liste = ['Université', 'université', 'University', 'Università'];
+        liste.forEach(function (item2) {
+            if (item.textContent.includes(item2)) {
+                item.textContent = item.textContent.replace(item2, '');
+            }
+        });
+
+        // on supprime les espaces en trop
+        item.textContent = item.textContent.trim();
+
+        // on met la première lettre en majuscule
+        item.textContent = item.textContent.charAt(0).toUpperCase() + item.textContent.slice(1);
+    });
 
     placeholder.addEventListener('input', function () {
         showPlaceholder();
@@ -50,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.keyCode === 27) {
             search_options.style.display = 'none';
         }
-        
+
     });
 
     // On affiche les options de recherche lorsqu'on clique sur le formulaire de recherche
@@ -170,10 +208,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // détecter l'entrée de mot clé de recherche comme titre:, auteur:, etc et les transformer en span
     function detectKeyword() {
-        let options = ['titre:', 'auteur:', 'sujet:', 'depuis:', 'de:', 'à:'];
+        let options = ['titre:', 'auteur:', 'sujet:', 'depuis:'];
         let text = placeholder.textContent;
-
-        // revoir la fonction pour mettre plusieurs mots clés dans la recherche (pour de: 2000 à: 2010)
 
         // si le texte contient un des mots clés de options
         options.forEach(function (item) {
@@ -195,9 +231,5 @@ document.addEventListener('DOMContentLoaded', function () {
             setEndOfContenteditable(placeholder);
         }, 50);
     }
-
-    // TODO: Fonction pour remettre dans le placeholder la recherche précédente
-
-
 });
 
