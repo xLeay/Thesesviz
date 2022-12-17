@@ -1,26 +1,14 @@
 <?php
 
 $data = new Search();
-// debug($_GET);
-
-// debug le premier array de GET
-// debug(key($_GET));
-
 $option = key($_GET);
-// debug($option);
 
 if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
 
     $key = htmlspecialchars($_GET[$option]);
 
-
-    // debug($key);
-
     $recherche = $data->reduce($key);
     $queries = $data->decodeKey($key);
-
-    // debug($key, $recherche);
-    // debug($queries);
 
     $time_start = microtime(true); // Début du chronomètre
 
@@ -33,11 +21,6 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
     $time = $time_end - $time_start; // Fin du chronomètre
     $time = round($time, 3);
 
-    // debug($theses);
-    // debug($auteurs);
-    // debug($sujets);
-    // debug($annees);
-
 } elseif (isset($_GET['id'])) {
 
     $id = htmlspecialchars($_GET['id']);
@@ -45,7 +28,6 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
     $recherche = $data->reduce($id);
     $queries = $data->decodeKey($id);
 
-    // debug($queries);
 
     $time_start = microtime(true); // Début du chronomètre
 
@@ -57,18 +39,12 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
     $time = $time_end - $time_start; // Fin du chronomètre
     $time = round($time, 3);
 
-    // debug('theses ---------------------', $theses, '<br>');
-    // debug('auteurs ----------------------', $personnes, '<br>');
-    // debug('sujets -----------------------', $sujets, '<br>');
-
 } elseif (isset($_GET['personne'])) {
 
     $personne = htmlspecialchars($_GET['personne']);
 
     $recherche = $data->reduce($personne);
     $queries = $data->decodeKey($personne);
-
-    // debug($queries);
 
     $time_start = microtime(true); // Début du chronomètre
 
@@ -80,19 +56,7 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
     $time_end = microtime(true);
     $time = $time_end - $time_start; // Fin du chronomètre
     $time = round($time, 3);
-
-    // debug($theses);
-    // debug($personnes);
-    // debug($sujets);
-    // debug($annees);
-    // debug(count($theses));
-    // debug(count($personnes));
-    // debug(count($sujets));
-    // debug(count($annees));
-
 }
-
-
 ?>
 
 <script type="text/javascript">
@@ -107,8 +71,6 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
 
 <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-
-<!-- < ?php require ROOT . "../includes/components/nav.php"; ?> -->
 
 <div class="main_container">
     <section class="thesis20">
@@ -171,7 +133,6 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
                     <p class="results_nb"><?= count($theses) ?> résultats pour la personnalité <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
                 <?php endif; ?>
 
-                <!-- <div style="display: grid; height: 400px; margin-bottom: 20px;"> -->
                 <div class="thesis_chart">
                     <div class="btn_container">
                         <a href="/q?depuis=<?= date('Y') - 5 ?>" id="UnAn" class="btn chartBtn filter_btn">Depuis 5 ans</a>
@@ -237,8 +198,6 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
                     <p class="results_nb"><?= count($theses) ?> résultats pour la discipline <span class="important_info"><?= $recherche ?></span> (<?= $time ?> secondes) à l'aide d'une recherche par pertinence</p>
                 <?php endif; ?>
 
-
-                <!-- <div style="display: grid; height: 400px; margin-bottom: 20px;"> -->
                 <div class="thesis_chart">
                     <div class="btn_container">
                         <a href="/q?depuis=<?= date('Y') - 5 ?>" id="UnAn" class="btn chartBtn filter_btn">Depuis 5 ans</a>
@@ -289,7 +248,7 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
     </section>
 </div>
 
-<div class="end" style="margin-top: 20vh; height: 1px;"></div>
+<div class="end" style="margin-top: 15vh; height: 1px;"></div>
 
 
 <script type="text/javascript">
@@ -326,8 +285,6 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
                 unwrap_summary.style.height = 'auto';
             }
 
-
-            // ----------------------------
             // Graphique colonne
 
         <?php elseif (isset($key) || isset($option)) : ?>
@@ -344,11 +301,7 @@ if (isset($_GET[$option]) && ($option != 'id') && ($option != 'personne')) {
                 element.innerHTML = element.innerHTML.replace(new RegExp(recherche, "gi"), '<span class="extrabold">' + recherche + '</span>');
             });
 
-
-            // console.log('graphique');
             let data = <?= json_encode($annees); ?>;
-
-            // console.log(data);
             let year = [];
             let count = [];
 

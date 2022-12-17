@@ -10,11 +10,12 @@ function truncate(text, maxLength, dotCount) {
     return text;
 }
 
-// barre de progression de la page entière
-document.addEventListener('readystatechange', function () {
-
-});
-
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -76,8 +77,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // trigger search
             getContent();
 
-            // console.log(getContent());
-
             // change input name based on search option
             setInputname();
 
@@ -116,6 +115,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    const scroll_to_top = document.querySelector('.scroll_to_top');
+    // on affiche le bouton de scroll to top quand on scroll
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 100) {
+            scroll_to_top.classList.add('show');
+        } else {
+            scroll_to_top.classList.remove('show');
+        }
+    });
 
     // Place le curseur à la fin du contenu editable
     function setEndOfContenteditable(elem) {
@@ -157,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let span = document.querySelectorAll('.search__editor-option');
         nodes = placeholder.childNodes;
         span.forEach(function (item) {
-            // console.log(nodes);
             if (nodes.length == 1) {
                 item.remove();
                 showPlaceholder();
@@ -170,16 +177,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function getContent() {
         search_input.value = placeholder.textContent;
         let option = null;
-        // console.log(search_input.value);
         if (placeholder.querySelector('span')) {
-            // search_input.value = placeholder.querySelector('span').textContent.replace(':', '');
             option = placeholder.querySelector('span').textContent.replace(':', '');
 
             search_input.value = placeholder.querySelector('span').nextSibling.textContent.replace(/^\s+/, '');
-            console.log(search_input.value);
         }
-        console.log(option);
-        // return search_input.value;
         return option;
     }
 

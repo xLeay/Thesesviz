@@ -4,96 +4,32 @@ include_once "db.class.php";
 
 class Search extends DB
 {
-
-    public function select(array $cols): string
-    {
-        $query = "SELECT ";
-        $size = count($cols);
-        if ($size > 1) {
-            $query .= implode(", ", $cols);
-        } else {
-            $query .= $cols[0];
-        }
-        return $query;
-    }
-
-    public function from($table): string
-    {
-        $query = "FROM " . $table;
-        return $query;
-    }
-
-    public function where($condition, $eq, $clause): string
-    {
-        $query          = " WHERE ";
-        $query          .= $condition;
-        $query          .= $eq ? " = " : " LIKE ";
-        $query          .= $clause;
-        return $query;
-    }
-
-    public function groupby($col): string
-    {
-        $query = " GROUP BY " . $col;
-        return $query;
-    }
-
-    public function orderby($col, $order): string
-    {
-        $query = " ORDER BY " . $col . " " . $order;
-        return $query;
-    }
-
-    public function limit($limit): string
-    {
-        $query = " LIMIT " . $limit;
-        return $query;
-    }
-
-
-
-    // $sqlrepertorie = new Search($conn);
-    // $sqlrepertorie->select('idThese')->from('these');
-    // $selection1 = $conn->prepare($sqlrepertorie)->execute();
-
-    // $sqlenligne = new Search($conn);
-    // $sqlenligne->select('these_accessible')->from('these')->where('these_accessible', true, '1');
-    // $selection2 = $conn->prepare($sqlenligne)->execute();
-
-    // $sqletablissement = new Search($conn);
-    // $sqletablissement->select('idref')->from('etablissement');
-    // $selection3 = $conn->prepare($sqletablissement)->execute();
-
-    // $sqlsujet = new Search($conn);
-    // $sqlsujet->select('idSujet')->from('sujet');
-    // $selection4 = $conn->prepare($sqlsujet)->execute();
-
-    // $sqlannee = new Search($conn);
-    // $sqlannee->select('DATE_FORMAT(date_soutenance, "%Y") as "year", COUNT(*) as count')->from('soutenir')->groupby('DATE_FORMAT(date_soutenance, "%Y")');
-    // $selection5 = $conn->prepare($sqlannee)->execute();
-
-
     public function loadData()
     {
         $conn = $this->cnx();
 
         // seléction des thèses répertoriées
-        $sqlrepertorie = "SELECT idThese FROM these";
+        $sqlrepertorie = "SELECT idThese
+        FROM these";
         $selection1 = $conn->prepare($sqlrepertorie);
         $selection1->execute();
 
         // sélection des thèses en ligne
-        $sqlenligne = "SELECT these_accessible FROM these WHERE these_accessible = 1";
+        $sqlenligne = "SELECT these_accessible
+        FROM these
+        WHERE these_accessible = 1";
         $selection2 = $conn->prepare($sqlenligne);
         $selection2->execute();
 
         // sélection des établissements concernés
-        $sqletablissement = "SELECT idref FROM etablissement";
+        $sqletablissement = "SELECT idref
+        FROM etablissement";
         $selection3 = $conn->prepare($sqletablissement);
         $selection3->execute();
 
         // sélection des sujets de thèses
-        $sqlsujet = "SELECT idSujet FROM sujet";
+        $sqlsujet = "SELECT idSujet
+        FROM sujet";
         $selection4 = $conn->prepare($sqlsujet);
         $selection4->execute();
 
@@ -103,7 +39,14 @@ class Search extends DB
         $selection5->execute();
         $annees = $selection5->fetchALL(PDO::FETCH_ASSOC);
 
-
+        // sélection des directeurs de thèses des thèses répertoriées
+        $sqldirecteurs = "SELECT role, idAssistance
+        FROM assister
+        WHERE role = 'directeur'
+        GROUP BY idAssistance";
+        $selection9 = $conn->prepare($sqldirecteurs);
+        $selection9->execute();
+        
         // sélection des 20 dernières thèses ajoutées
         $sql20dernieres = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt
         FROM etablissement e, these t NATURAL JOIN soutenir s 
@@ -136,7 +79,7 @@ class Search extends DB
 
 
         // mise de tout dans un array
-        $data = array($selection1->rowCount(), $selection2->rowCount(), $selection3->rowCount(), $selection4->rowCount(), $annees, $dernieres, $auteurs, $sujets);
+        $data = array($selection1->rowCount(), $selection2->rowCount(), $selection3->rowCount(), $selection4->rowCount(), $selection9->rowCount(), $annees, $dernieres, $auteurs, $sujets);
 
         return $data;
     }
@@ -226,7 +169,6 @@ class Search extends DB
 
         // on vérifie si l'utilisateur a spécifié une option de recherche
         $option = key($_GET);
-        // debug($option . ' - option');
 
         switch ($option) {
             case 'key':
@@ -423,11 +365,8 @@ class Search extends DB
                 $queries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
 
             default:
-                // debug($option);
                 return $queries;
         }
-
-        // return $queries;
     }
 
     public function exe($query)

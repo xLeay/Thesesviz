@@ -29,3 +29,8 @@
 </head>
 
 <body>
+
+<!-- scroll to top -->
+<div class="scroll_to_top" onclick="scrollToTop()">
+    <span class="material-symbols-rounded back_icon">arrow_upward</span>
+</div>

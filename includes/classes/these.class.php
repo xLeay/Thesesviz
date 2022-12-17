@@ -27,19 +27,6 @@ class These extends DB
         return $results;
     }
 
-    // public function __construct($accessible, $embargo, $nnt, $oai_set_specs, $resume, $soutenue, $sur_travaux, $titre, $discipline)
-    // {
-    //     $this->accessible = $accessible;
-    //     $this->embargo = $embargo;
-    //     $this->nnt = $nnt;
-    //     $this->oai_set_specs = $oai_set_specs;
-    //     $this->resume = $resume;
-    //     $this->soutenue = $soutenue;
-    //     $this->sur_travaux = $sur_travaux;
-    //     $this->titre = $titre;
-    //     $this->discipline = $discipline;
-    // }
-
     public function getAccessible()
     {
         return $this->accessible;

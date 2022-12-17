@@ -347,14 +347,6 @@ if (isset($_POST['buttomImport---'])) { // enlever les --- pour activer le scrip
                 $insertion = $assistercl->insertIntoDB($insertion7, $idThese, $idPersonne)->execute();
             }
         }
-
-        // $i++;
-        // if ($i == 25) {
-        //     break;
-        // }
-
-
-        // break;
     }
 
     $time_end = microtime(true);

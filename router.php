@@ -8,20 +8,6 @@ $request = str_replace($basepath, '', $request);
 
 define('ROOT', __DIR__);
 
-// // PDO
-// $servername = "localhost";
-// $username = "root";
-// $password = "";
-// $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4', PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARACTER SET utf8mb4");
-
-// try {
-//     $conn = new PDO("mysql:host=$servername;dbname=theseviz", $username, $password, $options);
-
-//     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-// } catch (PDOException $e) {
-//     echo "Connection failed: " . $e->getMessage();
-// }
-
 // load all files in functions folder
 $functions = glob(dirname(__FILE__) . '/includes/functions/*.php');
 
@@ -83,7 +69,7 @@ function loadPage($page, $with_head = true)
 }
 
 switch ($request) {
-    case "/":
+    case "/": // acceuil du site
         $og = (object) [
             "title" => "Thesesviz - Acceuil",
             "description" => "Thesesviz - Acceuil"
@@ -103,6 +89,20 @@ switch ($request) {
             "description" => "Import des thèses"
         ];
         loadPage("import");
+        break;
+    case "/reporting":
+        $og = (object) [
+            "title" => "Reporting du projet",
+            "description" => "Reporting du projet"
+        ];
+        loadPage("reporting");
+        break;
+    case "/about":
+        $og = (object) [
+            "title" => "À propos du projet",
+            "description" => "Informations à propos du projet"
+        ];
+        loadPage("about");
         break;
     case "/ajax/search":
         include "includes/ajax/search.php";

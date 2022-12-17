@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
+/* APP ========================================================================================================================================================= */
+/* APP ========================================================================================================================================================= */
+/* APP ========================================================================================================================================================= */
+/* APP ========================================================================================================================================================= */
 :root {
     --primary: #C9AC90;
     --primary25: rgba(201, 172, 144, 0.25);
@@ -10,7 +14,6 @@
     --secondary75: rgba(199, 190, 181, 0.75);
 
     --padding: max(15px, calc(38px + 18.5625vw));
-
 }
 
 * {
@@ -73,13 +76,58 @@ body {
     grid-template-columns: 2fr 1fr;
 }
 
+.highlight_text {
+    outline: 1px solid var(--secondary);
+    padding: 2px 2px;
+    border-radius: 5px;
+}
+
 a {
     text-decoration: none;
     color: inherit;
 }
 
+:target {
+    outline: 5px solid var(--primary25);
+    outline-offset: 10px;
+}
+
+.scroll_to_top {
+    background: #fff;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding: 5px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--secondary);
+    cursor: pointer;
+    transform: translateY(20vh);
+    user-select: none;
+    z-index: 10;
+}
+
+.show {
+    transform: translateY(0);
+}
+
+.show:hover {
+    background: var(--primary25);
+}
+
+/* NAV ========================================================================================================================================================= */
+/* NAV ========================================================================================================================================================= */
+/* NAV ========================================================================================================================================================= */
+/* NAV ========================================================================================================================================================= */
+.nav_invisible {
+    visibility: hidden;
+}
+
 nav {
-    /* outline: 1px solid #000; */
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -87,7 +135,6 @@ nav {
 }
 
 .back a {
-    /* outline: 1px solid #000; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,6 +173,10 @@ nav .search_thesis {
     z-index: 10;
 }
 
+/* SEARCHBAR ========================================================================================================================================================= */
+/* SEARCHBAR ========================================================================================================================================================= */
+/* SEARCHBAR ========================================================================================================================================================= */
+/* SEARCHBAR ========================================================================================================================================================= */
 .search_thesis .material-symbols-rounded {
     font-family: 'Material Symbols Rounded';
     font-weight: normal;
@@ -184,7 +235,6 @@ nav .search_thesis {
     align-items: center;
     height: 100%;
     white-space: nowrap;
-    /* border: 1px solid #000; */
 }
 
 .search__editor-placeholder-inner {
@@ -193,7 +243,6 @@ nav .search_thesis {
     font-weight: 500;
     color: var(--secondary);
     display: inline-block;
-
     user-modify: read-write-plaintext-only;
     /* disable formatted paste */
     -moz-user-modify: read-write-plaintext-only;
@@ -211,7 +260,6 @@ nav .search_thesis {
     align-items: center;
     width: 38px;
     height: 38px;
-    /* outline: 1px solid #000; */
 }
 
 .close::before {
@@ -305,20 +353,64 @@ input::selection {
     color: #fff;
 }
 
+.search_options {
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+    height: 175px;
+    background: #FFFFFF;
+    border: 1px solid #C7BEB5;
+    border-radius: 10px;
+    position: absolute;
+    padding: 10px 0;
+    top: calc(100% + 5px);
+    right: 0;
+    user-select: none;
+    cursor: auto;
+}
 
+.search_options__item p {
+    margin-left: 15px;
+}
+
+.search_options__list {
+    width: 100%;
+}
+
+.search_options__item {
+    cursor: pointer;
+}
+
+.search_options__list .search_options__item:hover {
+    background: var(--primary25);
+}
+
+.search_options>p {
+    margin-left: 15px;
+}
+
+/* BODY ========================================================================================================================================================= */
+/* BODY ========================================================================================================================================================= */
+/* BODY ========================================================================================================================================================= */
+/* BODY ========================================================================================================================================================= */
 .main_container {
     padding-inline: var(--padding);
 }
 
 section {
-    /* border: 1px solid #000; */
     display: flex;
     flex-direction: column;
     margin-bottom: 50px;
-    /* padding: 0 var(--padding); */
     gap: 10px;
 }
 
+/* HOMEPAGE ========================================================================================================================================================= */
+/* HOMEPAGE ========================================================================================================================================================= */
+/* HOMEPAGE ========================================================================================================================================================= */
+/* HOMEPAGE ========================================================================================================================================================= */
 .section_title {
     font-size: 28px;
     font-weight: 600;
@@ -355,7 +447,6 @@ section {
 }
 
 .btn_container {
-    /* border: 1px solid #000; */
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -405,47 +496,11 @@ section {
     color: #fff;
 }
 
-.search_options {
-    display: none;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 10px;
-    width: 300px;
-    height: 175px;
-    background: #FFFFFF;
-    border: 1px solid #C7BEB5;
-    border-radius: 10px;
-    position: absolute;
-    padding: 10px 0;
-    top: calc(100% + 5px);
-    right: 0;
-    user-select: none;
-    cursor: auto;
-}
-
-.search_options__item p {
-    margin-left: 15px;
-}
-
-.search_options__list {
-    width: 100%;
-}
-
-.search_options__item {
-    cursor: pointer;
-}
-
-.search_options__list .search_options__item:hover {
-    background: var(--primary25);
-}
-
-.search_options>p {
-    margin-left: 15px;
-}
-
+/* SEARCH ========================================================================================================================================================= */
+/* SEARCH ========================================================================================================================================================= */
+/* SEARCH ========================================================================================================================================================= */
+/* SEARCH ========================================================================================================================================================= */
 .no_results {
-    /* border: 1px solid #000; */
     text-align: center;
     user-select: none;
     height: fit-content;
@@ -489,7 +544,6 @@ section {
 }
 
 .quick_thesis__upper {
-    /* border: 1px solid #000; */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -611,8 +665,6 @@ section {
     white-space: nowrap;
 }
 
-
-
 .quick_thesis_subjects::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: #EFECE9;
@@ -634,8 +686,11 @@ section {
     height: fit-content;
 }
 
+/* THESE-UNIQUE ========================================================================================================================================================= */
+/* THESE-UNIQUE ========================================================================================================================================================= */
+/* THESE-UNIQUE ========================================================================================================================================================= */
+/* THESE-UNIQUE ========================================================================================================================================================= */
 .thesis_self__wrap {
-    /* border: 1px solid black; */
     display: grid;
     gap: 15px;
     margin-top: 20px;
@@ -654,7 +709,6 @@ section {
 }
 
 .prevent_overflow {
-    /* border: 1px solid #000; */
     min-width: 100%;
     max-width: 100%;
 }
@@ -734,7 +788,6 @@ section {
 }
 
 .thesis_self__subjects {
-    /* border: 1px solid #000; */
     display: flex;
     gap: 10px;
     overflow-x: auto;
@@ -781,6 +834,163 @@ section {
     font-size: 20px;
 }
 
+/* FOOTER ========================================================================================================================================================= */
+/* FOOTER ========================================================================================================================================================= */
+/* FOOTER ========================================================================================================================================================= */
+/* FOOTER ========================================================================================================================================================= */
+footer {
+    border-top: 1px solid var(--secondary);
+    background: #fff;
+    padding: 70px var(--padding);
+}
+
+.footer_container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer_container_project {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.footer_container__title {
+    font-size: 24px;
+}
+
+.footer_container_project_item__container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.footer_container_project_item {
+    font-size: 18px;
+    width: fit-content;
+    transition: all 0.1s ease;
+    position: relative;
+}
+
+.footer_container_project_item:hover {
+    color: var(--primary);
+}
+
+.footer_container_project_item::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    position: relative;
+    bottom: -2px;
+    left: 0;
+    transition: width 0.2s;
+}
+
+.footer_container_project_item:hover::after {
+    width: 100%;
+    position: relative;
+    bottom: -2px;
+    left: 0;
+}
+
+.footer_container_project_item:active::after {
+    background: var(--secondary);
+}
+
+.footer_container_project_item:active {
+    color: var(--secondary);
+}
+
+/* REPORTING ========================================================================================================================================================= */
+/* REPORTING ========================================================================================================================================================= */
+/* REPORTING ========================================================================================================================================================= */
+/* REPORTING ========================================================================================================================================================= */
+.img_container {
+    border: 1px solid var(--secondary);
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background: #fff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.img_container img {
+    width: 75%;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+li::marker {
+    color: var(--primary);
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.li_colors {
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.li_color {
+    border: 1px solid #000;
+    width: 30px;
+    height: 30px;
+}
+
+.color1 {
+    background: var(--primary);
+}
+
+.color2 {
+    background: var(--secondary);
+}
+
+.color3 {
+    background: #F9F9F9
+}
+
+.color4 {
+    background: #FFFFFF
+}
+
+figcaption {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.text_caption {
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid var(--secondary);
+    border-top: 1px solid var(--secondary);
+    width: fit-content;
+    padding: 0 15px;
+    transition: all 0.1s ease;
+}
+
+.text_caption:hover {
+    box-shadow: 0 1px 10px 0px var(--primary50);
+}
+
+/* RESPONSIVE ========================================================================================================================================================= */
+/* RESPONSIVE ========================================================================================================================================================= */
+/* RESPONSIVE ========================================================================================================================================================= */
+/* RESPONSIVE ========================================================================================================================================================= */
 @media (max-width: 1536px) {
 
     input,
@@ -790,6 +1000,14 @@ section {
 
     .btn {
         padding: 0 0;
+    }
+}
+
+@media (max-width: 1300px) {
+
+    .footer_container {
+        flex-direction: column;
+        gap: 40px;
     }
 }
 
