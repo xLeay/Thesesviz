@@ -18,7 +18,6 @@
             <div class="footer_container_project_item__container">
                 <p class="footer_container_project_item"><a href="https://github.com/xLeay/Thesesviz" target="_blank">Code source</a></p>
                 <p class="footer_container_project_item"><a href="/about">À propos</a></p>
-                <p class="footer_container_project_item"><a href="https://www.cnil.fr/" target="_blank">CNIL</a></p>
                 <p class="footer_container_project_item"><a href="/">Acceuil du site</a></p>
             </div>
         </div>
