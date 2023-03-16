@@ -5,10 +5,15 @@
 /* APP ========================================================================================================================================================= */
 /* APP ========================================================================================================================================================= */
 :root {
+
+    --body: #f9f9f9;
+    --background: #fff;
+
     --primary: #C9AC90;
     --primary25: rgba(201, 172, 144, 0.25);
     --primary40: rgba(201, 172, 144, 0.4);
     --primary50: rgba(201, 172, 144, 0.5);
+
     --secondary: #C7BEB5;
     --secondary30: rgba(199, 190, 181, 0.3);
     --secondary75: rgba(199, 190, 181, 0.75);
@@ -153,7 +158,11 @@ nav {
     padding: 30px;
 }
 
-.back a {
+.nav_icon {
+    user-select: none;
+}
+
+.nav_icon a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -162,15 +171,15 @@ nav {
     transition: all 0.1s ease;
 }
 
-.back a:hover {
+.nav_icon a:hover {
     background: var(--primary25);
 }
 
-.back a:active {
+.nav_icon a:active {
     transform: scale(0.9);
 }
 
-.back span {
+.nav_icon span {
     font-size: 36px;
 }
 

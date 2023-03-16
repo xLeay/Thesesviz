@@ -76,6 +76,7 @@ switch ($request) {
         ];
         loadPage("home");
         break;
+
     case "/q": // query (search)
         $og = (object) [
             "title" => "Recherche de thèse",
@@ -83,6 +84,7 @@ switch ($request) {
         ];
         loadPage("search");
         break;
+
     case "/import":
         $og = (object) [
             "title" => "Import des thèses",
@@ -90,6 +92,7 @@ switch ($request) {
         ];
         loadPage("import");
         break;
+
     case "/reporting":
         $og = (object) [
             "title" => "Reporting du projet",
@@ -97,6 +100,7 @@ switch ($request) {
         ];
         loadPage("reporting");
         break;
+
     case "/about":
         $og = (object) [
             "title" => "À propos du projet",
@@ -104,9 +108,19 @@ switch ($request) {
         ];
         loadPage("about");
         break;
+
+    case "/connexion":
+        $og = (object) [
+            "title" => "Connexion utilisateur",
+            "description" => "Connexion utilisateur à l'application Thesesviz"
+        ];
+        loadPage("connexion");
+        break;
+
     case "/ajax/search":
         include "includes/ajax/search.php";
         break;
+
     case "/404":
         $og = (object) [
             "title" => "",
@@ -114,6 +128,7 @@ switch ($request) {
         ];
         loadPage("404");
         break;
+
     default:
         http_response_code(404);
         loadPage("404");

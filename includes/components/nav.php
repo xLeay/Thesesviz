@@ -1,6 +1,5 @@
-
 <nav>
-    <div class="back">
+    <div class="nav_icon">
         <a id="backArrow">
             <span class="material-symbols-rounded back_icon">arrow_back</span>
         </a>
@@ -45,5 +44,11 @@
         </div>
     </form>
 
-    <div class="fakealign" style="visibility: hidden;"><p>align</p></div>
+    <div class="nav_icon">
+        <div class="profile">
+            <a href="/connexion">
+                <span class="material-symbols-rounded">person</span>
+            </a>
+        </div>
+    </div>
 </nav>
