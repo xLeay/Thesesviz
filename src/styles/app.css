@@ -6,17 +6,27 @@
 /* APP ========================================================================================================================================================= */
 :root {
 
-    --body: #f9f9f9;
-    --background: #fff;
+    --background: #FFFFFF;
+    --body: #F9F9F9;
+    --text: #000000;
+    --secondary_info: #777777;
+    --secondary_info25: #77777725;
 
     --primary: #C9AC90;
-    --primary25: rgba(201, 172, 144, 0.25);
-    --primary40: rgba(201, 172, 144, 0.4);
-    --primary50: rgba(201, 172, 144, 0.5);
+    --primary25: #C9AC9025;
+    --primary40: #C9AC9040;
+    --primary50: #C9AC9050;
 
     --secondary: #C7BEB5;
-    --secondary30: rgba(199, 190, 181, 0.3);
-    --secondary75: rgba(199, 190, 181, 0.75);
+    --secondary30: #C7BEB530;
+    --secondary75: #C7BEB575;
+
+    --button_text: #FFFFFF;
+    --hover_a: #F1F1F1;
+    --active_a: #E7E7E7;
+    --slight_hover_a: #F5F5F5;
+    --slight_active_a: #F1F1F1;
+    --logout: #B00000;
 
     --padding: max(15px, calc(38px + 18.5625vw));
 }
@@ -25,6 +35,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 html,
@@ -33,10 +44,18 @@ body {
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
     background: #f9f9f9;
     height: 100vh;
     scrollbar-gutter: stable both-edges;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* on place le footer (<body> <nav></nav> <div.main_container></div.main_container> <footer></footer> </body>), le troisième élément du body, au plus bas */
+/* Si le footer n'est pas en bas c'est que le body ne possède pas ces trois éléments */
+.main_container {
+    flex: 1;
 }
 
 .extrabold {
@@ -162,26 +181,190 @@ nav {
     user-select: none;
 }
 
-.nav_icon a {
+.nav_icon a, .nav_icon .profile {
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50px;
     padding: 5px;
     transition: all 0.1s ease;
+    cursor: pointer;
 }
 
-.nav_icon a:hover {
+.nav_icon a:hover, .nav_icon .profile:hover {
     background: var(--primary25);
 }
 
-.nav_icon a:active {
-    transform: scale(0.9);
-}
 
 .nav_icon span {
     font-size: 36px;
 }
+
+.profile {
+    position: relative;
+}
+
+nav .profile_menu--active {
+    display: flex;
+    align-items: flex-start;
+    background-color: var(--background);
+    color: var(--text);
+    z-index: 100;
+}
+
+nav .profile_menu--active a {
+    width: 100%;
+    justify-content: start;
+    cursor: pointer;
+    border-radius: 5px;
+    display: flex;
+    gap: 5px;
+}
+
+nav .profile_menu--active a:hover {
+    background-color: var(--slight_hover_a);
+}
+
+nav .profile_menu--active a:active {
+    background-color: var(--slight_active_a);
+}
+
+nav .logout_a:hover,
+nav .logout_a:hover * {
+    color: var(--logout);
+}
+
+.profile_menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    background-color: var(--background);
+    border-radius: 10px;
+    padding: 10px;
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    z-index: 1;
+    width: 240px;
+}
+
+.profile_menu .nav_icon {
+    font-size: 24px;
+}
+
+.profile_details__wrapper {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.profile_details__wrapper__email {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nav_sep {
+    border: 1px solid var(--hover_a);
+    height: 1px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #backArrow {
     visibility: hidden;

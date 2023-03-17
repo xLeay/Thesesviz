@@ -33,6 +33,13 @@ foreach ($queryStrings as $key => $queryString) {
 
 $canonical = $url . "?hl=fr" . (sizeof($canonicalQueryStrings) > 0 ? "&" . implode('&', $canonicalQueryStrings) : '');
 
+
+// ON LANCE LA SESSION
+session_start();
+// ON INCLUT LE FICHIER DE CONFIGURATION QUI CONNECTE SI ON A UN COOKIE DE CONNEXION TROUVÉ
+require_once './includes/conf.php';
+
+
 function loadAsset($page, $type)
 {
     global $basepath;
@@ -109,12 +116,28 @@ switch ($request) {
         loadPage("about");
         break;
 
-    case "/connexion":
+    case "/login":
         $og = (object) [
             "title" => "Connexion utilisateur",
             "description" => "Connexion utilisateur à l'application Thesesviz"
         ];
-        loadPage("connexion");
+        loadPage("login");
+        break;
+
+    case "/logout": // page de déconnexion
+        $og = (object) [
+            "title" => "Déonnexion",
+            "description" => "Déconnexion"
+        ];
+        loadPage("logout", false);
+        break;
+
+    case "/auth": // page d'autentification
+        $og = (object) [
+            "title" => "Authentification",
+            "description" => "Page d'authentification"
+        ];
+        loadPage("auth", false);
         break;
 
     case "/ajax/search":
