@@ -680,10 +680,26 @@ section {
 }
 
 .graphs_container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+}
+
+.multiple_graphs__wrapper {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 15px;
-    position: relative;
+}
+
+#pie_container {
+    border: 1px solid var(--secondary);
+    border-radius: 10px;
+    background: #fff;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #histo_container {
@@ -691,7 +707,7 @@ section {
     border-radius: 10px;
     padding: 50px 10px 10px 10px;
     background: #fff;
-    height: 500px;
+    height: 400px;
 }
 
 .map_wrap {

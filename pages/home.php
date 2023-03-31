@@ -6,6 +6,8 @@ $data = new Search();
 
 ?>
 
+<script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/maps/highmaps.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
@@ -39,18 +41,19 @@ $data = new Search();
 
     <section>
         <p class="section_title">Graphiques sur les thèses</p>
-        <div class="btn_container">
-            <button id="UnAn" class="btn chartBtn">un an</button>
-            <button id="CinqAns" class="btn chartBtn">5 ans</button>
-            <button id="DixAns" class="btn chartBtn">10 ans</button>
-        </div>
 
         <div class="graphs_container">
-            <div id="histo_container"></div>
-            <div class="map_wrap">
-                <p>Thèses sur le territoire</p>
-                <div id="map_container"></div>
+            <div class="multiple_graphs__wrapper">
+                <div id="pie_container"></div>
+                <div class="map_wrap">
+                    <p>Thèses sur le territoire</p>
+                    <div id="map_container"></div>
+                </div>
             </div>
+            <div class="multiple_graphs__wrapper">
+                <div id="cloud_container"></div>
+            </div>
+            <div id="histo_container"></div>
         </div>
     </section>
 
@@ -105,11 +108,6 @@ $data = new Search();
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", async () => {
         // Graphique colonne
-        const UnAn = document.getElementById('UnAn');
-        const CinqAns = document.getElementById('CinqAns');
-        const DixAns = document.getElementById('DixAns');
-
-        CinqAns.classList.add('btn-active');
 
         let data = <?= json_encode($data->loadData()[5]); ?>;
 
@@ -169,58 +167,18 @@ $data = new Search();
             }]
         });
 
-        UnAn.addEventListener('click', () => {
-            UnAn.classList.add('btn-active');
-            CinqAns.classList.remove('btn-active');
-            DixAns.classList.remove('btn-active');
-
-            chart.update({
-                xAxis: {
-                    categories: ['1985', '1986', '1987', '1988', '1989', '1990', '1991', '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2018', '2019', '2020', '2021', '2022']
-                },
-                series: [{
-                    name: 'Soutenues',
-                    data: [parseInt(data[0].count), parseInt(data[1].count), parseInt(data[2].count), parseInt(data[3].count), parseInt(data[4].count), parseInt(data[5].count), parseInt(data[6].count), parseInt(data[7].count), parseInt(data[8].count), parseInt(data[9].count), parseInt(data[10].count), parseInt(data[11].count), parseInt(data[12].count), parseInt(data[13].count), parseInt(data[14].count), parseInt(data[15].count), parseInt(data[16].count), parseInt(data[17].count), parseInt(data[18].count), parseInt(data[19].count), parseInt(data[20].count), parseInt(data[21].count), parseInt(data[22].count), parseInt(data[23].count), parseInt(data[24].count), parseInt(data[25].count), parseInt(data[26].count), parseInt(data[27].count), parseInt(data[28].count), parseInt(data[29].count), parseInt(data[30].count), parseInt(data[31].count), parseInt(data[32].count), parseInt(data[33].count), parseInt(data[34].count), parseInt(data[35].count), parseInt(data[36].count)],
-                    showInLegend: false
-                }]
-            });
+        chart.update({
+            xAxis: {
+                categories: ['1985', '1986', '1987', '1988', '1989', '1990', '1991', '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2018', '2019', '2020', '2021', '2022']
+            },
+            series: [{
+                name: 'Soutenues',
+                data: [parseInt(data[0].count), parseInt(data[1].count), parseInt(data[2].count), parseInt(data[3].count), parseInt(data[4].count), parseInt(data[5].count), parseInt(data[6].count), parseInt(data[7].count), parseInt(data[8].count), parseInt(data[9].count), parseInt(data[10].count), parseInt(data[11].count), parseInt(data[12].count), parseInt(data[13].count), parseInt(data[14].count), parseInt(data[15].count), parseInt(data[16].count), parseInt(data[17].count), parseInt(data[18].count), parseInt(data[19].count), parseInt(data[20].count), parseInt(data[21].count), parseInt(data[22].count), parseInt(data[23].count), parseInt(data[24].count), parseInt(data[25].count), parseInt(data[26].count), parseInt(data[27].count), parseInt(data[28].count), parseInt(data[29].count), parseInt(data[30].count), parseInt(data[31].count), parseInt(data[32].count), parseInt(data[33].count), parseInt(data[34].count), parseInt(data[35].count), parseInt(data[36].count)],
+                showInLegend: false
+            }]
         });
 
-        CinqAns.addEventListener('click', () => {
-            UnAn.classList.remove('btn-active');
-            CinqAns.classList.add('btn-active');
-            DixAns.classList.remove('btn-active');
-
-            chart.update({
-                xAxis: {
-                    categories: ['1985', '1990', '1995', '2000', '2005', '2010', '2015', '2020']
-                },
-                series: [{
-                    name: 'Soutenues',
-                    data: [parseInt(data[0].count), parseInt(data[5].count), parseInt(data[10].count), parseInt(data[15].count), parseInt(data[20].count), parseInt(data[25].count), parseInt(data[30].count), parseInt(data[34].count)],
-                    showInLegend: false
-                }]
-            });
-        });
-
-        DixAns.addEventListener('click', () => {
-            UnAn.classList.remove('btn-active');
-            CinqAns.classList.remove('btn-active');
-            DixAns.classList.add('btn-active');
-
-            chart.update({
-                xAxis: {
-                    categories: ['1985', '1995', '2005', '2015', '2020']
-                },
-                series: [{
-                    name: 'Soutenues',
-                    data: [parseInt(data[0].count), parseInt(data[10].count), parseInt(data[20].count), parseInt(data[30].count), parseInt(data[34].count)],
-                    showInLegend: false
-                }]
-            });
-        });
-
-
+        ///////////////////////////////////////////////////////////////////////////////////////////////
         // Graphique carte
         const topology = await fetch(
             'https://code.highcharts.com/mapdata/countries/fr/fr-all.topo.json'
@@ -255,6 +213,7 @@ $data = new Search();
             }
         });
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////
         // Create the chart
         const map_chart = Highcharts.mapChart('map_container', {
             credits: {
@@ -319,5 +278,107 @@ $data = new Search();
                 }
             }]
         });
+
+        let data_repertoriees = <?= json_encode($data->loadData()[0]); ?>;
+        let data_en_ligne = <?= json_encode($data->loadData()[1]); ?>;
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        // Graphique pie
+        const pie_chart = Highcharts.chart('pie_container', {
+            credits: {
+                enabled: false
+            },
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie',
+                height: 350
+            },
+            title: {
+                text: null
+            },
+            tooltip: {
+                backgroundColor: '#FFFFFF',
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: "#C7BEB5",
+                followPointer: true,
+                padding: 10,
+                formatter: function() {
+                    return `<b>${this.point.name}</b> <br><b style="color: var(--primary); font-size: 18px;">${this.y}</b> thèses soutenues`;
+                },
+                style: {
+                    fontSize: 14
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'Soutenues',
+                colorByPoint: true,
+                data: [{
+                    name: 'En ligne',
+                    y: parseInt(data_en_ligne)
+                }, {
+                    name: 'Non en ligne',
+                    y: parseInt(data_repertoriees) - parseInt(data_en_ligne)
+                }]
+            }],
+            colors: ['#C7BEB5', '#C9AC90']
+        });
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        // Graphique nuage de mots
+        const cloud_chart = Highcharts.chart('cloud_container', {
+            credits: {
+                enabled: false
+            },
+            chart: {
+                type: 'wordcloud',
+                height: 350
+            },
+            title: {
+                text: null
+            },
+            tooltip: {
+                backgroundColor: '#FFFFFF',
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: "#C7BEB5",
+                followPointer: true,
+                padding: 10,
+                formatter: function() {
+                    return `<b>${this.point.name}</b> <br><b style="color: var(--primary); font-size: 18px;">${this.y}</b> thèses soutenues`;
+                },
+                style: {
+                    fontSize: 14
+                }
+            },
+            series: [{
+                name: 'Soutenues',
+                data: <?= json_encode($data->loadData()[2]); ?>,
+                type: 'wordcloud',
+                color: '#C9AC90',
+                dataLabels: {
+                    enabled: true,
+                    style: {
+                        fontFamily: 'Poppins',
+                        fontWeight: 'bold',
+                        color: '#C9AC90'
+                    }
+                }
+            }]
+        });
+
     });
 </script>
