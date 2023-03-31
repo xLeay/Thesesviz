@@ -94,7 +94,7 @@ if (isset($_SESSION['auth']) && isset($_SESSION['auth']['pseudo']) && $_SESSION[
 
     <div class="nav_icon">
         <?php if (isset($_SESSION['auth']) && isset($_SESSION['auth']['pseudo']) && $_SESSION['auth']['pseudo'] != NULL) : ?>
-            <div class="profile">
+            <div class="profile profile_radius">
                 <img src="<?= $profil_pic ?>" alt="Identicon" style="border-radius: 5px; object-fit: cover; height: 32px; width: 32px;">
 
                 <div class="profile_menu card">

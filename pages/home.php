@@ -3,6 +3,7 @@
 require_once dirname(__DIR__, 1) . "/includes/fromRouter.php";
 
 $data = new Search();
+
 ?>
 
 <script src="https://code.highcharts.com/maps/highmaps.js"></script>

@@ -34,7 +34,7 @@
                     <?php endfor; ?>
                 </div>
             </div>
-        </div>
+        </div>  
         <div class="quick_thesis_info">
             <p class="quick_thesis_date underline">
                 <a href="/q?depuis=<?= DateTime::createFromFormat('Y-m-d', $thesis['date'])->format('Y'); ?>"><?= DateTime::createFromFormat('Y-m-d', $thesis['date'])->format('d M'); ?>

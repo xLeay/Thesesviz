@@ -191,10 +191,13 @@ nav {
     cursor: pointer;
 }
 
+.nav_icon  .profile_radius {
+    border-radius: 10px;
+}
+
 .nav_icon a:hover, .nav_icon .profile:hover {
     background: var(--primary25);
 }
-
 
 .nav_icon span {
     font-size: 36px;
@@ -525,6 +528,9 @@ nav .search_thesis {
     background: #fff;
     font-size: 36px;
     transition: all 0.1s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .smallbtn {
@@ -1210,7 +1216,7 @@ figcaption {
     }
 
     .btn {
-        padding: 0 0;
+        padding: 5px 10px;
     }
 }
 

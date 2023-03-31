@@ -132,6 +132,25 @@ switch ($request) {
         loadPage("logout", false);
         break;
 
+        // un case vers la page de profil de l'utilisateur (.com/profile/{pseudo})
+    case preg_match('/^\/profile\/[a-zA-Z0-9_]{3,15}$/', $request) ? true : false:
+        $request = $_SERVER['REQUEST_URI'];
+        $og = (object) [
+            "title" => substr($request, 9) . " - Profil",
+            "description" => "Profil de " . substr($request, 9)
+        ];
+        loadPage("profile");
+        break;
+
+        // un case vers la page de paramètres du compte de l'utilisateur (.com/profile/{pseudo}/settings)
+    case isset($_SESSION['auth']['pseudo']) ? "/profile/" . $_SESSION['auth']['pseudo'] . "/settings" : "/profile/settings": // page de paramètres du compte
+        $og = (object) [
+            "title" => isset($_SESSION['auth']['pseudo']) ? $_SESSION['auth']['pseudo'] . " - Paramètres du compte" : "",
+            "description" => isset($_SESSION['auth']['pseudo']) ? "Paramètres du compte de " . $_SESSION['auth']['pseudo'] : ""
+        ];
+        loadPage("profile");
+        break;
+
     case "/auth": // page d'autentification
         $og = (object) [
             "title" => "Authentification",
