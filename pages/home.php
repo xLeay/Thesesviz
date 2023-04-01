@@ -6,9 +6,9 @@ $data = new Search();
 
 ?>
 
-<script src="https://code.highcharts.com/modules/wordcloud.js"></script>
-<script src="https://code.highcharts.com/highcharts.js"></script>
+<!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
 <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+<script src="https://code.highcharts.com/modules/wordcloud.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 <div class="main_container">
@@ -44,14 +44,21 @@ $data = new Search();
 
         <div class="graphs_container">
             <div class="multiple_graphs__wrapper">
-                <div id="pie_container"></div>
-                <div class="map_wrap">
+                <div class="graph_wrap">
+                    <p>Thèses en ligne</p>
+                    <div id="pie_container"></div>
+                </div>
+                <div class="graph_wrap">
                     <p>Thèses sur le territoire</p>
                     <div id="map_container"></div>
                 </div>
             </div>
             <div class="multiple_graphs__wrapper">
-                <div id="cloud_container"></div>
+                <div class="graph_wrap">
+                    <p>Nuage de mots des sujets</p>
+                    <div id="cloud_container"></div>
+                </div>
+
             </div>
             <div id="histo_container"></div>
         </div>
@@ -70,7 +77,7 @@ $data = new Search();
             $thesis = array(
                 'nnt' => $dernieres[$i]['nnt'],
                 'id' => $dernieres[$i]['idThese'],
-                'rank' => $dernieres[$i]['rank'],
+                'classement' => $dernieres[$i]['classement'],
                 'titre' => $dernieres[$i]['titre'],
                 'date' => $dernieres[$i]['date_soutenance'],
                 'etablissement' => $dernieres[$i]['nom'],
@@ -107,9 +114,11 @@ $data = new Search();
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", async () => {
-        // Graphique colonne
 
-        let data = <?= json_encode($data->loadData()[5]); ?>;
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Graphique ligne
+        let datas = <?= json_encode($data->loadData()[5]); ?>;
 
         const chartColors = Highcharts.setOptions({
             colors: ['#C9AC90'],
@@ -156,54 +165,64 @@ $data = new Search();
             },
             xAxis: {
                 title: {
-                    text: 'Années'
+                    text: ''
                 },
-                categories: ['1985', '1990', '1995', '2000', '2005', '2010', '2015', '2020']
+                categories: ['1985', '1986', '1987', '1988', '1989', '1990', '1991', '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2018', '2019', '2020', '2021', '2022'],
+                tickInterval: 5,
             },
             series: [{
                 name: 'Soutenues',
-                data: [parseInt(data[0].count), parseInt(data[5].count), parseInt(data[10].count), parseInt(data[15].count), parseInt(data[20].count), parseInt(data[25].count), parseInt(data[30].count), parseInt(data[34].count)],
-                showInLegend: false
+                data: [parseInt(datas[0].count), parseInt(datas[1].count), parseInt(datas[2].count), parseInt(datas[3].count), parseInt(datas[4].count), parseInt(datas[5].count), parseInt(datas[6].count), parseInt(datas[7].count), parseInt(datas[8].count), parseInt(datas[9].count), parseInt(datas[10].count), parseInt(datas[11].count), parseInt(datas[12].count), parseInt(datas[13].count), parseInt(datas[14].count), parseInt(datas[15].count), parseInt(datas[16].count), parseInt(datas[17].count), parseInt(datas[18].count), parseInt(datas[19].count), parseInt(datas[20].count), parseInt(datas[21].count), parseInt(datas[22].count), parseInt(datas[23].count), parseInt(datas[24].count), parseInt(datas[25].count), parseInt(datas[26].count), parseInt(datas[27].count), parseInt(datas[28].count), parseInt(datas[29].count), parseInt(datas[30].count), parseInt(datas[31].count), parseInt(datas[32].count), parseInt(datas[33].count), parseInt(datas[34].count), parseInt(datas[35].count), parseInt(datas[36].count)],
+                showInLegend: false,
             }]
         });
 
-        chart.update({
-            xAxis: {
-                categories: ['1985', '1986', '1987', '1988', '1989', '1990', '1991', '1992', '1993', '1994', '1995', '1996', '1997', '1998', '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2018', '2019', '2020', '2021', '2022']
-            },
-            series: [{
-                name: 'Soutenues',
-                data: [parseInt(data[0].count), parseInt(data[1].count), parseInt(data[2].count), parseInt(data[3].count), parseInt(data[4].count), parseInt(data[5].count), parseInt(data[6].count), parseInt(data[7].count), parseInt(data[8].count), parseInt(data[9].count), parseInt(data[10].count), parseInt(data[11].count), parseInt(data[12].count), parseInt(data[13].count), parseInt(data[14].count), parseInt(data[15].count), parseInt(data[16].count), parseInt(data[17].count), parseInt(data[18].count), parseInt(data[19].count), parseInt(data[20].count), parseInt(data[21].count), parseInt(data[22].count), parseInt(data[23].count), parseInt(data[24].count), parseInt(data[25].count), parseInt(data[26].count), parseInt(data[27].count), parseInt(data[28].count), parseInt(data[29].count), parseInt(data[30].count), parseInt(data[31].count), parseInt(data[32].count), parseInt(data[33].count), parseInt(data[34].count), parseInt(data[35].count), parseInt(data[36].count)],
-                showInLegend: false
-            }]
-        });
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Graphique carte
         const topology = await fetch(
             'https://code.highcharts.com/mapdata/countries/fr/fr-all.topo.json'
         ).then(response => response.json());
 
-        const data_region = [
-            ['fr-cor', 10],
-            ['fr-bre', 11],
-            ['fr-pdl', 12],
-            ['fr-pac', 13],
-            ['fr-occ', 14],
-            ['fr-naq', 15],
-            ['fr-bfc', 16],
-            ['fr-cvl', 17],
-            ['fr-idf', 18],
-            ['fr-hdf', 19],
-            ['fr-ara', 20],
-            ['fr-ges', 21],
-            ['fr-nor', 22],
-            ['fr-lre', 23],
-            ['fr-may', 24],
-            ['fr-gf', 25],
-            ['fr-mq', 26],
-            ['fr-gua', 27]
+        const trueData_region = [
+            ['fr-cor', 'R94'],
+            ['fr-bre', 'R53'],
+            ['fr-pdl', 'R52'],
+            ['fr-pac', 'R93'],
+            ['fr-occ', 'R76'],
+            ['fr-naq', 'R75'],
+            ['fr-bfc', 'R27'],
+            ['fr-cvl', 'R24'],
+            ['fr-idf', 'R11'],
+            ['fr-hdf', 'R32'],
+            ['fr-ara', 'R84'],
+            ['fr-ges', 'R44'],
+            ['fr-nor', 'R28'],
+            ['fr-lre', 'R04'],
+            ['fr-may', 'R06'],
+            ['fr-gf', 'R03'],
+            ['fr-mq', 'R02'],
+            ['fr-gua', 'R01'],
         ];
+
+        const nbThesisByEstab = <?= json_encode($data->getNbThesisByEstab()); ?>;
+        const regionByEstab = <?= json_encode($data->getRegionByEstab()); ?>;
+
+        const nbThesisByRegion = nbThesisByEstab.reduce((acc, cur) => {
+            const regionCode = regionByEstab.find(region => region.idref === cur.idref)?.['Code région'];
+
+            if (regionCode) {
+                acc[regionCode] = (acc[regionCode] || 0) + cur.nb_theses;
+            }
+            return acc;
+        }, {});
+
+        const data_region = Object.entries(nbThesisByRegion).map(([regionCode, nbTheses]) => [
+            trueData_region.find(region => {
+                return region[1] === regionCode
+            })[0],
+            nbTheses
+        ]);
 
         const map_Font = Highcharts.setOptions({
             chart: {
@@ -213,8 +232,7 @@ $data = new Search();
             }
         });
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-        // Create the chart
+        // Create the map chart
         const map_chart = Highcharts.mapChart('map_container', {
             credits: {
                 enabled: false
@@ -279,12 +297,13 @@ $data = new Search();
             }]
         });
 
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Graphique pie
+
         let data_repertoriees = <?= json_encode($data->loadData()[0]); ?>;
         let data_en_ligne = <?= json_encode($data->loadData()[1]); ?>;
-
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-        // Graphique pie
         const pie_chart = Highcharts.chart('pie_container', {
             credits: {
                 enabled: false
@@ -337,47 +356,40 @@ $data = new Search();
             colors: ['#C7BEB5', '#C9AC90']
         });
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Graphique nuage de mots
+
+        const topics = <?= json_encode($data->getTopics()); ?>;
+        topics.splice(141, 1);
+        const data = topics.map(topic => ({
+            name: topic.libelle,
+            weight: topic['COUNT(*)']
+        }));
+
         const cloud_chart = Highcharts.chart('cloud_container', {
             credits: {
                 enabled: false
             },
-            chart: {
-                type: 'wordcloud',
-                height: 350
-            },
-            title: {
-                text: null
-            },
-            tooltip: {
-                backgroundColor: '#FFFFFF',
-                borderRadius: 10,
-                borderWidth: 2,
-                borderColor: "#C7BEB5",
-                followPointer: true,
-                padding: 10,
-                formatter: function() {
-                    return `<b>${this.point.name}</b> <br><b style="color: var(--primary); font-size: 18px;">${this.y}</b> thèses soutenues`;
-                },
-                style: {
-                    fontSize: 14
+            accessibility: {
+                screenReaderSection: {
+                    beforeChartFormat: '<h5>{chartTitle}</h5>' +
+                        '<div>{chartSubtitle}</div>' +
+                        '<div>{chartLongdesc}</div>' +
+                        '<div>{viewTableButton}</div>'
                 }
             },
             series: [{
-                name: 'Soutenues',
-                data: <?= json_encode($data->loadData()[2]); ?>,
                 type: 'wordcloud',
-                color: '#C9AC90',
-                dataLabels: {
-                    enabled: true,
-                    style: {
-                        fontFamily: 'Poppins',
-                        fontWeight: 'bold',
-                        color: '#C9AC90'
-                    }
-                }
-            }]
+                data,
+                name: 'Occurrences'
+            }],
+            title: {
+                text: ''
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size: 16px"><b>{point.key}</b></span><br>'
+            }
         });
 
     });

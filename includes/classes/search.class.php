@@ -46,13 +46,13 @@ class Search extends DB
         GROUP BY idAssistance";
         $selection9 = $conn->prepare($sqldirecteurs);
         $selection9->execute();
-        
+
         // sélection des 20 dernières thèses ajoutées
-        $sql20dernieres = "SELECT @rank:=@rank+1 AS rank, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt
-        FROM etablissement e, these t NATURAL JOIN soutenir s 
+        $sql20dernieres = "SELECT @classement:=@classement+1 AS classement, s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt
+        FROM etablissement e, these t NATURAL JOIN soutenir s
         WHERE s.idEtablissement = e.idEtablissement 
         ORDER BY s.date_soutenance DESC LIMIT 20";
-        $conn->query("SET @rank=0");
+        $conn->query("SET @classement=0");
         $selection6 = $conn->prepare($sql20dernieres);
         $selection6->execute();
         $dernieres = $selection6->fetchALL(PDO::FETCH_ASSOC);
@@ -82,6 +82,52 @@ class Search extends DB
         $data = array($selection1->rowCount(), $selection2->rowCount(), $selection3->rowCount(), $selection4->rowCount(), $selection9->rowCount(), $annees, $dernieres, $auteurs, $sujets);
 
         return $data;
+    }
+
+    public function getTopics()
+    {
+        $conn = $this->cnx();
+
+        $sql = "SELECT s.libelle, COUNT(*)
+        FROM these t, reposer a, sujet s
+        WHERE t.idThese = a.idThese AND s.idSujet = a.idThese
+        GROUP BY s.libelle";
+        $selection = $conn->prepare($sql);
+        $selection->execute();
+        $topics = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+        return $topics;
+    }
+
+    public function getNbThesisByEstab()
+    {
+        $conn = $this->cnx();
+
+        $sql = "SELECT etablissement.nom, etablissement.idref, COUNT(DISTINCT soutenir.idThese) AS nb_theses
+        FROM etablissement
+        LEFT JOIN soutenir ON etablissement.idEtablissement = soutenir.idEtablissement
+        GROUP BY etablissement.nom, etablissement.idref  
+        ORDER BY `nb_theses` DESC";
+        $selection = $conn->prepare($sql);
+        $selection->execute();
+        $nbThesisByEstab = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+        return $nbThesisByEstab;
+    }
+
+    public function getRegionByEstab()
+    {
+        $conn = $this->cnx();
+
+        $sql = "SELECT f.`Libellé`, f.`Code région`, e.`idref`
+        FROM etablissement e
+        LEFT JOIN fr_etab f ON f.identifiant_idref = e.idref
+        ORDER BY f.Libellé DESC";
+        $selection = $conn->prepare($sql);
+        $selection->execute();
+        $regionByEstab = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+        return $regionByEstab;
     }
 
 
@@ -361,7 +407,7 @@ class Search extends DB
                 NATURAL JOIN these t
                 WHERE MATCH (t.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
                 GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
-                
+
                 $queries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
 
             default:
@@ -373,7 +419,7 @@ class Search extends DB
     {
         $conn = $this->cnx();
         $selection = $conn->prepare($query);
-    
+
         if (isset($_GET['id'])) {
             $selection->execute();
             $result = $selection->fetchALL(PDO::FETCH_ASSOC);
@@ -389,6 +435,4 @@ class Search extends DB
     {
         return $this->conn;
     }
-
-
 }
