@@ -212,7 +212,8 @@ $data = new Search();
             const regionCode = regionByEstab.find(region => region.idref === cur.idref)?.['Code région'];
 
             if (regionCode) {
-                acc[regionCode] = (acc[regionCode] || 0) + cur.nb_theses;
+
+                acc[regionCode] = (acc[regionCode] || 0) + parseInt(cur.nb_theses);
             }
             return acc;
         }, {});
@@ -361,7 +362,17 @@ $data = new Search();
         // Graphique nuage de mots
 
         const topics = <?= json_encode($data->getTopics()); ?>;
-        topics.splice(141, 1);
+
+        const targetLibelle = "Reconnaissance des formes, diagnostic, Fuzzy Pattern Matching, diagnostic adaptatif, logique floue, théorie des possibilités, diagnostic prédictif, apprentissage incrémental";
+        const targetTopic = topics.reduce((acc, cur) => {
+            if (cur.libelle.includes(targetLibelle)) {
+                acc = cur.libelle;
+            }
+            return acc;
+        }, {});
+
+        topics.splice(topics.findIndex(topic => topic.libelle === targetTopic), 1);
+
         const data = topics.map(topic => ({
             name: topic.libelle,
             weight: topic['COUNT(*)']
