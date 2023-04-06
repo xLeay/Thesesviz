@@ -42,8 +42,8 @@ if (isset($_SESSION['error'])) {
 
             <!-- BOUTON DE SAUVEGARDE -->
             <div class="save_buttons__wrapper">
-                <button class="btn-secondary" onclick="window.location.href = '/profile/<?= $user_result['pseudo'] ?>'">Annuler</button>
-                <button class="btn-primary" id="js-save" form="form1">Sauvegarder</button>
+                <button class="btn" onclick="window.location.href = '/profile/<?= $user_result['pseudo'] ?>'">Annuler</button>
+                <button class="btn" id="js-save" form="form1">Sauvegarder</button>
             </div>
         </div>
 
@@ -96,7 +96,7 @@ if (isset($_SESSION['error'])) {
                                         <div class="input__container">
                                             <input form="form2" type="password" id="newpassword" name="newpassword" autocomplete="false" spellcheck="false" minlength="12">
                                         </div>
-                                        <span class="material-symbols-sharp verify_icon password_verify_icon">Check</span>
+                                        <span class="material-symbols-rounded verify_icon password_verify_icon">Check</span>
 
                                         <div class="password_checking__container card">
                                             <div class="password_checking">
@@ -110,27 +110,27 @@ if (isset($_SESSION['error'])) {
                                                 <p>Règles à respecter :</p>
                                                 <div class="security_wrapper">
                                                     <div class="security_wrapper__item">
-                                                        <span class="material-symbols-sharp security_icon">Check</span>
+                                                        <span class="material-symbols-rounded security_icon">Check</span>
                                                         <p>Lettres minuscules</p>
                                                     </div>
                                                     <div class="security_wrapper__item">
-                                                        <span class="material-symbols-sharp security_icon">Check</span>
+                                                        <span class="material-symbols-rounded security_icon">Check</span>
                                                         <p>Lettres majuscules</p>
                                                     </div>
                                                     <div class="security_wrapper__item">
-                                                        <span class="material-symbols-sharp security_icon">Check</span>
+                                                        <span class="material-symbols-rounded security_icon">Check</span>
                                                         <p>Usage de Chiffres</p>
                                                     </div>
                                                     <div class="security_wrapper__item">
-                                                        <span class="material-symbols-sharp security_icon">Check</span>
+                                                        <span class="material-symbols-rounded security_icon">Check</span>
                                                         <p>Usage de caractères spéciaux</p>
                                                     </div>
                                                     <div class="security_wrapper__item">
-                                                        <span class="material-symbols-sharp security_icon">Check</span>
+                                                        <span class="material-symbols-rounded security_icon">Check</span>
                                                         <p>Ne pas contenir d'espace</p>
                                                     </div>
                                                     <div class="security_wrapper__item">
-                                                        <span class="material-symbols-sharp security_icon">Check</span>
+                                                        <span class="material-symbols-rounded security_icon">Check</span>
                                                         <p>Ne pas contenir le pseudo ou l’email</p>
                                                     </div>
                                                 </div>
@@ -143,7 +143,7 @@ if (isset($_SESSION['error'])) {
                         </div>
 
                         <div class="password__btn_container">
-                            <button form="form2" class="btn-primary btn--disabled" id="js-password_save" disabled>Modifier</button>
+                            <button form="form2" class="btn btn--disabled" id="js-password_save" disabled>Modifier</button>
                         </div>
                     </div>
                 </div>
@@ -177,7 +177,7 @@ if (isset($_SESSION['error'])) {
                             </div>
                             <!-- resendcode -->
                             <div class="password__btn_container">
-                                <button form="form3" class="btn-primary btn--disabled" id="js-email_save" disabled>Modifier</button>
+                                <button form="form3" class="btn btn--disabled" id="js-email_save" disabled>Modifier</button>
                             </div>
                         </div>
                     </div>
@@ -199,7 +199,7 @@ if (isset($_SESSION['error'])) {
                         <p>Suppression du compte. Une confirmation sera demandée.</p>
 
                         <div class="password__btn_container" style="margin-bottom: 60px;">
-                            <button class="btn-primary" id="delete_account__btn">Supprimer</button>
+                            <button class="btn" id="delete_account__btn">Supprimer</button>
                         </div>
                     </div>
                 </div>
@@ -223,8 +223,8 @@ if (isset($_SESSION['error'])) {
                 </div>
 
                 <div class="delete_account_buttons__wrapper">
-                    <button class="btn-secondary" id="cancel_delete__btn">Annuler</button>
-                    <button form="form4" class="btn-primary" id="confirm_delete__btn">Sauvegarder</button>
+                    <button class="btn" id="cancel_delete__btn">Annuler</button>
+                    <button form="form4" class="btn" id="confirm_delete__btn">Sauvegarder</button>
                 </div>
             </div>
         </div>
@@ -319,33 +319,7 @@ if (isset($_SESSION['error'])) {
     const profile_image = document.querySelector('#profile_image');
     const delete_image = document.querySelector('#delete_image');
 
-    const delete_banner__btn = document.querySelector('.delete_banner__btn');
-    const change_banner__btn = document.querySelector('.change_banner__btn');
     const change_profile_pic__btn = document.querySelector('.change_profile_pic__btn');
-
-    // Si profile_banner__container contient un span .no_banner, on met en display none le bouton delete_banner__btn
-    document.addEventListener('DOMContentLoaded', () => {
-        if (profile_banner__container.querySelector('.no_banner')) {
-            delete_banner__btn.style.display = 'none';
-        }
-    });
-
-    delete_banner__btn.addEventListener('click', () => {
-        console.log('delete banner');
-
-        console.log(profile_banner__container);
-
-        delete_image.click();
-        profile_banner__container.style.background = `rgba(${imagesAvgColors.profile_banner_color.r},${imagesAvgColors.profile_banner_color.g},${imagesAvgColors.profile_banner_color.b},0.7)`;
-        profile_banner.remove();
-        profile_banner__container.innerHTML = `<span class="material-symbols-rounded no_banner">no_photography</span>`;
-
-    });
-
-    change_banner__btn.addEventListener('click', () => {
-        // console.log('change banner');
-        banner_image.click();
-    });
 
     change_profile_pic__btn.addEventListener('click', () => {
         // console.log('change profile pic');

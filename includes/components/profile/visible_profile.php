@@ -1,12 +1,7 @@
-<h1 class="section_title">Page de profil</h1>
+<h1 class="section_title" style="margin-bottom: 10px">Page de profil</h1>
 
 <div class="main_wrapper">
     <section class="profile_page card">
-        <div class="img_container">
-            <div class="profile_banner__container">
-                <span class="material-symbols-rounded no_banner">no_photography</span>
-            </div>
-        </div>
 
         <div class="profile_picture__container">
             <img src="<?= $big_profile_pic ?>" class="profile_picture card" alt="Photo de profil">

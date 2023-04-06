@@ -69,12 +69,13 @@ $data = new Search();
         <p class="section_title">Les 20 dernières thèses</p>
 
         <?php $i = 0; ?>
-        <?php for ($i; $i < 5; $i++) : ?>
+        <?php for ($i; $i < 20; $i++) : ?>
             <?php
             $dernieres = $data->loadData()[6];
             $auteurs = $data->loadData()[7];
             $sujets = $data->loadData()[8];
             $thesis = array(
+                'classemnt' => $dernieres[$i]['classement'],
                 'nnt' => $dernieres[$i]['nnt'],
                 'id' => $dernieres[$i]['idThese'],
                 'classement' => $dernieres[$i]['classement'],
@@ -100,14 +101,42 @@ $data = new Search();
             ?>
         <?php endfor; ?>
 
-        <!-- <div class="btn_container" id="see_more__container">
+        <div class="btn_container" id="see_more__container">
             <button id="see_more" class="btn">Voir plus</button>
-        </div> -->
+        </div>
     </section>
 </div>
 
-<!-- TODO: Voir plus (les thèses) en ajax -->
+<script>
+    const seeMore = document.getElementById('see_more');
+    const seeMoreContainer = document.getElementById('see_more__container');
+    const thesis20 = document.querySelector('.thesis20');
+    const quick_thesis_container = document.querySelectorAll('.quick_thesis_container');
+    const thesisBatchArray = Array.from(quick_thesis_container);
+    const thesisBatchArrayLength = thesisBatchArray.length;
 
+    let counter = 4;
+
+    // On cache les thèses de la 6e à la 20e
+    for (let i = 5; i < thesisBatchArrayLength; i++) {
+        thesisBatchArray[i].style.display = 'none';
+    }
+
+    seeMore.addEventListener('click', () => {
+
+        // Si on clique sur voir plus, on affiche 5 thèses supplémentaires à chaque fois
+        for (let i = 0; i < 5; i++) {
+            counter++;
+            thesisBatchArray[counter].style.display = 'flex';
+            console.log(counter);
+        }
+
+        // On supprime le bouton voir plus une fois qu'on a affiché toutes les thèses
+        if (counter == thesisBatchArrayLength - 1) {
+            seeMoreContainer.style.display = 'none';
+        }
+    });
+</script>
 
 
 

@@ -1,3 +1,15 @@
+<?php
+
+$t = $data->getEstabWikipediaPage($thesis['etablissement']);
+
+// Récupérer l'URL de la page Wikipédia de l'établissement
+$pageUrl = $t[0]['Page Wikipédia en français'];
+
+if (isset($pageUrl)) {
+    $ogImageUrl = getOgImageUrl($pageUrl);
+}
+
+?>
 <div class="thesis_self__title">
     <p><?= $thesis['titre']; ?></p>
 </div>
@@ -106,7 +118,20 @@
                             <span class="less_important_info"><?= $thesis['etablissement']; ?></span>
                         </a>
                     </p>
+                    <?php if (isset($pageUrl)) : ?>
+                        <div class="estab__img" style="margin-top: 5px;">
+                            <a href="<?= $pageUrl; ?>" target="_blank" rel="noopener noreferrer">
+                                <img class="card" src="<?= getOgImageUrl($pageUrl); ?>" alt="og_image">
+                            </a>
+                        </div>
+                    <?php else : ?>
+                        <div class="prevent_overflow estab__img">
+                            <p class="list_overflow" style="margin-top: 5px; color: var(--secondary_info);">Aucun visuel pour l'établissement</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
+
+
 
                 <div class="prevent_overflow">
                     <p class="list_overflow">discipline

@@ -1,4 +1,4 @@
-<div class="quick_thesis_container">
+<div class="quick_thesis_container" data-counter="<?= $i; ?>">
     <div class="quick_thesis_wrap">
         <div class="quick_thesis">
             <div class="quick_thesis__upper">

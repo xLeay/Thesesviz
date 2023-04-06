@@ -1,4 +1,7 @@
 
+    <!-- <footer>
+        <?php debug('Session', $_SESSION) ?>
+    </footer> -->
 
     <?php include ROOT . "/includes/components/footer.php" ?>
 

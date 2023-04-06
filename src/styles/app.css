@@ -274,101 +274,6 @@ nav .logout_a:hover * {
     margin: 5px 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #backArrow {
     visibility: hidden;
 }
@@ -722,6 +627,51 @@ section {
     color: #000;
 }
 
+.graph_wrap__header {
+    /* border: 1px solid #000; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info_map {
+    /* border: 1px solid #000; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    position: relative;
+    user-select: none;
+    color: var(--text);
+    cursor: pointer;
+}
+
+.info_map--active {
+    color: var(--primary);
+}
+
+.info_map .info_map-p {
+    position: absolute;
+    margin-top: 5px;
+    top: 100%;
+    right: 0;
+    width: fit-content;
+    background: var(--primary25);
+    border-radius: 10px;
+    z-index: 2;
+    opacity: 0;
+    transition: all 0.1s ease;
+    font-size: 12px;
+    padding: 5px 10px;
+    white-space: nowrap;
+    user-select: none;
+    pointer-events: none;
+}
+
+.info_map--active .info_map-p {
+    opacity: 1;
+}
+
 .btn-active {
     background: var(--primary);
     color: #fff;
@@ -1065,6 +1015,17 @@ section {
     font-size: 20px;
 }
 
+.estab__img {
+    display: flex;
+    width: 60%;
+}
+
+.estab__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 /* FOOTER ========================================================================================================================================================= */
 /* FOOTER ========================================================================================================================================================= */
 /* FOOTER ========================================================================================================================================================= */
@@ -1249,6 +1210,14 @@ figcaption {
 
     section {
         gap: 30px;
+    }
+
+    .info_map .info_map-p {
+        white-space: break-spaces;
+    }
+
+    .info_map--active .info_map-p {
+        opacity: 1;
     }
 }
 

@@ -52,14 +52,14 @@ function loadAsset($page, $type)
     return "";
 }
 
-function loadPage($page, $with_head = true)
+function loadPage($page, $with_head = true, $handler = false)
 {
 
     include_once "includes/classes/search.class.php";
 
     global $basepath, $og, $canonical;
-    $path =  "pages" . DIRECTORY_SEPARATOR . $page . ".php";
-    $headPath = "pages" . DIRECTORY_SEPARATOR . $page . ".head.php";
+    $path =  ($handler ? "handler" : "pages") . DIRECTORY_SEPARATOR . $page . ".php";
+    $headPath = ($handler ? "handler" : "pages") . DIRECTORY_SEPARATOR . $page . ".head.php";
     if (file_exists($path)) {
         if ($with_head) {
             $appendHead = loadAsset($page, 'css');
@@ -157,6 +157,14 @@ switch ($request) {
             "description" => "Page d'authentification"
         ];
         loadPage("auth", false);
+        break;
+
+    case "/editAccount": // Gestion de la modification des paramètres du compte
+        $og = (object) [
+            "title" => "Gestion de la modification des paramètres du compte",
+            "description" => "Gestion de la modification des paramètres du compte"
+        ];
+        loadPage("editAccount", false, true);
         break;
 
     case "/ajax/search":

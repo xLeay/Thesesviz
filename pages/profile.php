@@ -125,18 +125,10 @@ if (isset($_SESSION['auth']['pseudo']) && $_SESSION['auth']['pseudo'] === $visib
     let profile_images = null;
     let imageUrls = null;
 
-    <?php if ($user_result['banniere_profil'] != null) : ?>
-        profile_images = [profile_banner, profile_picture];
-        imageUrls = [
-            profile_banner.src,
-            profile_picture.src
-        ];
-    <?php else : ?>
-        profile_images = [profile_picture];
-        imageUrls = [
-            profile_picture.src
-        ];
-    <?php endif; ?>
+    profile_images = [profile_picture];
+    imageUrls = [
+        profile_picture.src
+    ];
 
     let imagesAvgColors = {
         profile_banner_color: {
@@ -184,16 +176,6 @@ if (isset($_SESSION['auth']['pseudo']) && $_SESSION['auth']['pseudo'] === $visib
                             b
                         }
                     });
-                    // console.log(imagesAvgColors);
-
-                    // Si profile_banner__container contient un span .no_banner, on change son background-color en la couleur moyenne de profile_picture
-                    if (profile_banner__container.querySelector('.no_banner')) {
-                        for (const [key, value] of Object.entries(imagesAvgColors)) {
-                            if (key == 'profile_picture card_color') {
-                                profile_banner__container.style.background = `rgba(${value.r},${value.g},${value.b},0.7)`;
-                            }
-                        }
-                    }
 
                     // Don't forget to resolve syncPromise
                     resolve();

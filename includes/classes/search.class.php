@@ -115,6 +115,112 @@ class Search extends DB
         return $nbThesisByEstab;
     }
 
+    // On spécifie les options de recherche pour la carte de la france
+    public function getNbThesisByEstabByOption($option, $key)
+    {
+        $conn = $this->cnx();
+
+        // Définir les colonnes à sélectionner en fonction de l'option choisie
+        $sql = "SELECT etablissement.nom, etablissement.idref, COUNT(DISTINCT soutenir.idThese) AS nb_theses, these.titre, MATCH (these.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_titre
+        FROM etablissement
+        LEFT JOIN soutenir ON etablissement.idEtablissement = soutenir.idEtablissement
+        NATURAL JOIN these
+        WHERE MATCH (these.titre) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+        GROUP BY etablissement.nom, etablissement.idref, these.titre, score_titre  
+        ORDER BY `score_titre` DESC";
+        $selection = $conn->prepare($sql);
+        $selection->execute();
+        $nbThesisByEstab = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+        switch ($option) {
+            case 'key':
+                return $nbThesisByEstab;
+                break;
+
+            case 'titre':
+                return $nbThesisByEstab;
+                break;
+
+            case 'auteur':
+                $sql = "SELECT etablissement.nom, etablissement.idref, COUNT(DISTINCT soutenir.idThese) AS nb_theses,personne.prenom, personne.nom, assister.role
+                FROM these
+                NATURAL JOIN soutenir
+                NATURAL JOIN assister
+                NATURAL JOIN personne
+                JOIN etablissement ON soutenir.idEtablissement = etablissement.idEtablissement
+                WHERE assister.role = 'auteur' AND personne.prenom = :prenom AND personne.nom = :nom
+                GROUP BY etablissement.nom, etablissement.idref, personne.nom, assister.role";
+                $selection = $conn->prepare($sql);
+                $selection->bindParam(':nom', $key[0]);
+                $selection->bindParam(':prenom', $key[1]);
+                $selection->execute();
+                $nbThesisByEstab = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+                return $nbThesisByEstab;
+                break;
+            
+            case 'sujet':
+                $sql = "SELECT etablissement.nom, etablissement.idref, COUNT(DISTINCT soutenir.idThese) AS nb_theses, sujet.libelle, MATCH (sujet.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_sujet
+                FROM these
+                NATURAL JOIN soutenir
+                NATURAL JOIN reposer
+                NATURAL JOIN sujet
+                JOIN etablissement ON soutenir.idEtablissement = etablissement.idEtablissement WHERE MATCH (sujet.libelle) AGAINST ('$key' IN NATURAL LANGUAGE MODE) GROUP BY etablissement.nom, etablissement.idref, sujet.libelle ORDER BY score_sujet DESC";
+                $selection = $conn->prepare($sql);
+                $selection->execute();
+                $nbThesisByEstab = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+                return $nbThesisByEstab;
+                break;
+
+            case 'depuis':
+                $sql = "SELECT etablissement.nom, etablissement.idref, COUNT(DISTINCT soutenir.idThese) AS nb_theses
+                FROM etablissement
+                LEFT JOIN soutenir ON etablissement.idEtablissement = soutenir.idEtablissement
+                NATURAL JOIN these
+                WHERE soutenir.date_soutenance >= CONCAT('$key', '-01-01')
+                GROUP BY etablissement.nom, etablissement.idref, these.titre";
+                $selection = $conn->prepare($sql);
+                $selection->execute();
+                $nbThesisByEstab = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+                return $nbThesisByEstab;
+                break;
+
+            case 'etablissement':
+                $sql = "SELECT etablissement.nom, etablissement.idref, COUNT(DISTINCT soutenir.idThese) AS nb_theses
+                FROM etablissement
+                LEFT JOIN soutenir ON etablissement.idEtablissement = soutenir.idEtablissement
+                NATURAL JOIN these
+                WHERE etablissement.nom = '$key'
+                GROUP BY etablissement.nom, etablissement.idref, these.titre";
+                $selection = $conn->prepare($sql);
+                $selection->execute();
+                $nbThesisByEstab = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+                return $nbThesisByEstab;
+                break;
+
+            case 'discipline':
+                $sql = "SELECT etablissement.nom, etablissement.idref, COUNT(DISTINCT soutenir.idThese) AS nb_theses, these.discipline, MATCH (these.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE) score_discipline
+                FROM these
+                NATURAL JOIN soutenir
+                JOIN etablissement ON soutenir.idEtablissement = etablissement.idEtablissement
+                WHERE MATCH (these.discipline) AGAINST ('$key' IN NATURAL LANGUAGE MODE)
+                GROUP BY etablissement.nom, etablissement.idref, these.discipline
+                ORDER BY score_discipline DESC";
+                $selection = $conn->prepare($sql);
+                $selection->execute();
+                $nbThesisByEstab = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+                return $nbThesisByEstab;
+                break;
+            default:
+                return $nbThesisByEstab;
+                break;
+        }
+    }
+
     public function getRegionByEstab()
     {
         $conn = $this->cnx();
@@ -130,8 +236,25 @@ class Search extends DB
         return $regionByEstab;
     }
 
+    public function getEstabWikipediaPage($nom)
+    {
+        $conn = $this->cnx();
 
-    public function reduce($key) // PEUT ETRE L'ENLEVER A VOIR
+        $sql = "SELECT f.`Libellé`, f.`Page Wikipédia en français`, e.`idref`
+            FROM etablissement e
+            LEFT JOIN fr_etab f ON f.identifiant_idref = e.idref
+            WHERE e.nom = :nom
+            LIMIT 1";
+        $selection = $conn->prepare($sql);
+        $selection->bindParam(':nom', $nom);
+        $selection->execute();
+        $regionByEstab = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+        return $regionByEstab;
+    }
+
+
+    public function reduce($key)
     {
         $options = [
             'titre:', 'auteur:', 'sujet:', 'depuis:', 'de:', 'à:'
@@ -293,25 +416,25 @@ class Search extends DB
                 $sqlthese = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt
                 FROM etablissement e, these t
                 NATURAL JOIN soutenir s
-                WHERE s.idEtablissement = e.idEtablissement AND s.date_soutenance >= '$key'
+                WHERE s.idEtablissement = e.idEtablissement AND s.date_soutenance >= CONCAT('$key', '-01-01')
                 ORDER BY s.date_soutenance DESC";
 
                 $sqlauteur = "SELECT a.role, p.nom, p.prenom, t.idThese, t.titre
                 FROM these t
                 NATURAL JOIN assister a
                 NATURAL JOIN personne p
-                WHERE a.role = 'auteur' AND t.idThese IN (SELECT idThese FROM soutenir WHERE date_soutenance >= '$key')
+                WHERE a.role = 'auteur' AND t.idThese IN (SELECT idThese FROM soutenir WHERE date_soutenance >= CONCAT('$key', '-01-01'))
                 ORDER BY t.idThese DESC";
 
                 $sqlsujet = "SELECT s.libelle, r.idThese
                 FROM reposer r
                 NATURAL JOIN sujet s
                 NATURAL JOIN (SELECT idThese, date_soutenance FROM soutenir ORDER BY idThese DESC) so
-                WHERE so.date_soutenance >= '$key'";
+                WHERE so.date_soutenance >= CONCAT('$key', '-01-01')";
 
                 $sqlannees = "SELECT DATE_FORMAT(date_soutenance, '%Y') as 'year', COUNT(date_soutenance) as count
                 FROM soutenir s
-                WHERE s.date_soutenance >= '$key'
+                WHERE s.date_soutenance >= CONCAT('$key', '-01-01')
                 GROUP BY DATE_FORMAT(date_soutenance, '%Y')";
 
                 $SINCEqueries = array($sqlthese, $sqlauteur, $sqlsujet, $sqlannees);
