@@ -30,7 +30,6 @@
     /* border: 1px solid #000; */
 }
 
-
 .profile_page {
     /* border: 1px solid #000; */
     padding: 20px;
@@ -496,6 +495,42 @@
     background: var(--primary25);
     border-radius: 50px;
 }
+
+/* ALERTES */
+/* ALERTES */
+/* ALERTES */
+/* ALERTES */
+.alert-btn {
+    width: 150px !important;
+    height: auto;
+}
+
+.add-btn {
+    width: 125px !important;
+    height: auto;
+}
+
+.form__group .input__container {
+    border: 1px solid var(--secondary);
+    display: flex;
+    align-items: center;
+    padding-inline: 10px;
+    border-radius: 10px;
+    height: auto;
+    width: fit-content;
+}
+
+.alerts-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.alert-item {
+    width: fit-content;
+    padding: 10px 15px;
+}
+
 
 
 

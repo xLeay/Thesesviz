@@ -23,10 +23,14 @@ $user_result = $selection->fetch(PDO::FETCH_ASSOC);
 // debug($_POST);
 
 
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Si on ne provient pas de la page de modification de compte, on redirige vers la page d'accueil
+// Si on ne provient pas de la page de modification de compte ou celle des alertes, on redirige vers la page d'accueil
 if (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] !== NULL) {
-    if ($_SERVER['HTTP_REFERER'] !== ($_SERVER['HTTP_ORIGIN'] . "/profile/" . $_SESSION['auth']['pseudo'] . "/settings")) {
+    if (
+        $_SERVER['HTTP_REFERER'] !== ($_SERVER['HTTP_ORIGIN'] . "/profile/" . $_SESSION['auth']['pseudo'] . "/settings")
+        && $_SERVER['HTTP_REFERER'] !== ($_SERVER['HTTP_ORIGIN'] . "/profile/" . $_SESSION['auth']['pseudo'] . "/alerts")
+    ) {
         header('Location: /');
         exit();
     }
@@ -172,5 +176,53 @@ if (isset($_POST['deleteAccount'])) {
     } else {
         $_SESSION['error'] = 'error';
         header('Location: /profile/' . $_SESSION['auth']['pseudo'] . '/settings');
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Si on a des alertes
+if (isset($_POST['alert']) && ($_POST['alert'] !== null)) {
+    $alert = htmlspecialchars($_POST['alert']);
+
+    // On envoie un mail à l'utilisateur
+    $to = $_SESSION['auth']['email'];
+    $subject = 'Alertes';
+    $message = 'Vous avez ajouté une alerte sur le mot ' . $alert . ' ! Voici les 10 dernières thèses correspondantes :';
+
+    // On sélectionne les 10 dernières thèses avec le mot clé
+    $sql10dernieres = "SELECT s.date_soutenance, e.nom, t.titre, t.these_accessible, t.idThese, t.nnt, MATCH (t.titre) AGAINST ('$alert' IN NATURAL LANGUAGE MODE) score_titre
+    FROM etablissement e, these t NATURAL JOIN soutenir s
+    WHERE s.idEtablissement = e.idEtablissement AND MATCH (t.titre) AGAINST ('$alert' IN NATURAL LANGUAGE MODE)
+    ORDER BY s.date_soutenance DESC LIMIT 10";
+    $selection = $conn->prepare($sql10dernieres);
+    $selection->execute();
+    $dernieres = $selection->fetchALL(PDO::FETCH_ASSOC);
+
+    // Ajouter le contenu des thèses dans le message si il y en a
+    if (empty($dernieres)) {
+        $message .= "\n\nAucune thèse ne correspond à votre alerte.";
+    } else {
+        foreach ($dernieres as $these) {
+            $message .= "\n\nTitre : " . $these['titre'] . "\nAuteur : " . $these['nom'] . "\nDate de soutenance : " . $these['date_soutenance'];
+        }
+    }
+
+    // Envoyer le message
+    mail($to, $subject, $message);
+
+    // on modifie les alertes (on ajoute ou on supprime avec des virgules)
+    $sql = "UPDATE utilisateur SET alertes = CONCAT(alertes, ', ', :alert) WHERE id_user = :id_user";
+    $modification = $conn->prepare($sql);
+    $modification->bindParam(':id_user', $_SESSION['auth']['id_user']);
+    $modification->bindParam(':alert', $alert);
+    $modification->execute();
+
+    if ($modification->rowCount() > 0) {
+        $_SESSION['error'] = 'success';
+        header('Location: /profile/' . $_SESSION['auth']['pseudo'] . '/alerts');
+    } else {
+        $_SESSION['error'] = 'error';
+        header('Location: /profile/' . $_SESSION['auth']['pseudo'] . '/alerts');
     }
 }

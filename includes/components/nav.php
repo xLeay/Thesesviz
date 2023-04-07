@@ -113,6 +113,11 @@ if (isset($_SESSION['auth']) && isset($_SESSION['auth']['pseudo']) && $_SESSION[
                         <p class="semibold">Profil</p>
                     </a>
 
+                    <a href="/profile/<?= $nick ?>/alerts" class="nav_settings_icon__a">
+                        <span class="material-symbols-rounded nav_icon">notifications</span>
+                        <p class="semibold">Alertes</p>
+                    </a>
+
                     <a href="/profile/<?= $nick ?>/settings" class="nav_settings_icon__a">
                         <span class="material-symbols-rounded nav_icon">settings</span>
                         <p class="semibold">Paramètres</p>
@@ -133,7 +138,7 @@ if (isset($_SESSION['auth']) && isset($_SESSION['auth']['pseudo']) && $_SESSION[
                 <p class="semibold nav_item__p"><?= $nick ?></p>
             </a> -->
             <div class="profile">
-                <a href="/login">
+                <a href="/login" class="no-hover">
                     <span class="material-symbols-rounded">person</span>
                 </a>
             </div>

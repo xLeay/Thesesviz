@@ -151,6 +151,15 @@ switch ($request) {
         loadPage("profile");
         break;
 
+        // un case vers la page de paramètres du compte de l'utilisateur (.com/profile/{pseudo}/alerts)
+    case isset($_SESSION['auth']['pseudo']) ? "/profile/" . $_SESSION['auth']['pseudo'] . "/alerts" : "/profile/alerts": // page de paramètres du compte
+        $og = (object) [
+            "title" => isset($_SESSION['auth']['pseudo']) ? $_SESSION['auth']['pseudo'] . " - Paramètres du compte" : "",
+            "description" => isset($_SESSION['auth']['pseudo']) ? "Paramètres du compte de " . $_SESSION['auth']['pseudo'] : ""
+        ];
+        loadPage("profile");
+        break;
+
     case "/auth": // page d'autentification
         $og = (object) [
             "title" => "Authentification",

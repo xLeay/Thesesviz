@@ -199,6 +199,10 @@ nav {
     background: var(--primary25);
 }
 
+.no-hover:hover {
+    background: none !important;
+}
+
 .nav_icon span {
     font-size: 36px;
 }

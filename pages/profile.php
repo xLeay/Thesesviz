@@ -49,22 +49,23 @@ if (isset($_SESSION['auth']['pseudo']) && $_SESSION['auth']['pseudo'] === $visib
     // debug($big_profile_pic);
 }
 
-
-
+ 
 // debug($user_result);
-// debug($_SESSION['auth']);
-// debug($_SESSION['error']);
 ?>
 
 <div class="main_container">
 
     <!-- Si l'url contient '/profile/' ET ne contient pas '/settings', alors on affiche le profil -->
-    <?php if (stripos($_SERVER['REQUEST_URI'], '/profile/') !== false && stripos($_SERVER['REQUEST_URI'], '/settings') === false) : ?>
+    <?php if (stripos($_SERVER['REQUEST_URI'], '/profile/') !== false && stripos($_SERVER['REQUEST_URI'], '/settings') === false && stripos($_SERVER['REQUEST_URI'], '/alerts') === false) : ?>
         <?php include_once ROOT . '/includes/components/profile/visible_profile.php' ?>
 
         <!-- Si l'url contient '/profile/' ET contient '/settings', alors on affiche les paramètres du compte -->
     <?php elseif (stripos($_SERVER['REQUEST_URI'], '/profile/') !== false && stripos($_SERVER['REQUEST_URI'], '/settings') !== false) : ?>
         <?php include_once ROOT . '/includes/components/profile/profile_settings.php' ?>
+
+        <!-- Si l'url contient '/profile/' ET contient '/alerts', alors on affiche les paramètres du compte -->
+    <?php elseif (stripos($_SERVER['REQUEST_URI'], '/profile/') !== false && stripos($_SERVER['REQUEST_URI'], '/alerts') !== false) : ?>
+        <?php include_once ROOT . '/includes/components/profile/profile_alerts.php' ?>
 
     <?php endif; ?>
 </div>
